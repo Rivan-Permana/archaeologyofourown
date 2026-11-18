@@ -31,5 +31,28 @@
     "text": "This address does not exist, or the article is not published yet or any longer.",
     "home": "Go home",
     "latest": "Latest articles"
+  },
+  "series": {
+    "temuan": {
+      "label": "Finds",
+      "description": "Finds from everyday visual culture."
+    },
+    "jejak-proses": {
+      "label": "Process traces",
+      "description": "The traces of process behind objects."
+    },
+    "ingatan-bersama": {
+      "label": "Shared memory",
+      "description": "Memories we keep together."
+    },
+    "stratigrafi": {
+      "label": "Stratigraphy",
+      "description": "Essays that read across layers."
+    }
+  },
+  "category": {
+    "budaya-visual": "Visual culture",
+    "proses": "Process",
+    "ingatan": "Memory"
   }
 }

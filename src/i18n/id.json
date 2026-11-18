@@ -31,5 +31,28 @@
     "text": "Alamat ini tidak ada, atau artikelnya belum atau tidak lagi terbit.",
     "home": "Ke beranda",
     "latest": "Artikel terbaru"
+  },
+  "series": {
+    "temuan": {
+      "label": "Temuan",
+      "description": "Temuan tentang budaya visual sehari-hari."
+    },
+    "jejak-proses": {
+      "label": "Jejak Proses",
+      "description": "Jejak proses di balik benda-benda."
+    },
+    "ingatan-bersama": {
+      "label": "Ingatan Bersama",
+      "description": "Ingatan yang kita simpan bersama."
+    },
+    "stratigrafi": {
+      "label": "Stratigrafi",
+      "description": "Esai yang membaca lapisan demi lapisan."
+    }
+  },
+  "category": {
+    "budaya-visual": "Budaya visual",
+    "proses": "Proses",
+    "ingatan": "Ingatan"
   }
 }
