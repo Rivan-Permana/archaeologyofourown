@@ -48,14 +48,6 @@ body:has(dialog[open]) { overflow: hidden; }
 /* Placeholder marker (UX-DR35): accent border on paper, always visible on Placeholder content. */
 .ph { display: inline-block; font: var(--type-meta-weight) var(--type-meta-size)/1 var(--font-body); padding: var(--space-1) var(--space-2); border: 1px solid var(--color-accent); color: var(--color-accent); background: var(--color-paper); }
 
-/* Image slot without a photo: section hatching, the drafting convention for "not yet excavated" (UX-DR35).
-   Line colour only, no hue; the Placeholder marker still labels it. */
-.slot {
-  background-color: var(--color-surface);
-  background-image: repeating-linear-gradient(135deg, transparent 0 9px, var(--color-line) 9px 10px);
-  box-shadow: inset 0 0 0 1px var(--color-line);
-}
-
 /* Catalogue Record block and Category tag (UX-DR18, UX-DR19): used in Articles, the Artefact of the Day and cards. */
 .catalogue-record { display: grid; grid-template-columns: max-content 1fr; margin: var(--space-8) 0; border: 1px solid var(--color-line); }
 .catalogue-record dt, .catalogue-record dd { margin: 0; padding: var(--space-3) var(--space-4); border-top: 1px solid var(--color-line); }
@@ -74,3 +66,39 @@ body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-even
 
 /* Motion: one strong ease-out for entrances (emil-design-eng); scroll and fade-up curves are set where they are used. */
 :root { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); }
+
+/* Finds register (user decision 2026-11-19): an image slot without a photo shows a line drawing of an everyday
+   find, the way an excavation report draws its small finds, with the black-and-white photo scale in the corner.
+   Drawings are masks, so the line colour is always --color-ink. The Placeholder marker still labels the slot. */
+:root {
+  --find-cap: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='60' cy='50' rx='30' ry='12'/%3E%3Cellipse cx='60' cy='50' rx='21' ry='8'/%3E%3Cpath d='M30 50v13a30 12 0 0 0 60 0V50'/%3E%3Cpath d='M36 58v12M44 60v13M52 61v13M60 62v13M68 61v13M76 60v13M84 58v12'/%3E%3Ccircle cx='50' cy='47' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='55' cy='52' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='63' cy='46' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='68' cy='51' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='59' cy='49' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='46' cy='51' r='.7' fill='%23000' stroke='none'/%3E%3C/svg%3E");
+  --find-coin: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='60' cy='60' r='34'/%3E%3Ccircle cx='60' cy='60' r='28'/%3E%3Ccircle cx='60' cy='48' r='6'/%3E%3Ccircle cx='71.4' cy='56.3' r='6'/%3E%3Ccircle cx='67.1' cy='69.7' r='6'/%3E%3Ccircle cx='52.9' cy='69.7' r='6'/%3E%3Ccircle cx='48.6' cy='56.3' r='6'/%3E%3Ccircle cx='60' cy='60' r='2.5'/%3E%3Ccircle cx='40' cy='40' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='82' cy='44' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='84' cy='78' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='38' cy='80' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='60' cy='90' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='30' cy='60' r='.7' fill='%23000' stroke='none'/%3E%3C/svg%3E");
+  --find-sherd: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 54C30 36 66 30 100 36l-6 18C86 72 68 86 44 90 32 76 22 66 14 54Z'/%3E%3Cpath d='M19 60C35 44 68 39 97 44'/%3E%3Cpath d='M38 68l10-6M50 72l10-6M62 74l10-6'/%3E%3Cpath d='M106 36h5l-2 20h-4z' fill='%23000'/%3E%3Ccircle cx='30' cy='62' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='44' cy='80' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='58' cy='82' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='76' cy='64' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='84' cy='58' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='36' cy='72' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='70' cy='76' r='.7' fill='%23000' stroke='none'/%3E%3C/svg%3E");
+  --find-bottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M52 12h16v9H52z'/%3E%3Cpath d='M54 21v14c0 6-14 10-14 22v48c0 4 4 7 8 7h24c4 0 8-3 8-7V57c0-12-14-16-14-22V21'/%3E%3Cpath d='M40 68h40v24H40z'/%3E%3Cpath d='M46 60v40'/%3E%3Cpath d='M48 80h24M52 86h16'/%3E%3C/svg%3E");
+  --find-glass: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='60' cy='22' rx='25' ry='5'/%3E%3Cpath d='M35 22l6 84h38l6-84'/%3E%3Cpath d='M43 106a17 3 0 0 0 34 0'/%3E%3Cpath d='M45 32l3 66M53 32l1.5 68M60 32v68M67 32l-1.5 68M75 32l-3 66'/%3E%3Cpath d='M38 50h44'/%3E%3C/svg%3E");
+  --find-key: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='34' cy='60' r='17'/%3E%3Ccircle cx='34' cy='60' r='6'/%3E%3Cpath d='M51 57h56v6H51'/%3E%3Cpath d='M88 63v10h5v-6h5v9h5V63'/%3E%3Ccircle cx='26' cy='50' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='42' cy='70' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='24' cy='66' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='44' cy='52' r='.7' fill='%23000' stroke='none'/%3E%3C/svg%3E");
+}
+.slot { position: relative; background: repeating-linear-gradient(90deg, var(--color-ink) 0 12px, var(--color-paper) 12px 24px) left 17px bottom 17px / 96px 6px no-repeat, linear-gradient(var(--color-ink), var(--color-ink)) left 16px bottom 16px / 98px 8px no-repeat, var(--color-surface); }
+.slot::after { content: ''; position: absolute; inset: 8% 14% 14%; background: var(--color-ink); -webkit-mask: var(--find, var(--find-sherd)) center / contain no-repeat; mask: var(--find, var(--find-sherd)) center / contain no-repeat; }
+.slot[data-find="cap"] { --find: var(--find-cap); }
+.slot[data-find="coin"] { --find: var(--find-coin); }
+.slot[data-find="sherd"] { --find: var(--find-sherd); }
+.slot[data-find="bottle"] { --find: var(--find-bottle); }
+.slot[data-find="glass"] { --find: var(--find-glass); }
+.slot[data-find="key"] { --find: var(--find-key); }
+
+/* The photo scale as a standalone rule: section heads end in it. */
+.scale { display: inline-block; width: 98px; height: 8px; flex: none; background: repeating-linear-gradient(90deg, var(--color-ink) 0 12px, var(--color-paper) 12px 24px) 1px 1px / 96px 6px no-repeat, var(--color-ink); }
+
+/* Soil colours, one per editorial series, taken from the Masthead layers (101) to (105). */
+.soil-temuan { --soil: color-mix(in oklab, var(--color-accent) 42%, var(--color-surface)); }
+.soil-jejak-proses { --soil: color-mix(in oklab, var(--color-ink) 80%, var(--color-accent)); }
+.soil-ingatan-bersama { --soil: var(--color-ink-muted); }
+.soil-stratigrafi { --soil: repeating-linear-gradient(60deg, transparent 0 5px, var(--color-ink-muted) 5px 6px), color-mix(in oklab, var(--color-ink) 18%, var(--color-surface)); }
+.chip { display: inline-block; width: 10px; height: 10px; background: var(--soil); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-ink) 40%, transparent); vertical-align: -1px; }
+
+/* Section head: heading on the left, the photo scale on the right, ruled underneath. */
+.sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-ink); margin-bottom: var(--space-8); }
+.sec-head h2 { font-family: var(--font-display); font-weight: 400; font-size: var(--type-h2-size); line-height: var(--type-h2-leading); margin: 0; }
+.sec-head .scale { margin-bottom: 0.4em; }
+@media (min-width: 768px) { .sec-head { margin-bottom: var(--space-12); } }

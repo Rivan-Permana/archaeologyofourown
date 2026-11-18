@@ -78,7 +78,15 @@
     "toc": "On this page",
     "share": "Share",
     "copy": "Copy link",
-    "copied": "Link copied"
+    "copied": "Link copied",
+    "series": "Series",
+    "author": "Author",
+    "date": "Date",
+    "reading": "Reading time",
+    "shareTitle": "Share this article",
+    "shareHint": "Send it to a friend through an app, or copy the link.",
+    "email": "Email",
+    "more": "More"
   },
   "notice": {
     "unavailable": "This article isn't available in English yet."

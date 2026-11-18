@@ -4,7 +4,8 @@ import { t } from '../i18n/index.ts';
 import { articleBase, type Locale } from '../i18n/routes.ts';
 import { EDITORIAL_SERIES } from '../shared/enums.ts';
 
-// Four ruled register rows, not cards: the register look carries the "catalogue" idea (UX-DR16).
+// Four ruled register rows, not cards (UX-DR16). Each row carries its soil colour from the Masthead section, so the
+// series read as the layers of the same dig.
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const m = t(locale);
@@ -17,10 +18,11 @@ const count = (n: number) => m.seriesSection.count[n === 1 ? 'one' : 'other'].re
 ---
 <section class="sec" id="editorial-series" aria-labelledby="editorial-series-heading">
   <div class="wrap">
-    <div class="head"><h2 id="editorial-series-heading">{m.seriesSection.title}</h2></div>
+    <div class="sec-head"><h2 id="editorial-series-heading">{m.seriesSection.title}</h2><span class="scale" aria-hidden="true"></span></div>
     <ul class="list">
       {rows.map(({ series, count: n, latest }) => (
-        <li>
+        <li class={`soil-${series}`}>
+          <span class="soil" aria-hidden="true"></span>
           <h3>{m.series[series].label}</h3>
           <p class="desc">{m.series[series].description}</p>
           {latest
@@ -35,28 +37,30 @@ const count = (n: number) => m.seriesSection.count[n === 1 ? 'one' : 'other'].re
 <style>
   .sec { padding: var(--space-12) 0 var(--space-16); }
   .wrap { max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); }
-  .head { border-top: 1px solid var(--color-ink); padding-top: var(--space-4); margin-bottom: var(--space-6); }
-  h2 { font-family: var(--font-display); font-weight: 400; font-size: var(--type-h2-size); line-height: var(--type-h2-leading); margin: 0; }
-  .list { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--color-line); }
-  li { display: grid; grid-template-columns: 1fr auto; gap: var(--space-2) var(--space-4); align-items: baseline; padding: var(--space-6) 0; border-top: 1px solid var(--color-line); transition: border-color 150ms ease; }
-  li:hover { border-top-color: var(--color-accent); }
+  .list { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--color-ink); }
+  li { position: relative; display: grid; grid-template-columns: 1fr auto; gap: var(--space-2) var(--space-4); align-items: baseline; padding: var(--space-6) 0 var(--space-6) var(--space-6); border-top: 1px solid var(--color-line); }
+  li:first-child { border-top: 0; }
+  /* The soil strip: a thin band on mobile, a wide block on desktop that widens a little on hover. */
+  .soil { position: absolute; left: 0; top: var(--space-3); bottom: var(--space-3); width: 8px; background: var(--soil); transform-origin: left; transition: transform 300ms var(--ease-out); }
   h3 { font-family: var(--font-display); font-weight: 400; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); margin: 0; }
   p { margin: 0; }
   .desc { color: var(--color-ink-muted); grid-column: 1 / -1; }
   .latest { grid-column: 1 / -1; }
+  .latest a { font-family: var(--font-display); }
   .soon { color: var(--color-ink-muted); }
   .meta { font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); line-height: var(--type-meta-leading); letter-spacing: var(--type-meta-tracking); font-variant-numeric: tabular-nums; color: var(--color-ink-muted); }
   .count { grid-row: 1; grid-column: 2; text-align: right; }
   @media (min-width: 768px) {
     .wrap { padding-inline: var(--gutter-desktop); }
     .sec { padding: var(--space-16) 0 var(--space-24); }
-    .head { margin-bottom: var(--space-12); }
   }
   @media (min-width: 1100px) {
-    li { grid-template-columns: 3fr 4fr 4fr 1fr; gap: var(--gutter-desktop); }
-    h3 { font-size: 1.75rem; }
+    li { grid-template-columns: 3fr 4fr 4fr 1fr; gap: var(--gutter-desktop); padding: var(--space-8) 0 var(--space-8) calc(64px + var(--gutter-desktop)); min-height: 120px; align-items: center; }
+    .soil { top: 0; bottom: 0; width: 64px; }
+    @media (hover: hover) { li:hover .soil { transform: scaleX(1.25); } }
+    h3 { font-size: 2rem; line-height: 1.1; }
     .desc, .latest { grid-column: auto; }
     .count { grid-row: auto; grid-column: auto; }
   }
-  @media (prefers-reduced-motion: reduce) { li { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .soil { transition: none; } }
 </style>

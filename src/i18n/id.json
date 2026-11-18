@@ -78,7 +78,15 @@
     "toc": "Di halaman ini",
     "share": "Bagikan",
     "copy": "Salin tautan",
-    "copied": "Tautan tersalin"
+    "copied": "Tautan tersalin",
+    "series": "Seri",
+    "author": "Penulis",
+    "date": "Tanggal",
+    "reading": "Waktu baca",
+    "shareTitle": "Bagikan artikel ini",
+    "shareHint": "Kirim ke teman lewat aplikasi, atau salin tautannya.",
+    "email": "Surel",
+    "more": "Lainnya"
   },
   "notice": {
     "unavailable": "Artikel ini belum tersedia dalam bahasa Indonesia."

@@ -21,10 +21,10 @@ const labels = { ...m.record, categories: m.category };
 const marker = m.site.placeholderMarker;
 const tint = pick && tintOf(pick, pool);
 ---
-<section class="aotd" id="artefact-of-the-day" aria-labelledby="aotd-heading" data-aotd data-pick={pickId} data-date={date} data-lang={locale} data-count={inLang.length}
+<section class:list={['aotd', { case: !tint }]} id="artefact-of-the-day" aria-labelledby="aotd-heading" data-aotd data-pick={pickId} data-date={date} data-lang={locale} data-count={inLang.length}
   style={tint ? `--tint-light:${tint.light};--tint-dark:${tint.dark}` : undefined}>
   <div class="wrap">
-    <h2 id="aotd-heading">{m.nav.artefactOfTheDay}</h2>
+    <div class="sec-head"><h2 id="aotd-heading">{m.nav.artefactOfTheDay}</h2><span class="scale" aria-hidden="true"></span></div>
     {pick
       ? <div class="panel" data-panel set:html={panelHtml(pick, pool, locale, labels, marker)} />
       : <p>{m.aotd.empty}</p>}
@@ -78,6 +78,7 @@ const tint = pick && tintOf(pick, pool);
       await wait(200);
       panel!.innerHTML = panelHtml(a, p, lang, cfg.labels, cfg.marker);
       const tint = tintOf(a, p);
+      root!.classList.toggle('case', !tint);
       if (tint) { root!.style.setProperty('--tint-light', tint.light); root!.style.setProperty('--tint-dark', tint.dark); }
       else { root!.style.removeProperty('--tint-light'); root!.style.removeProperty('--tint-dark'); }
       panel!.classList.remove('fading');
@@ -111,31 +112,38 @@ const tint = pick && tintOf(pick, pool);
   }
 </script>
 <style>
-  .aotd { position: relative; isolation: isolate; background: var(--tint-light, var(--color-surface)); padding: var(--space-12) 0 var(--space-16); transition: background-color 0.6s ease; }
+  .aotd { position: relative; isolation: isolate; background: var(--tint-light, var(--color-surface)); padding: var(--space-12) 0 var(--space-16); transition: background-color 0.6s ease;
+    --inv-ink: var(--color-paper); --inv-paper: var(--color-ink); --inv-accent: color-mix(in oklab, var(--color-accent) 62%, var(--color-paper)); }
   /* Soil grain over the section colour, the same texture as the Masthead layers. */
   .aotd::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--color-ink); opacity: 0.08; -webkit-mask: var(--tex-grain); mask: var(--tex-grain); pointer-events: none; }
   @media (prefers-color-scheme: dark) { .aotd { background: var(--tint-dark, var(--color-surface)); } }
+  /* No photo palette to borrow: the section is a dark display case. Tokens are inverted for everything inside,
+     so the drawing, record, scale and buttons keep their contrast without per-element colours. */
+  .aotd.case { background: var(--inv-paper); color: var(--inv-ink); }
+  .aotd.case::before { background: var(--inv-ink); opacity: 0.06; }
+  .case .wrap { --color-ink: var(--inv-ink); --color-paper: var(--inv-paper); --color-accent: var(--inv-accent);
+    --color-surface: color-mix(in oklab, var(--inv-paper) 86%, var(--inv-ink)); --color-ink-muted: color-mix(in oklab, var(--inv-ink) 72%, var(--inv-paper));
+    --color-line: color-mix(in oklab, var(--inv-ink) 28%, var(--inv-paper)); --color-on-accent: var(--inv-paper); color: var(--color-ink); }
   .wrap { max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); }
-  h2 { font-family: var(--font-display); font-weight: 400; font-size: var(--type-h2-size); line-height: var(--type-h2-leading); margin: 0 0 var(--space-6); }
   .panel { display: grid; gap: var(--space-6); transition: opacity 0.2s ease; }
   .panel.fading { opacity: 0; }
   .controls { margin-top: var(--space-6); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
   .note { margin: 0; font-size: var(--type-small-size); }
   .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
   .panel :global(figure) { margin: 0; }
-  .panel :global(.photo) { position: relative; aspect-ratio: 4 / 5; background: var(--color-surface); }
+  .panel :global(.photo) { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--color-surface); }
   .panel :global(.photo img), .panel :global(.slot) { width: 100%; height: 100%; object-fit: cover; display: block; }
   .panel :global(.mark) { position: absolute; top: var(--space-3); left: var(--space-3); }
   .panel :global(figcaption) { margin-top: var(--space-2); font-size: var(--type-small-size); color: var(--color-ink); }
-  .panel :global(.art-title) { font-family: var(--font-display); font-weight: 400; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); margin: 0 0 var(--space-4); }
+  .panel :global(.art-title) { font-family: var(--font-display); font-weight: 300; font-size: clamp(2.25rem, 4.5vw, 4rem); line-height: 1; letter-spacing: -0.01em; margin: 0 0 var(--space-8); text-wrap: balance; }
   .panel :global(.catalogue-record) { margin: 0; border-color: var(--color-ink); }
   .panel :global(.catalogue-record dt) { color: var(--color-ink); }
   @media (min-width: 768px) { .wrap { padding-inline: var(--gutter-desktop); } .aotd { padding: var(--space-16) 0 var(--space-24); } }
   @media (min-width: 1100px) {
     .panel { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter-desktop); align-items: start; }
-    .panel :global(.aotd-figure) { grid-column: 1 / span 4; }
-    .panel :global(.aotd-body) { grid-column: 6 / span 5; }
-    .controls { margin-left: calc((100% + var(--gutter-desktop)) / 12 * 5); }
+    .panel :global(.aotd-figure) { grid-column: 1 / span 5; }
+    .panel :global(.aotd-body) { grid-column: 7 / span 6; align-self: center; }
+    .controls { margin-left: calc((100% + var(--gutter-desktop)) / 12 * 6); }
   }
   @media (prefers-reduced-motion: reduce) { .aotd, .panel { transition: none; } }
 </style>

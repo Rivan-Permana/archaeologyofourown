@@ -2,6 +2,7 @@
 // so a swapped Artefact is identical to a prerendered one. Text is escaped; the only HTML is what is built here.
 import type { PublicArtefactT, PublicMediaT } from './public.ts';
 import { catalogueRecordHtml, esc, type RenderLabels } from './render.ts';
+import { findFor } from './finds.ts';
 
 type Lang = 'id' | 'en';
 export interface Pool { artefacts: PublicArtefactT[]; media: PublicMediaT[] }
@@ -31,7 +32,7 @@ export function panelHtml(a: PublicArtefactT, pool: Pool, lang: Lang, labels: Re
   const photo = !m
     ? ''
     : m.isPlaceholder || !alt
-      ? `<div class="slot" ${a.isPlaceholder || m.isPlaceholder ? `role="img" aria-label="${esc(alt || placeholderMarker)}"` : 'aria-hidden="true"'}></div>${marker}`
+      ? `<div class="slot" data-find="${findFor(a.id)}" ${a.isPlaceholder || m.isPlaceholder ? `role="img" aria-label="${esc(alt || placeholderMarker)}"` : 'aria-hidden="true"'}></div>${marker}`
       : `<img src="${src(big)}" srcset="${widths.map((w) => `${src(w)} ${w}w`).join(', ')}" sizes="(min-width: 1100px) 40vw, 100vw" width="${big}" height="${Math.round((big * m.height) / m.width)}" alt="${esc(alt)}" loading="lazy" decoding="async">${marker}`;
   const cap = [ref?.caption[lang] && esc(ref.caption[lang]!), ref?.credit[lang] && `<span class="credit">${esc(ref.credit[lang]!)}</span>`].filter(Boolean).join(' ');
   return `<figure class="aotd-figure"><div class="photo">${photo}</div>${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>` +
