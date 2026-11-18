@@ -142,14 +142,14 @@ const related = (await articlesIn(locale))
   .media { position: relative; aspect-ratio: 4 / 3; }
   .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .media .slot { width: 100%; height: 100%; background: transparent; }
-  .media .slot::after { inset: 4% 12%; }
+  .media .slot::after { inset: 4% 12%; rotate: none; }
   .mark { position: absolute; top: 0; left: 0; }
   figcaption { margin-top: var(--space-2); font-size: var(--type-small-size); line-height: var(--type-small-leading); }
   .layout { max-width: var(--max-width); margin: 0 auto; padding: var(--space-12) var(--margin-mobile) 0; display: block; }
   .main { max-width: var(--measure); margin: 0 auto; }
   .foot { margin-top: var(--space-12); }
   .related { max-width: var(--max-width); margin: var(--space-16) auto 0; padding: 0 var(--margin-mobile); }
-  .related h2 { font-size: var(--type-h2-size); font-weight: var(--type-h2-weight); line-height: var(--type-h2-leading); margin: 0 0 var(--space-8); padding-top: var(--space-6); border-top: 3px solid var(--color-ink); }
+  .related h2 { font-size: var(--type-h3-size); font-weight: var(--type-h3-weight); line-height: var(--type-h3-leading); margin: 0 0 var(--space-8); padding-top: var(--space-4); border-top: 3px solid var(--color-ink); }
   .row { display: grid; grid-template-columns: 1fr; gap: var(--space-12) var(--gutter-desktop); }
   @media (min-width: 768px) {
     .cover-in, .layout, .related { padding-inline: var(--gutter-desktop); }

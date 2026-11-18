@@ -56,9 +56,9 @@ typography:
   # public: "Indeks" direction, user decision 2026-11-19
   display:
     fontFamily: Bricolage Grotesque
-    fontSize: clamp(3.4rem, 22vw, 21rem)
+    fontSize: clamp(2.75rem, 11vw, 7.5rem)
     fontWeight: '800'
-    lineHeight: '0.8'
+    lineHeight: '0.85'
   manifesto:
     fontFamily: Plus Jakarta Sans
     fontSize: clamp(1.3rem, 2.3vw, 2rem)
@@ -185,7 +185,7 @@ spacing:
   gutter-desktop: 32px
   margin-mobile: 16px
   max-width: 1440px
-  measure: 68ch
+  measure: 56ch
   admin-nav-width: 200px
   admin-rail-width: 300px
   admin-room-padding: 32px

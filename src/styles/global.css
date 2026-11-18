@@ -78,13 +78,17 @@ body:has(dialog[open]) { overflow: hidden; }
 .s-ingatan-bersama { --c: var(--color-botol); --on: var(--color-series-paper); }
 .s-stratigrafi { --c: var(--color-nila); --on: var(--color-series-paper); }
 .slot { position: relative; background: var(--c, var(--color-surface)); }
-.slot::after { content: ''; position: absolute; inset: 14% 22%; background: var(--on, var(--color-ink)); -webkit-mask: var(--find, var(--find-sherd)) center / contain no-repeat; mask: var(--find, var(--find-sherd)) center / contain no-repeat; }
-.slot[data-find="cap"] { --find: var(--find-cap); }
-.slot[data-find="coin"] { --find: var(--find-coin); }
-.slot[data-find="sherd"] { --find: var(--find-sherd); }
-.slot[data-find="bottle"] { --find: var(--find-bottle); }
-.slot[data-find="glass"] { --find: var(--find-glass); }
-.slot[data-find="key"] { --find: var(--find-key); }
+/* Each find sits the way it was laid out on the recording sheet, not centred like an icon: its own size, offset and
+   turn, some cropped by the edge. A 5 cm scale sits bottom left, as on a finds photo. */
+.slot { overflow: hidden; }
+.slot::after { content: ''; position: absolute; inset: var(--at, 14% 22%); rotate: var(--turn, 0deg); background: var(--on, var(--color-ink)); -webkit-mask: var(--find, var(--find-sherd)) center / contain no-repeat; mask: var(--find, var(--find-sherd)) center / contain no-repeat; }
+.slot::before { content: '5 cm'; position: absolute; left: var(--space-4); bottom: var(--space-3); z-index: 1; padding-top: 6px; width: 64px; border-top: 3px solid var(--on, var(--color-ink)); font: 600 11px/1 var(--font-body); color: var(--on, var(--color-ink)); }
+.slot[data-find="cap"] { --find: var(--find-cap); --at: 4% 10% 24% 30%; --turn: -8deg; }
+.slot[data-find="coin"] { --find: var(--find-coin); --at: 10% 30% 18% 14%; }
+.slot[data-find="sherd"] { --find: var(--find-sherd); --at: 6% -12% 14% 18%; --turn: 12deg; }
+.slot[data-find="bottle"] { --find: var(--find-bottle); --at: 8% 24% -22% 30%; --turn: 6deg; }
+.slot[data-find="glass"] { --find: var(--find-glass); --at: -18% 32% 18% 20%; }
+.slot[data-find="key"] { --find: var(--find-key); --at: 12% 4% 20% 14%; --turn: -14deg; }
 .dot { display: inline-block; width: 12px; height: 12px; flex: none; background: var(--c); outline: 1px solid var(--color-ink); outline-offset: -1px; }
 
 /* Headings are the condensed display cut; the width axis is not a token in DESIGN.md, so it is set once here. */

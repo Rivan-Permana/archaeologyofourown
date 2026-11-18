@@ -20,3 +20,6 @@ public/version.json
 public/artefacts.json
 .playwright-mcp/
 public/_headers
+
+# impeccable critique snapshots (local)
+.impeccable/

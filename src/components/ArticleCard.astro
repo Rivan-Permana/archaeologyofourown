@@ -24,7 +24,7 @@ const Heading = featured ? 'h2' : 'h3';
     {real
       ? <img src={src(widths[widths.length - 1])} srcset={widths.map((w) => `${src(w)} ${w}w`).join(', ')} sizes={featured ? '(min-width: 1100px) 66vw, 100vw' : '(min-width: 1100px) 33vw, 100vw'} width="3" height="2" alt={alt} loading="lazy" decoding="async" />
       : (isPlaceholder || media?.isPlaceholder)
-        ? <div class="slot" data-find={findFor(slug)} role="img" aria-label={alt ?? m.site.placeholderMarker}></div>
+        ? <div class="slot" data-find={findFor(slug)} aria-hidden="true"></div>
         : <div class="slot" data-find={findFor(slug)} aria-hidden="true"></div>}
     {(isPlaceholder || media?.isPlaceholder) && <span class="mark"><Placeholder locale={locale} /></span>}
   </div>
@@ -34,7 +34,7 @@ const Heading = featured ? 'h2' : 'h3';
 </article>
 <style>
   .card { position: relative; }
-  .media { position: relative; aspect-ratio: 1 / 1; overflow: hidden; background: var(--c); margin-bottom: var(--space-4); }
+  .media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--c); margin-bottom: var(--space-4); }
   .media img, .slot { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 500ms var(--ease-out); }
   @media (hover: hover) { .card:hover .slot { transform: rotate(-5deg) scale(1.04); } .card:hover .media img { transform: scale(1.03); } }
   .mark { position: absolute; top: var(--space-3); left: var(--space-3); z-index: 1; }

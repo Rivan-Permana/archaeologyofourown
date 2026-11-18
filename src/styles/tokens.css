@@ -40,9 +40,9 @@
   --font-admin-sans: 'Inter Variable', Inter, system-ui, sans-serif;
 
   /* public type */
-  --type-display-size: clamp(3.4rem, 22vw, 21rem);
+  --type-display-size: clamp(2.75rem, 11vw, 7.5rem);
   --type-display-weight: 800;
-  --type-display-leading: 0.8;
+  --type-display-leading: 0.85;
   --type-manifesto-size: clamp(1.3rem, 2.3vw, 2rem);
   --type-manifesto-weight: 500;
   --type-manifesto-leading: 1.3;
@@ -120,7 +120,7 @@
   --gutter-desktop: 32px;
   --margin-mobile: 16px;
   --max-width: 1440px;
-  --measure: 68ch;
+  --measure: 56ch;
   --admin-nav-width: 200px;
   --admin-rail-width: 300px;
   --admin-room-padding: 32px;

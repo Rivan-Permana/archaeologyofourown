@@ -12,7 +12,7 @@ const text = encodeURIComponent(`${title} ${url}`);
 const u = encodeURIComponent(url);
 const apps = [
   { label: 'WhatsApp', href: `https://wa.me/?text=${text}` },
-  { label: 'X', href: `https://x.com/intent/post?text=${encodeURIComponent(title)}&url=${u}` },
+  { label: 'X (Twitter)', href: `https://x.com/intent/post?text=${encodeURIComponent(title)}&url=${u}` },
   { label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${u}` },
   { label: m.email, href: `mailto:?subject=${encodeURIComponent(title)}&body=${u}` },
 ];
