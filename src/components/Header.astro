@@ -4,13 +4,14 @@ import { homeSections, routeFor, type Locale } from '../i18n/routes.ts';
 import GlobeIcon from './GlobeIcon.astro';
 import LangSwitch from './LangSwitch.astro';
 
-interface Props { locale: Locale; hrefs: Record<Locale, string> }
-const { locale, hrefs } = Astro.props;
+// `overMasthead`: on the home page the bar stays hidden and inert while the Masthead is in view (UX-DR10).
+interface Props { locale: Locale; hrefs: Record<Locale, string>; overMasthead?: boolean }
+const { locale, hrefs, overMasthead = false } = Astro.props;
 const m = t(locale);
 const home = routeFor('home', locale);
 ---
 <a class="skip" href="#main">{m.nav.skip}</a>
-<header class="bar">
+<header class:list={['bar', { over: overMasthead }]} data-bar inert={overMasthead}>
   <div class="inner">
     <a class="wordmark" href={home}>{m.site.name}</a>
     <nav class="nav" aria-label={m.nav.label}>
@@ -30,6 +31,15 @@ const home = routeFor('home', locale);
   </dialog>
 </header>
 <script>
+  const bar = document.querySelector<HTMLElement>('[data-bar].over');
+  const mast = document.querySelector('[data-masthead]');
+  if (bar && mast) {
+    new IntersectionObserver(([e]) => {
+      bar.toggleAttribute('inert', e.isIntersecting);
+      bar.classList.toggle('shown', !e.isIntersecting);
+    // Reveal once the Masthead is scrolled past the bar height plus a margin (scroll-padding-top is 58px).
+    }, { rootMargin: '-64px 0px 0px 0px' }).observe(mast);
+  }
   const dialog = document.querySelector<HTMLDialogElement>('[data-menu]');
   const open = document.querySelector<HTMLButtonElement>('[data-menu-open]');
   // showModal traps focus, closes on Esc and returns focus to the opener; the rest is the focus target and item clicks.
@@ -45,6 +55,8 @@ const home = routeFor('home', locale);
   .skip { position: absolute; left: var(--space-2); top: -100px; background: var(--color-paper); padding: var(--space-3) var(--space-4); z-index: 20; }
   .skip:focus { top: var(--space-2); }
   .bar { position: sticky; top: 0; z-index: 10; background: var(--color-paper); border-bottom: 1px solid var(--color-line); }
+  .over { position: fixed; inset-inline: 0; visibility: hidden; }
+  .over.shown { visibility: visible; }
   .inner { height: calc(var(--header-height) - 1px); max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); display: flex; align-items: center; gap: var(--space-6); }
   .wordmark { font-family: var(--font-display); font-size: var(--type-h3-size); line-height: var(--type-h3-leading); text-decoration: none; margin-right: auto; }
   ul { list-style: none; margin: 0; padding: 0; }

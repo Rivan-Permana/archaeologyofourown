@@ -20,7 +20,12 @@ export function otherLocale(locale: Locale): Locale {
 
 // Header nav and mobile menu list only sections registered here by the story that builds them (FR-1).
 // The footer shows privacy and contribute links only once those route pairs exist in `routes`.
-export const homeSections: { id: string; label: 'articles' | 'artefactOfTheDay' | 'contribute' | 'newsletter' }[] = [];
+export const homeSections: { id: string; label: 'articles' | 'artefactOfTheDay' | 'contribute' | 'newsletter' }[] = [
+  { id: 'latest-articles', label: 'articles' },
+];
+
+// Article pages are built in Story 1.8: /artikel/<slug> and /en/articles/<slug>.
+export const articleBase: Record<Locale, string> = { id: '/artikel/', en: '/en/articles/' };
 
 export function optionalRoute(key: 'privacy' | 'contribute', locale: Locale): string | undefined {
   return (routes as Record<string, Record<Locale, string>>)[key]?.[locale];

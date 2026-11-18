@@ -61,5 +61,16 @@
     "category": "Category",
     "provenance": "Provenance",
     "credit": "Contributor credit"
+  },
+  "masthead": {
+    "manifesto": "We read everyday Indonesian objects like layers of soil: what came before, around and after the object was made.",
+    "manifestoIsPlaceholder": true,
+    "read": "Read articles",
+    "contribute": "Contribute an artefact"
+  },
+  "latest": {
+    "title": "Latest articles",
+    "empty": "No articles in this language yet.",
+    "readingTime": "min read"
   }
 }

@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import { t } from '../i18n/index.ts';
+import type { Locale } from '../i18n/routes.ts';
+import ArticleCard from './ArticleCard.astro';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const m = t(locale);
+const media = new Map((await getCollection('media')).map((e) => [e.data.id, e.data]));
+// Only Articles available in the page language, newest first, at most six (FR-4).
+const items = (await getCollection('articles'))
+  .flatMap(({ data: a }) => {
+    const tr = a.translations.find((x) => x.lang === locale);
+    return tr ? [{ a, tr }] : [];
+  })
+  .sort((x, y) => y.a.date.localeCompare(x.a.date))
+  .slice(0, 6)
+  .map(({ a, tr }) => {
+    const hero = a.refs.find((r) => r.role === 'hero');
+    return {
+      locale, series: a.series, slug: tr.slug, title: tr.title, excerpt: tr.standfirst, date: a.date, minutes: tr.readingMinutes,
+      isPlaceholder: a.isPlaceholder, media: hero && media.get(hero.mediaId), alt: hero?.alt[locale],
+    };
+  });
+const [featured, ...rest] = items;
+const side = rest.slice(0, 2);
+const below = rest.slice(2);
+---
+<section class="sec" id="latest-articles" aria-labelledby="latest-articles-heading">
+  <div class="wrap">
+    <div class="head"><h2 id="latest-articles-heading" tabindex="-1">{m.latest.title}</h2></div>
+    {featured
+      ? <div class="latest">
+          <div class="feat"><ArticleCard {...featured} featured /></div>
+          {side.length > 0 && <div class="side">{side.map((c) => <ArticleCard {...c} />)}</div>}
+          {below.map((c) => <div class="third"><ArticleCard {...c} /></div>)}
+        </div>
+      : <p>{m.latest.empty}</p>}
+  </div>
+</section>
+<style>
+  .sec { padding: var(--space-12) 0 var(--space-16); }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); }
+  .head { border-top: 1px solid var(--color-ink); padding-top: var(--space-4); margin-bottom: var(--space-6); }
+  h2 { font-family: var(--font-display); font-weight: 400; font-size: var(--type-h2-size); line-height: var(--type-h2-leading); margin: 0; }
+  .latest { display: grid; grid-template-columns: 1fr; gap: var(--space-12) var(--gutter-desktop); }
+  .side { display: grid; gap: var(--space-12); align-content: start; }
+  @media (min-width: 768px) {
+    .wrap { padding-inline: var(--gutter-desktop); }
+    .sec { padding: var(--space-16) 0 var(--space-24); }
+    .head { margin-bottom: var(--space-12); }
+  }
+  @media (min-width: 1100px) {
+    .latest { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    .feat { grid-column: 1 / span 8; }
+    .side { grid-column: 9 / span 4; }
+    .third { grid-column: span 4; }
+  }
+</style>

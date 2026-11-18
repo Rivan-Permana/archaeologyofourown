@@ -1,0 +1,69 @@
+---
+import { t } from '../i18n/index.ts';
+import { optionalRoute, type Locale } from '../i18n/routes.ts';
+import GlobeIcon from './GlobeIcon.astro';
+import LangSwitch from './LangSwitch.astro';
+import Placeholder from './Placeholder.astro';
+
+interface Props { locale: Locale; hrefs: Record<Locale, string> }
+const { locale, hrefs } = Astro.props;
+const m = t(locale);
+const contribute = optionalRoute('contribute', locale);
+const [first, ...rest] = m.site.name.split(' of ');
+---
+<section class="mast" data-masthead aria-labelledby="site-name">
+  <div class="wrap">
+    <div class="top"><GlobeIcon /><LangSwitch locale={locale} hrefs={hrefs} short /></div>
+    <h1 id="site-name"><span>{first}</span> <span>of {rest.join(' of ')}</span></h1>
+    <p class="manifesto">{m.masthead.manifesto}</p>
+    {m.masthead.manifestoIsPlaceholder && <Placeholder locale={locale} />}
+    <div class="actions">
+      <a class="btn btn-primary" href="#latest-articles" data-read>{m.masthead.read}</a>
+      {contribute && <a class="btn btn-secondary" href={contribute}>{m.masthead.contribute}</a>}
+    </div>
+  </div>
+  <div class="strata" aria-hidden="true">
+    <div class="band b1"></div><div class="band b2"></div>
+    <div class="band b3"><i class="find"></i></div>
+    <div class="band b4"></div><div class="band b5"></div>
+  </div>
+</section>
+<script>
+  // "Baca artikel" moves focus to the Latest Articles heading (UX-DR73). The default anchor jump would
+  // reset focus to the page, so scroll and focus are done here; without JS the anchor still scrolls.
+  document.querySelector('[data-read]')?.addEventListener('click', (e) => {
+    const heading = document.getElementById('latest-articles-heading');
+    if (!heading) return;
+    e.preventDefault();
+    history.pushState(null, '', '#latest-articles');
+    document.getElementById('latest-articles')?.scrollIntoView({ block: 'start' });
+    heading.focus({ preventScroll: true });
+  });
+</script>
+<style>
+  .mast { display: flex; flex-direction: column; min-height: calc(100svh - 0px); }
+  .wrap { max-width: var(--max-width); margin: 0 auto; width: 100%; padding-inline: var(--margin-mobile); }
+  .top { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2); height: 56px; font-size: var(--type-small-size); }
+  h1 { font-family: var(--font-display); font-size: var(--type-display-size); font-weight: var(--type-display-weight); line-height: var(--type-display-leading); font-variation-settings: "opsz" 144; letter-spacing: -0.01em; margin: var(--space-4) 0 0; }
+  h1 span { display: block; }
+  .manifesto { font-family: var(--font-display); font-size: var(--type-manifesto-size); font-weight: var(--type-manifesto-weight); line-height: var(--type-manifesto-leading); max-width: 52ch; margin: var(--space-6) 0 var(--space-3); }
+  .actions { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-6); }
+  .actions .btn { width: 100%; }
+  .strata { margin-top: auto; padding-top: var(--space-8); }
+  .band { position: relative; border-top: 1px solid var(--color-ink); }
+  .b1 { height: 28px; background: var(--color-surface); }
+  .b2 { height: 8px; background: var(--color-line); }
+  .b3 { height: 48px; background: var(--color-surface); }
+  .b4 { height: 12px; background: var(--color-line); }
+  .b5 { height: 28px; background: var(--color-ink-muted); border-bottom: 1px solid var(--color-ink); }
+  .find { position: absolute; left: 61%; top: 18px; width: 12px; height: 12px; background: var(--color-accent); }
+  @media (min-width: 768px) {
+    .wrap { padding-inline: var(--gutter-desktop); }
+    .top { height: 72px; }
+    .actions { flex-direction: row; flex-wrap: wrap; }
+    .actions .btn { width: auto; }
+    .strata { padding-top: var(--space-12); }
+    .b1 { height: 48px; } .b2 { height: 12px; } .b3 { height: 88px; } .b4 { height: 20px; } .b5 { height: 40px; }
+    .find { top: 38px; }
+  }
+</style>
