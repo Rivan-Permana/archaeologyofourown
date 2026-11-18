@@ -54,5 +54,12 @@
     "budaya-visual": "Budaya visual",
     "proses": "Proses",
     "ingatan": "Ingatan"
+  },
+  "record": {
+    "inventoryNumber": "No. inventaris",
+    "year": "Tahun",
+    "category": "Kategori",
+    "provenance": "Asal-usul",
+    "credit": "Kredit kontributor"
   }
 }

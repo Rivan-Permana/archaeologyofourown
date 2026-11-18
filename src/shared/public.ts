@@ -56,3 +56,5 @@ export const Snapshot = z.strictObject({
   media: z.array(PublicMedia),
 });
 export type Snapshot = z.infer<typeof Snapshot>;
+export type PublicMediaT = z.infer<typeof PublicMedia>;
+export type PublicArtefactT = z.infer<typeof PublicArtefact>;

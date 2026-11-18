@@ -41,7 +41,7 @@ development_status:
   1-3-public-chrome-header-mobile-menu-language-switch-footer-and: review
   1-4-content-schema-media-serving-and-placeholder-seed: review
   1-5-build-snapshot-endpoint-with-public-dtos: review
-  1-6-article-rendering-prebuild-snapshot-and-leak-check: backlog
+  1-6-article-rendering-prebuild-snapshot-and-leak-check: review
   1-7-home-masthead-and-latest-articles: backlog
   1-8-article-page: backlog
   1-9-editorial-series-section: backlog

@@ -12,9 +12,12 @@
     "test": "node --test --experimental-strip-types \"tests/**/*.test.ts\"",
     "seed": "wrangler d1 migrations apply DB --local && node --experimental-strip-types scripts/seed.ts",
     "license": "node --experimental-strip-types scripts/check-licenses.ts",
+    "snapshot": "node --experimental-strip-types scripts/snapshot.ts",
     "build": "astro build",
+    "leak": "node --experimental-strip-types scripts/check-dist.ts",
+    "build:ci": "npm run snapshot && npm run build && npm run leak",
     "contrast": "node --experimental-strip-types scripts/check-contrast.ts",
-    "ci": "npm run license && npm run contrast && npm run check && npm test && npm run build"
+    "ci": "npm run license && npm run contrast && npm run check && npm test && npm run snapshot -- --local && npm run build && npm run leak"
   },
   "dependencies": {
     "@astrojs/cloudflare": "14.4.8",

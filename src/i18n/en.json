@@ -54,5 +54,12 @@
     "budaya-visual": "Visual culture",
     "proses": "Process",
     "ingatan": "Memory"
+  },
+  "record": {
+    "inventoryNumber": "Inventory no.",
+    "year": "Year",
+    "category": "Category",
+    "provenance": "Provenance",
+    "credit": "Contributor credit"
   }
 }
