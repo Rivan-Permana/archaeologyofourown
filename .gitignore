@@ -18,3 +18,4 @@ _bmad/
 worker-configuration.d.ts
 public/version.json
 public/artefacts.json
+.playwright-mcp/

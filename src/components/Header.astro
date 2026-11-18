@@ -55,8 +55,10 @@ const home = routeFor('home', locale);
   .skip { position: absolute; left: var(--space-2); top: -100px; background: var(--color-paper); padding: var(--space-3) var(--space-4); z-index: 20; }
   .skip:focus { top: var(--space-2); }
   .bar { position: sticky; top: 0; z-index: 10; background: var(--color-paper); border-bottom: 1px solid var(--color-line); }
-  .over { position: fixed; inset-inline: 0; visibility: hidden; }
-  .over.shown { visibility: visible; }
+  /* Over the Masthead the bar is hidden; it fades and drops in 8px once the Masthead has passed. Exit is quicker than enter. */
+  .over { position: fixed; inset-inline: 0; visibility: hidden; opacity: 0; transform: translateY(-8px); transition: opacity 140ms var(--ease-out), transform 140ms var(--ease-out), visibility 0s linear 140ms; }
+  .over.shown { visibility: visible; opacity: 1; transform: none; transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out); }
+  @media (prefers-reduced-motion: reduce) { .over, .over.shown { transition: none; } }
   .inner { height: calc(var(--header-height) - 1px); max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); display: flex; align-items: center; gap: var(--space-6); }
   .wordmark { font-family: var(--font-display); font-size: var(--type-h3-size); line-height: var(--type-h3-leading); text-decoration: none; margin-right: auto; }
   ul { list-style: none; margin: 0; padding: 0; }

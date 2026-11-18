@@ -55,3 +55,6 @@ body:has(dialog[open]) { overflow: hidden; }
 .catalogue-record dt { font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); line-height: var(--type-meta-leading); letter-spacing: var(--type-meta-catalogue-tracking); text-transform: uppercase; color: var(--color-ink-muted); }
 .catalogue-record dd { font-size: var(--type-small-size); }
 .category-tag { display: inline-block; border: 1px solid var(--color-ink); padding: 2px var(--space-2); font-size: var(--type-meta-size); line-height: var(--type-meta-leading); }
+
+/* Motion: one strong ease-out for entrances (emil-design-eng); scroll and fade-up curves are set where they are used. */
+:root { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); }

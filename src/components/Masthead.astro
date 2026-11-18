@@ -14,18 +14,18 @@ const [first, ...rest] = m.site.name.split(' of ');
 <section class="mast" data-masthead aria-labelledby="site-name">
   <div class="wrap">
     <div class="top"><p class="notice" role="status" data-notice hidden>{m.notice.unavailable}</p><GlobeIcon /><LangSwitch locale={locale} hrefs={hrefs} short /></div>
-    <h1 id="site-name"><span>{first}</span> <span>of {rest.join(' of ')}</span></h1>
-    <p class="manifesto">{m.masthead.manifesto}</p>
+    <h1 id="site-name" class="rise" style="--i:0"><span>{first}</span> <span>of {rest.join(' of ')}</span></h1>
+    <p class="manifesto rise" style="--i:1">{m.masthead.manifesto}</p>
     {m.masthead.manifestoIsPlaceholder && <Placeholder locale={locale} />}
-    <div class="actions">
+    <div class="actions rise" style="--i:2">
       <a class="btn btn-primary" href="#latest-articles" data-read>{m.masthead.read}</a>
       {contribute && <a class="btn btn-secondary" href={contribute}>{m.masthead.contribute}</a>}
     </div>
   </div>
   <div class="strata" aria-hidden="true">
-    <div class="band b1"></div><div class="band b2"></div>
-    <div class="band b3"><i class="find"></i></div>
-    <div class="band b4"></div><div class="band b5"></div>
+    <div class="band b1" data-band></div><div class="band b2" data-band></div>
+    <div class="band b3" data-band><i class="find"></i></div>
+    <div class="band b4" data-band></div><div class="band b5" data-band></div>
   </div>
 </section>
 <script>
@@ -54,6 +54,10 @@ const [first, ...rest] = m.site.name.split(' of ');
   .manifesto { font-family: var(--font-display); font-size: var(--type-manifesto-size); font-weight: var(--type-manifesto-weight); line-height: var(--type-manifesto-leading); max-width: 52ch; margin: var(--space-6) 0 var(--space-3); }
   .actions { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-6); }
   .actions .btn { width: 100%; }
+  /* Fade-up once on load (0.6s, power3.out = easeOutQuart, 24px). Pure CSS so the text never waits for a script (NFR7). */
+  .rise { animation: rise 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) both; animation-delay: calc(var(--i) * 80ms); }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px); } }
+  @media (prefers-reduced-motion: reduce) { .rise { animation: none; } }
   .strata { margin-top: auto; padding-top: var(--space-8); }
   .band { position: relative; border-top: 1px solid var(--color-ink); }
   .b1 { height: 28px; background: var(--color-surface); }
