@@ -1,6 +1,6 @@
 # Deploy runbook: first deploy to workers.dev
 
-State on 2026-11-18. Epic 1 is built and reviewed on branch `feat/epic-1-read-the-publication`. Nothing has been pushed or created yet.
+State on 2026-11-18. Epic 1 is built and reviewed on branch `feat/epic-1-read-the-publication` and deployed (PR 1 open). Live at `https://archaeology-of.our-own.workers.dev` (noindex, Placeholder fixtures). D1 `archaeologyofourown` has the `0000_init` migration; R2 bucket `archaeologyofourown-media` exists and is empty. The steps below record how it was done.
 
 ## Verified without touching anything remote
 
