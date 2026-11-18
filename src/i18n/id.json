@@ -1,12 +1,35 @@
 {
   "site": {
     "name": "Archaeology of Our Own",
+    "description": "Publikasi tentang benda-benda yang kita pakai sehari-hari.",
     "placeholder": "Situs ini sedang disiapkan. Isinya masih contoh.",
     "placeholderMarker": "Contoh"
   },
   "language": {
     "id": "Bahasa Indonesia",
     "en": "English",
-    "switchTo": "English"
+    "label": "Bahasa"
+  },
+  "nav": {
+    "label": "Navigasi utama",
+    "skip": "Lewati ke konten",
+    "menu": "Menu",
+    "close": "Tutup",
+    "articles": "Artikel",
+    "artefactOfTheDay": "Artefak hari ini",
+    "contribute": "Kirim artefak",
+    "newsletter": "Buletin"
+  },
+  "footer": {
+    "label": "Kaki halaman",
+    "privacy": "Catatan privasi",
+    "contribute": "Kirim artefak",
+    "copyright": "Hak cipta"
+  },
+  "notFound": {
+    "title": "Halaman tidak ditemukan",
+    "text": "Alamat ini tidak ada, atau artikelnya belum atau tidak lagi terbit.",
+    "home": "Ke beranda",
+    "latest": "Artikel terbaru"
   }
 }

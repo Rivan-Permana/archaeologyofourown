@@ -1,0 +1,27 @@
+---
+import { t } from '../i18n/index.ts';
+import { routeFor } from '../i18n/routes.ts';
+import Page from '../layouts/Page.astro';
+
+// Bilingual by design: one sentence per language, each with its own `lang` (UX-DR37).
+const id = t('id');
+const en = t('en');
+---
+<Page locale="id" title={`${id.notFound.title} | ${id.site.name}`} description={id.notFound.text} alternates={false}>
+  <div class="page">
+    <h1>{id.notFound.title}</h1>
+    <p lang="id">{id.notFound.text}</p>
+    <p lang="en">{en.notFound.text}</p>
+    <ul>
+      <li><a href={routeFor('home', 'id')} lang="id">{id.notFound.home}</a> / <a href={routeFor('home', 'en')} lang="en">{en.notFound.home}</a></li>
+      <li><a href={`${routeFor('home', 'id')}#latest-articles`} lang="id">{id.notFound.latest}</a> / <a href={`${routeFor('home', 'en')}#latest-articles`} lang="en">{en.notFound.latest}</a></li>
+    </ul>
+  </div>
+</Page>
+<style>
+  .page { max-width: var(--measure); margin: 0 auto; padding: var(--space-12) var(--margin-mobile); }
+  h1 { font-family: var(--font-display); font-size: var(--type-h1-size); font-weight: var(--type-h1-weight); line-height: var(--type-h1-leading); margin: 0 0 var(--space-6); }
+  p { margin: 0 0 var(--space-4); }
+  ul { list-style: none; padding: 0; margin: var(--space-6) 0 0; }
+  li { margin-bottom: var(--space-2); }
+</style>

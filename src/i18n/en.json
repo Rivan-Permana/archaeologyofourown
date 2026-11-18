@@ -1,12 +1,35 @@
 {
   "site": {
     "name": "Archaeology of Our Own",
+    "description": "A publication about the artefacts we live with.",
     "placeholder": "This site is being prepared. Its content is still a placeholder.",
     "placeholderMarker": "Placeholder"
   },
   "language": {
     "id": "Bahasa Indonesia",
     "en": "English",
-    "switchTo": "Bahasa Indonesia"
+    "label": "Language"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "skip": "Skip to content",
+    "menu": "Menu",
+    "close": "Close",
+    "articles": "Articles",
+    "artefactOfTheDay": "Artefact of the day",
+    "contribute": "Contribute",
+    "newsletter": "Newsletter"
+  },
+  "footer": {
+    "label": "Page footer",
+    "privacy": "Privacy note",
+    "contribute": "Contribute an artefact",
+    "copyright": "Copyright"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "This address does not exist, or the article is not published yet or any longer.",
+    "home": "Go home",
+    "latest": "Latest articles"
   }
 }
