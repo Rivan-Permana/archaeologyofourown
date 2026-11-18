@@ -2,13 +2,20 @@
    Components use these names only; no literal colours, radii or font stacks elsewhere. */
 :root {
   /* public colour */
-  --color-paper: #F4EFE7;
-  --color-surface: #EAE3D7;
-  --color-ink: #1E1B18;
-  --color-ink-muted: #5E574F;
-  --color-line: #CFC6B8;
-  --color-accent: #B4462B;
+  --color-paper: #FAFAF8;
+  --color-surface: #EFEFEA;
+  --color-ink: #161A33;
+  --color-ink-muted: #50546B;
+  --color-line: #D6D7E0;
+  --color-accent: #2B3A8C;
   --color-on-accent: #FFFFFF;
+  /* series colours, the same in both themes */
+  --color-kunyit: #E8B21A;
+  --color-jambu: #EFA3B3;
+  --color-botol: #1F6B5C;
+  --color-nila: #2B3A8C;
+  --color-series-ink: #161A33;
+  --color-series-paper: #FAFAF8;
   color-scheme: light;
 
   /* admin colour (light only in v1) */
@@ -26,43 +33,45 @@
   --color-admin-accent-press: #9A3B24;
   --color-admin-on-accent: #FFFFFF;
 
-  /* font families (self-hosted fonts arrive in Story 1.2; stacks fall back until then) */
-  --font-display: 'Fraunces Variable', Fraunces, Georgia, serif;
-  --font-body: 'Inter Variable', Inter, system-ui, sans-serif;
+  /* font families: public "Indeks" direction (2026-11-19); the admin keeps Fraunces and Inter */
+  --font-display: 'Bricolage Grotesque Variable', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'Plus Jakarta Sans Variable', system-ui, sans-serif;
+  --font-admin-serif: 'Fraunces Variable', Fraunces, Georgia, serif;
+  --font-admin-sans: 'Inter Variable', Inter, system-ui, sans-serif;
 
   /* public type */
-  --type-display-size: clamp(3.5rem, 12vw, 11rem);
-  --type-display-weight: 300;
-  --type-display-leading: 0.9;
-  --type-manifesto-size: clamp(1.25rem, 2.2vw, 1.75rem);
-  --type-manifesto-weight: 400;
+  --type-display-size: clamp(3.4rem, 15.2vw, 15.5rem);
+  --type-display-weight: 800;
+  --type-display-leading: 0.8;
+  --type-manifesto-size: clamp(1.3rem, 2.3vw, 2rem);
+  --type-manifesto-weight: 500;
   --type-manifesto-leading: 1.3;
-  --type-h1-size: clamp(2.5rem, 6vw, 4.5rem);
-  --type-h1-weight: 400;
-  --type-h1-leading: 1;
-  --type-h2-size: clamp(1.75rem, 3.5vw, 2.75rem);
-  --type-h2-weight: 400;
-  --type-h2-leading: 1.1;
-  --type-h3-size: 1.375rem;
-  --type-h3-weight: 400;
-  --type-h3-leading: 1.2;
+  --type-h1-size: clamp(2.75rem, 7vw, 6.5rem);
+  --type-h1-weight: 800;
+  --type-h1-leading: 0.9;
+  --type-h2-size: clamp(2.4rem, 6vw, 5.5rem);
+  --type-h2-weight: 800;
+  --type-h2-leading: 0.9;
+  --type-h3-size: clamp(1.6rem, 3vw, 2.4rem);
+  --type-h3-weight: 800;
+  --type-h3-leading: 1;
   --type-standfirst-size: 1.375rem;
-  --type-standfirst-weight: 400;
-  --type-standfirst-leading: 1.3;
+  --type-standfirst-weight: 500;
+  --type-standfirst-leading: 1.4;
   --type-body-size: 1.0625rem;
   --type-body-weight: 400;
-  --type-body-leading: 1.6;
+  --type-body-leading: 1.65;
   --type-small-size: 0.875rem;
   --type-small-weight: 400;
   --type-small-leading: 1.5;
-  --type-meta-size: 0.75rem;
+  --type-meta-size: 0.8125rem;
   --type-meta-weight: 500;
   --type-meta-leading: 1.4;
-  --type-meta-tracking: 0.01em;
-  --type-meta-catalogue-size: 0.75rem;
+  --type-meta-tracking: 0em;
+  --type-meta-catalogue-size: 0.8125rem;
   --type-meta-catalogue-weight: 500;
   --type-meta-catalogue-leading: 1.4;
-  --type-meta-catalogue-tracking: 0.08em;
+  --type-meta-catalogue-tracking: 0em;
 
   /* admin type */
   --type-admin-title-size: 34px;
@@ -127,13 +136,13 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-paper: #161412;
-    --color-surface: #201D1A;
-    --color-ink: #EDE6DA;
-    --color-ink-muted: #A79E91;
-    --color-line: #3A352F;
-    --color-accent: #E07A5C;
-    --color-on-accent: #161412;
+    --color-paper: #0F1124;
+    --color-surface: #191C36;
+    --color-ink: #F1F0EA;
+    --color-ink-muted: #A6A9C0;
+    --color-line: #2E3252;
+    --color-accent: #8C9BEA;
+    --color-on-accent: #0F1124;
     color-scheme: dark;
   }
 }

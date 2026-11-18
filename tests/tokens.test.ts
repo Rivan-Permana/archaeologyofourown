@@ -30,7 +30,7 @@ test('public typography matches', () => {
       assert.equal(light[`--type-${t}-${suffix}`], norm(want), `${t}.${k}`);
     }
   }
-  assert.ok(light['--font-display'].includes('fraunces') && light['--font-body'].includes('inter'));
+  assert.ok(light['--font-display'].includes('bricolage') && light['--font-body'].includes('plus jakarta'));
 });
 
 test('spacing and radius match', () => {

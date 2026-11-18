@@ -2,8 +2,8 @@
 // background is light enough (relative luminance >= 0.62) or dark enough (<= 0.038) for the tokens' text.
 // Any pair that still fails contrast falls back to the surface colours.
 export const THEME = {
-  light: { surface: '#EAE3D7', ink: '#1E1B18', inkMuted: '#5E574F', accent: '#B4462B' },
-  dark: { surface: '#201D1A', ink: '#EDE6DA', inkMuted: '#A79E91', accent: '#E07A5C' },
+  light: { surface: '#EFEFEA', ink: '#161A33', inkMuted: '#50546B', accent: '#2B3A8C' },
+  dark: { surface: '#191C36', ink: '#F1F0EA', inkMuted: '#A6A9C0', accent: '#8C9BEA' },
 } as const;
 export const LIGHT_MIN_LUMINANCE = 0.62;
 export const DARK_MAX_LUMINANCE = 0.038;

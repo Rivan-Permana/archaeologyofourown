@@ -22,7 +22,7 @@ a { color: var(--color-ink); text-decoration-color: var(--color-accent); text-un
   letter-spacing: var(--type-meta-tracking);
   font-variant-numeric: tabular-nums;
 }
-.meta-catalogue { letter-spacing: var(--type-meta-catalogue-tracking); text-transform: uppercase; }
+.meta-catalogue { letter-spacing: var(--type-meta-catalogue-tracking); }
 
 /* Chrome: header height drives scroll-padding so focus is never hidden under the sticky bar (UX-DR72). */
 :root { --header-height: calc(var(--space-12) + var(--space-2)); }
@@ -36,12 +36,12 @@ body:has(dialog[open]) { overflow: hidden; }
 @media (min-width: 768px) { .grid { grid-template-columns: repeat(6, 1fr); gap: var(--gutter-desktop); padding-inline: var(--gutter-desktop); } }
 @media (min-width: 1100px) { .grid { grid-template-columns: repeat(12, 1fr); } }
 
-/* Buttons (UX-DR13): square, 48px, accent primary and ink-bordered secondary. */
-.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: var(--space-3) var(--space-6); font: 500 var(--type-body-size)/1.25 var(--font-body); text-decoration: none; border: 1px solid var(--color-ink); border-radius: var(--radius-none); background: transparent; color: var(--color-ink); cursor: pointer; transition: background-color 150ms ease, border-color 150ms ease; }
+/* Buttons (UX-DR13): square, 48px, accent primary and ink-bordered secondary; a small scale on press. */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: var(--space-3) var(--space-6); font: 500 var(--type-body-size)/1.25 var(--font-body); text-decoration: none; border: 1px solid var(--color-ink); border-radius: var(--radius-none); background: transparent; color: var(--color-ink); cursor: pointer; transition: background-color 150ms ease, border-color 150ms ease, transform 160ms var(--ease-out); }
 .btn-primary { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-on-accent); }
 .btn-primary:hover { background: color-mix(in srgb, var(--color-accent) 92%, black); border-color: color-mix(in srgb, var(--color-accent) 92%, black); }
 .btn-secondary:hover { background: var(--color-surface); }
-.btn:active { transform: translateY(1px); }
+.btn:active { transform: scale(0.97); }
 .btn[aria-disabled="true"] { opacity: 0.4; cursor: not-allowed; }
 @media (prefers-reduced-motion: reduce) { .btn { transition: none; } .btn:active { transform: none; } }
 
@@ -52,17 +52,9 @@ body:has(dialog[open]) { overflow: hidden; }
 .catalogue-record { display: grid; grid-template-columns: max-content 1fr; margin: var(--space-8) 0; border: 1px solid var(--color-line); }
 .catalogue-record dt, .catalogue-record dd { margin: 0; padding: var(--space-3) var(--space-4); border-top: 1px solid var(--color-line); }
 .catalogue-record dt:first-of-type, .catalogue-record dt:first-of-type + dd { border-top: 0; }
-.catalogue-record dt { font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); line-height: var(--type-meta-leading); letter-spacing: var(--type-meta-catalogue-tracking); text-transform: uppercase; color: var(--color-ink-muted); }
+.catalogue-record dt { font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); line-height: var(--type-meta-leading); letter-spacing: var(--type-meta-catalogue-tracking); color: var(--color-ink-muted); }
 .catalogue-record dd { font-size: var(--type-small-size); }
 .category-tag { display: inline-block; border: 1px solid var(--color-ink); padding: 2px var(--space-2); font-size: var(--type-meta-size); line-height: var(--type-meta-leading); }
-
-/* Textures as masks, so the colour always comes from a token: soil grain and pebbles for the Masthead section,
-   and the same grain at low strength as paper tooth behind the whole page. */
-:root {
-  --tex-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.2 0 0 0 -1.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  --tex-pebbles: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='96' fill='none' stroke='%23000' stroke-width='1.2'%3E%3Cellipse cx='18' cy='22' rx='6' ry='3.5'/%3E%3Cellipse cx='64' cy='60' rx='4' ry='3'/%3E%3Cellipse cx='112' cy='30' rx='8' ry='4.5' transform='rotate(-12 112 30)'/%3E%3Cellipse cx='150' cy='74' rx='5' ry='3'/%3E%3Cellipse cx='92' cy='84' rx='3' ry='2'/%3E%3Cellipse cx='38' cy='80' rx='3.5' ry='2.5'/%3E%3Ccircle cx='140' cy='14' r='2'/%3E%3C/svg%3E");
-}
-body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: var(--color-ink); opacity: 0.05; -webkit-mask: var(--tex-grain); mask: var(--tex-grain); }
 
 /* Motion: one strong ease-out for entrances (emil-design-eng); scroll and fade-up curves are set where they are used. */
 :root { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); }
@@ -78,27 +70,22 @@ body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-even
   --find-glass: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='60' cy='22' rx='25' ry='5'/%3E%3Cpath d='M35 22l6 84h38l6-84'/%3E%3Cpath d='M43 106a17 3 0 0 0 34 0'/%3E%3Cpath d='M45 32l3 66M53 32l1.5 68M60 32v68M67 32l-1.5 68M75 32l-3 66'/%3E%3Cpath d='M38 50h44'/%3E%3C/svg%3E");
   --find-key: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='34' cy='60' r='17'/%3E%3Ccircle cx='34' cy='60' r='6'/%3E%3Cpath d='M51 57h56v6H51'/%3E%3Cpath d='M88 63v10h5v-6h5v9h5V63'/%3E%3Ccircle cx='26' cy='50' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='42' cy='70' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='24' cy='66' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='44' cy='52' r='.7' fill='%23000' stroke='none'/%3E%3C/svg%3E");
 }
-.slot { position: relative; background: repeating-linear-gradient(90deg, var(--color-ink) 0 12px, var(--color-paper) 12px 24px) left 17px bottom 17px / 96px 6px no-repeat, linear-gradient(var(--color-ink), var(--color-ink)) left 16px bottom 16px / 98px 8px no-repeat, var(--color-surface); }
-.slot::after { content: ''; position: absolute; inset: 8% 14% 14%; background: var(--color-ink); -webkit-mask: var(--find, var(--find-sherd)) center / contain no-repeat; mask: var(--find, var(--find-sherd)) center / contain no-repeat; }
+/* "Indeks" direction (user decision 2026-11-19). Each editorial series owns one colour; a slot without a photo is
+   its series colour with the drawn find in the series text colour. Series colours are the same in both themes, so
+   they carry fixed text colours rather than the theme ink. */
+.s-temuan { --c: var(--color-kunyit); --on: var(--color-series-ink); }
+.s-jejak-proses { --c: var(--color-jambu); --on: var(--color-series-ink); }
+.s-ingatan-bersama { --c: var(--color-botol); --on: var(--color-series-paper); }
+.s-stratigrafi { --c: var(--color-nila); --on: var(--color-series-paper); }
+.slot { position: relative; background: var(--c, var(--color-surface)); }
+.slot::after { content: ''; position: absolute; inset: 14% 22%; background: var(--on, var(--color-ink)); -webkit-mask: var(--find, var(--find-sherd)) center / contain no-repeat; mask: var(--find, var(--find-sherd)) center / contain no-repeat; }
 .slot[data-find="cap"] { --find: var(--find-cap); }
 .slot[data-find="coin"] { --find: var(--find-coin); }
 .slot[data-find="sherd"] { --find: var(--find-sherd); }
 .slot[data-find="bottle"] { --find: var(--find-bottle); }
 .slot[data-find="glass"] { --find: var(--find-glass); }
 .slot[data-find="key"] { --find: var(--find-key); }
+.dot { display: inline-block; width: 12px; height: 12px; flex: none; background: var(--c); outline: 1px solid var(--color-ink); outline-offset: -1px; }
 
-/* The photo scale as a standalone rule: section heads end in it. */
-.scale { display: inline-block; width: 98px; height: 8px; flex: none; background: repeating-linear-gradient(90deg, var(--color-ink) 0 12px, var(--color-paper) 12px 24px) 1px 1px / 96px 6px no-repeat, var(--color-ink); }
-
-/* Soil colours, one per editorial series, taken from the Masthead layers (101) to (105). */
-.soil-temuan { --soil: color-mix(in oklab, var(--color-accent) 42%, var(--color-surface)); }
-.soil-jejak-proses { --soil: color-mix(in oklab, var(--color-ink) 80%, var(--color-accent)); }
-.soil-ingatan-bersama { --soil: var(--color-ink-muted); }
-.soil-stratigrafi { --soil: repeating-linear-gradient(60deg, transparent 0 5px, var(--color-ink-muted) 5px 6px), color-mix(in oklab, var(--color-ink) 18%, var(--color-surface)); }
-.chip { display: inline-block; width: 10px; height: 10px; background: var(--soil); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-ink) 40%, transparent); vertical-align: -1px; }
-
-/* Section head: heading on the left, the photo scale on the right, ruled underneath. */
-.sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-ink); margin-bottom: var(--space-8); }
-.sec-head h2 { font-family: var(--font-display); font-weight: 400; font-size: var(--type-h2-size); line-height: var(--type-h2-leading); margin: 0; }
-.sec-head .scale { margin-bottom: 0.4em; }
-@media (min-width: 768px) { .sec-head { margin-bottom: var(--space-12); } }
+/* Headings are the condensed display cut; the width axis is not a token in DESIGN.md, so it is set once here. */
+h1, h2, h3, .disp { font-family: var(--font-display); font-stretch: 75%; letter-spacing: -0.02em; text-wrap: balance; }

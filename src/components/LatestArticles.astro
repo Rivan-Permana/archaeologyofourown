@@ -3,7 +3,9 @@ import { getCollection } from 'astro:content';
 import { articlesIn } from '../lib/articles.ts';
 import { t } from '../i18n/index.ts';
 import type { Locale } from '../i18n/routes.ts';
-import ArticleCard from './ArticleCard.astro';
+import { articleBase } from '../i18n/routes.ts';
+import { findFor } from '../shared/finds.ts';
+import Placeholder from './Placeholder.astro';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -22,34 +24,99 @@ const items = (await articlesIn(locale))
     };
   });
 const [featured, ...rest] = items;
-const side = rest.slice(0, 2);
-const below = rest.slice(2);
+const href = (slug: string) => `${articleBase[locale]}${slug}/`;
+const when = (d: string, style: 'long' | 'medium') => new Intl.DateTimeFormat(locale === 'id' ? 'id-ID' : 'en-GB', { dateStyle: style, timeZone: 'Asia/Jakarta' }).format(new Date(d));
+// The featured plate shows the photo when there is one; otherwise its series colour and drawn find (UX-DR35).
+const real = featured?.media && !featured.media.isPlaceholder && featured.alt ? featured.media : undefined;
+const widths = real ? [...real.variants].sort((a, b) => a - b) : [];
+const src = (w: number) => `/media/${real!.id}-w${w}.webp`;
+const ph = featured && (featured.isPlaceholder || featured.media?.isPlaceholder);
 ---
 <section class="sec" id="latest-articles" aria-labelledby="latest-articles-heading">
   <div class="wrap">
-    <div class="sec-head"><h2 id="latest-articles-heading" tabindex="-1">{m.latest.title}</h2><span class="scale" aria-hidden="true"></span></div>
+    <h2 id="latest-articles-heading" class="head" tabindex="-1">{m.latest.title}</h2>
     {featured
-      ? <div class="latest">
-          <div class="feat"><ArticleCard {...featured} featured /></div>
-          {side.length > 0 && <div class="side">{side.map((c) => <ArticleCard {...c} />)}</div>}
-          {below.map((c) => <div class="third"><ArticleCard {...c} /></div>)}
-        </div>
+      ? <>
+          <article class:list={['feature', `s-${featured.series}`]}>
+            <div class="plate">
+              {real
+                ? <img src={src(widths[widths.length - 1])} srcset={widths.map((w) => `${src(w)} ${w}w`).join(', ')} sizes="(min-width: 900px) 58vw, 100vw" width="4" height="3" alt={featured.alt} decoding="async" />
+                : <div class="slot" data-find={findFor(featured.slug)} role={ph ? 'img' : undefined} aria-label={ph ? (featured.alt ?? m.site.placeholderMarker) : undefined} aria-hidden={ph ? undefined : 'true'}></div>}
+              {ph && <span class="mark"><Placeholder locale={locale} /></span>}
+            </div>
+            <div class="txt">
+              <p class="meta"><span class="dot"></span><span>{m.series[featured.series as keyof typeof m.series].label}</span><time datetime={featured.date}>{when(featured.date, 'long')}</time></p>
+              <h3><a href={href(featured.slug)}>{featured.title}</a></h3>
+              <p class="excerpt">{featured.excerpt}</p>
+              <p class="meta">{featured.minutes} {m.latest.readingTime}</p>
+            </div>
+          </article>
+          {rest.length > 0 && (
+            <ol class="index">
+              {rest.map((c) => (
+                <li class={`s-${c.series}`}>
+                  <a class="t" href={href(c.slug)}>{c.title}</a>
+                  <span class="ser"><span class="dot"></span>{m.series[c.series as keyof typeof m.series].label}</span>
+                  <time datetime={c.date}>{when(c.date, 'medium')}</time>
+                  <span class="find slot" data-find={findFor(c.slug)} aria-hidden="true"></span>
+                  {(c.isPlaceholder || c.media?.isPlaceholder) && <span class="ph-row"><Placeholder locale={locale} /></span>}
+                </li>
+              ))}
+            </ol>
+          )}
+        </>
       : <p>{m.latest.empty}</p>}
   </div>
 </section>
 <style>
-  .sec { padding: var(--space-12) 0 var(--space-16); }
+  .sec { padding: var(--space-16) 0; }
   .wrap { max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); }
-  .latest { display: grid; grid-template-columns: 1fr; gap: var(--space-12) var(--gutter-desktop); }
-  .side { display: grid; gap: var(--space-12); align-content: start; }
-  @media (min-width: 768px) {
-    .wrap { padding-inline: var(--gutter-desktop); }
-    .sec { padding: var(--space-16) 0 var(--space-24); }
+  .head { font-size: var(--type-h2-size); font-weight: var(--type-h2-weight); line-height: var(--type-h2-leading); margin: 0 0 var(--space-8); }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); margin: 0; font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); line-height: var(--type-meta-leading); font-variant-numeric: tabular-nums; }
+
+  /* Feature: the colour plate on the left, an ink block on the right. */
+  .feature { position: relative; display: grid; }
+  .plate { position: relative; aspect-ratio: 4 / 3; background: var(--c); overflow: hidden; }
+  .plate img, .plate .slot { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 600ms var(--ease-out); }
+  .plate .slot::after { inset: 16% 26%; }
+  @media (hover: hover) { .feature:hover .slot { transform: translateY(-8px) rotate(-3deg); } .feature:hover img { transform: scale(1.03); } }
+  .mark { position: absolute; top: var(--space-4); left: var(--space-4); z-index: 1; }
+  .txt { display: grid; align-content: space-between; gap: var(--space-6); padding: var(--space-8) var(--space-6); background: var(--color-series-ink); color: var(--color-series-paper); }
+  .txt .dot { outline-color: var(--color-series-paper); }
+  .txt h3 { font-size: var(--type-h1-size); font-weight: var(--type-h1-weight); line-height: var(--type-h1-leading); margin: 0; }
+  .txt h3 a { color: inherit; text-decoration: none; }
+  .txt h3 a::after { content: ''; position: absolute; inset: 0; }
+  .feature:hover h3 a { text-decoration: underline; text-decoration-color: var(--c); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+  .txt h3 a:focus-visible { outline: none; }
+  .feature:has(a:focus-visible) { outline: var(--focus-ring-width) solid var(--color-accent); outline-offset: var(--focus-ring-offset); }
+  .excerpt { margin: 0; font-size: var(--type-standfirst-size); line-height: var(--type-standfirst-leading); font-weight: var(--type-standfirst-weight); max-width: 34ch; }
+  @media (min-width: 900px) { .feature { grid-template-columns: 7fr 5fr; } .txt { padding: var(--space-12) var(--space-8); } }
+
+  /* Index: one big type row per article; on hover the row fills with its series colour and shows its find. */
+  .index { list-style: none; margin: var(--space-16) 0 0; padding: 0; border-top: 3px solid var(--color-ink); }
+  .index li { position: relative; isolation: isolate; display: grid; gap: var(--space-2) var(--space-4); align-items: center; padding: var(--space-5) var(--space-2); border-bottom: 1px solid var(--color-ink); }
+  .index li::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--c); transform: scaleY(0); transform-origin: bottom; transition: transform 320ms var(--ease-out); }
+  .t { font-family: var(--font-display); font-stretch: 75%; font-weight: 800; letter-spacing: -0.02em; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); text-decoration: none; text-wrap: balance; }
+  .t::after { content: ''; position: absolute; inset: 0; }
+  .t:focus-visible { outline: none; }
+  .index li:has(.t:focus-visible) { outline: var(--focus-ring-width) solid var(--color-accent); outline-offset: -2px; }
+  .ser { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--type-small-size); font-weight: 500; }
+  .index time { font-size: var(--type-small-size); font-variant-numeric: tabular-nums; color: var(--color-ink-muted); }
+  .find { display: none; }
+  .ph-row { grid-row: 1; justify-self: start; }
+  @media (hover: hover) {
+    .index li:hover::before, .index li:has(.t:focus-visible)::before { transform: scaleY(1); }
+    .index li:hover, .index li:hover time, .index li:has(.t:focus-visible), .index li:has(.t:focus-visible) time { color: var(--on); }
+    .index li:hover .dot { outline-color: var(--on); }
   }
-  @media (min-width: 1100px) {
-    .latest { grid-template-columns: repeat(12, minmax(0, 1fr)); }
-    .feat { grid-column: 1 / span 8; }
-    .side { grid-column: 9 / span 4; }
-    .third { grid-column: span 4; }
+  @media (min-width: 900px) {
+    .index li { grid-template-columns: 1fr 200px 120px; padding-inline: var(--space-4); min-height: 96px; }
+    .index time { text-align: right; }
+    .ph-row { grid-row: auto; grid-column: 1; }
+    .find { display: block; position: absolute; right: 360px; top: 50%; width: 96px; height: 96px; translate: 0 -50%; background: transparent; opacity: 0; scale: 0.9; transition: opacity 200ms ease, scale 320ms var(--ease-out); pointer-events: none; }
+    .find::after { inset: 0; }
+    .index li:hover .find { opacity: 1; scale: 1; }
   }
+  @media (min-width: 768px) { .wrap { padding-inline: var(--gutter-desktop); } .sec { padding: var(--space-24) 0; } .head { margin-bottom: var(--space-12); } }
+  @media (prefers-reduced-motion: reduce) { .index li::before, .find, .plate img, .plate .slot { transition: none; } }
 </style>

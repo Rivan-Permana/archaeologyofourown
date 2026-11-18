@@ -3,7 +3,7 @@ name: Archaeology of Our Own
 description: Visual system for a bilingual (ID/EN) publication about the artefacts we live with. Two scopes in one file. `public` is the reader-facing site (paper and ink, square corners, light and dark). `admin` is the private Editor Dashboard (direction C "Ruang baca" v2, soft corners, large text, light only in v1).
 status: final
 created: 2026-11-17
-updated: 2026-11-18
+updated: 2026-11-19
 sources:
   - ../../prds/prd-archaeologyofourown-2026-11-17/prd.md
   - ../../prds/prd-archaeologyofourown-2026-11-17/addendum.md
@@ -15,21 +15,28 @@ sources:
   - review-rubric.md
   - review-accessibility.md
 colors:
-  # public scope (docs/DESIGN.md, contrast measured 2026-11-17)
-  paper: '#F4EFE7'
-  paper-dark: '#161412'
-  surface: '#EAE3D7'
-  surface-dark: '#201D1A'
-  ink: '#1E1B18'
-  ink-dark: '#EDE6DA'
-  ink-muted: '#5E574F'
-  ink-muted-dark: '#A79E91'
-  line: '#CFC6B8'
-  line-dark: '#3A352F'
-  accent: '#B4462B'
-  accent-dark: '#E07A5C'
+  # public scope: "Indeks" direction, user decision 2026-11-19 (replaces the paper-and-ink palette; see the note under Colors)
+  paper: '#FAFAF8'
+  paper-dark: '#0F1124'
+  surface: '#EFEFEA'
+  surface-dark: '#191C36'
+  ink: '#161A33'
+  ink-dark: '#F1F0EA'
+  ink-muted: '#50546B'
+  ink-muted-dark: '#A6A9C0'
+  line: '#D6D7E0'
+  line-dark: '#2E3252'
+  accent: '#2B3A8C'
+  accent-dark: '#8C9BEA'
   on-accent: '#FFFFFF'
-  on-accent-dark: '#161412'
+  on-accent-dark: '#0F1124'
+  # series colours, the same in both themes; each carries its own text colour
+  kunyit: '#E8B21A'
+  jambu: '#EFA3B3'
+  botol: '#1F6B5C'
+  nila: '#2B3A8C'
+  series-ink: '#161A33'
+  series-paper: '#FAFAF8'
   # tint: runtime value from the Artefact image palette, see Colors
   # admin scope (direction C v2 "Ruang baca"; light only in v1)
   admin-room: '#EDEBE6'
@@ -46,59 +53,59 @@ colors:
   admin-accent-press: '#9A3B24'
   admin-on-accent: '#FFFFFF'
 typography:
-  # public
+  # public: "Indeks" direction, user decision 2026-11-19
   display:
-    fontFamily: Fraunces
-    fontSize: clamp(3.5rem, 12vw, 11rem)
-    fontWeight: '300'
-    lineHeight: '0.9'
+    fontFamily: Bricolage Grotesque
+    fontSize: clamp(3.4rem, 15.2vw, 15.5rem)
+    fontWeight: '800'
+    lineHeight: '0.8'
   manifesto:
-    fontFamily: Fraunces
-    fontSize: clamp(1.25rem, 2.2vw, 1.75rem)
-    fontWeight: '400'
+    fontFamily: Plus Jakarta Sans
+    fontSize: clamp(1.3rem, 2.3vw, 2rem)
+    fontWeight: '500'
     lineHeight: '1.3'
   h1:
-    fontFamily: Fraunces
-    fontSize: clamp(2.5rem, 6vw, 4.5rem)
-    fontWeight: '400'
-    lineHeight: '1.0'
+    fontFamily: Bricolage Grotesque
+    fontSize: clamp(2.75rem, 7vw, 6.5rem)
+    fontWeight: '800'
+    lineHeight: '0.9'
   h2:
-    fontFamily: Fraunces
-    fontSize: clamp(1.75rem, 3.5vw, 2.75rem)
-    fontWeight: '400'
-    lineHeight: '1.1'
+    fontFamily: Bricolage Grotesque
+    fontSize: clamp(2.4rem, 6vw, 5.5rem)
+    fontWeight: '800'
+    lineHeight: '0.9'
   h3:
-    fontFamily: Fraunces
-    fontSize: 1.375rem
-    fontWeight: '400'
-    lineHeight: '1.2'
+    fontFamily: Bricolage Grotesque
+    fontSize: clamp(1.6rem, 3vw, 2.4rem)
+    fontWeight: '800'
+    lineHeight: '1'
   standfirst:
-    fontFamily: Fraunces
+    fontFamily: Plus Jakarta Sans
     fontSize: 1.375rem
-    fontWeight: '400'
-    lineHeight: '1.3'
+    fontWeight: '500'
+    lineHeight: '1.4'
   body:
-    fontFamily: Inter
+    fontFamily: Plus Jakarta Sans
     fontSize: 1.0625rem
     fontWeight: '400'
-    lineHeight: '1.6'
+    lineHeight: '1.65'
   small:
-    fontFamily: Inter
+    fontFamily: Plus Jakarta Sans
     fontSize: 0.875rem
     fontWeight: '400'
     lineHeight: '1.5'
   meta:
-    fontFamily: Inter
-    fontSize: 0.75rem
+    fontFamily: Plus Jakarta Sans
+    fontSize: 0.8125rem
     fontWeight: '500'
     lineHeight: '1.4'
-    letterSpacing: 0.01em
+    letterSpacing: 0em
   meta-catalogue:
-    fontFamily: Inter
-    fontSize: 0.75rem
+    fontFamily: Plus Jakarta Sans
+    fontSize: 0.8125rem
     fontWeight: '500'
     lineHeight: '1.4'
-    letterSpacing: 0.08em
+    letterSpacing: 0em
   # admin
   admin-title:
     fontFamily: Fraunces
@@ -384,6 +391,9 @@ Two scopes share one file. **`public`** is the reader-facing site and carries th
 **Voice (both scopes).** Sentence case, short sentences, verbs for actions, errors that say what to do. No em dashes in interface copy. Public copy exists in Indonesian and English; the Dashboard interface is Indonesian. Microcopy rules and examples live in EXPERIENCE.md › Voice and Tone; implementation copy passes through `better-writing` and `design:ux-copy`.
 
 ## Colors
+
+
+> **Superseded 2026-11-19 by user decision ("Indeks" direction, mockup `docs/mockups/b-indeks.html`).** The public scope no longer uses paper-and-ink with a terracotta accent, Fraunces and Inter: those read as the generic AI-generated look. Public colours are now a clean paper `#FAFAF8`, indigo ink `#161A33` and four series colours taken from everyday Indonesian things (kunyit `#E8B21A`, jambu `#EFA3B3`, kaca botol `#1F6B5C`, nila `#2B3A8C`); type is Bricolage Grotesque (condensed, 800) for display and headings and Plus Jakarta Sans (a Jakarta foundry face) for text. Each editorial series owns one colour; an image slot without a photo is its series colour with the drawn find. The Masthead strata are replaced by the wordmark at full width, and the four series rows are the strata. Values in the front matter are the source; the tables below that still name the old values are kept for history. Admin scope is unchanged.
 
 ### Public (light and dark, follows device theme)
 

@@ -4,8 +4,8 @@ import { t } from '../i18n/index.ts';
 import { articleBase, type Locale } from '../i18n/routes.ts';
 import { EDITORIAL_SERIES } from '../shared/enums.ts';
 
-// Four ruled register rows, not cards (UX-DR16). Each row carries its soil colour from the Masthead section, so the
-// series read as the layers of the same dig.
+// The four series as the layers of one dig (UX-DR16, "Indeks" direction 2026-11-19): full-width bands in each
+// series colour, thicker for series with more articles. On scroll the layers settle into place (home-motion.ts).
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const m = t(locale);
@@ -17,50 +17,42 @@ const rows = EDITORIAL_SERIES.map((series) => {
 const count = (n: number) => m.seriesSection.count[n === 1 ? 'one' : 'other'].replace('{n}', String(n));
 ---
 <section class="sec" id="editorial-series" aria-labelledby="editorial-series-heading">
-  <div class="wrap">
-    <div class="sec-head"><h2 id="editorial-series-heading">{m.seriesSection.title}</h2><span class="scale" aria-hidden="true"></span></div>
-    <ul class="list">
-      {rows.map(({ series, count: n, latest }) => (
-        <li class={`soil-${series}`}>
-          <span class="soil" aria-hidden="true"></span>
+  <div class="wrap"><h2 id="editorial-series-heading" class="head">{m.seriesSection.title}</h2></div>
+  <ul class="layers" data-layers>
+    {rows.map(({ series, count: n, latest }) => (
+      <li class={`layer s-${series}`} style={`--n:${Math.min(n, 6)}`} data-band>
+        <div class="wrap row">
           <h3>{m.series[series].label}</h3>
-          <p class="desc">{m.series[series].description}</p>
-          {latest
-            ? <p class="latest"><span class="meta">{m.seriesSection.latest}</span> <a href={`${articleBase[locale]}${latest.tr.slug}/`}>{latest.tr.title}</a></p>
-            : <p class="latest soon">{m.seriesSection.soon}</p>}
-          <p class="meta count">{count(n)}</p>
-        </li>
-      ))}
-    </ul>
-  </div>
+          <div class="about">
+            <p>{m.series[series].description}</p>
+            {latest
+              ? <p class="latest">{m.seriesSection.latest}: <a href={`${articleBase[locale]}${latest.tr.slug}/`}>{latest.tr.title}</a></p>
+              : <p class="latest">{m.seriesSection.soon}</p>}
+          </div>
+          <p class="count">{count(n)}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
 </section>
 <style>
-  .sec { padding: var(--space-12) 0 var(--space-16); }
+  .sec { padding-top: var(--space-16); }
   .wrap { max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); }
-  .list { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--color-ink); }
-  li { position: relative; display: grid; grid-template-columns: 1fr auto; gap: var(--space-2) var(--space-4); align-items: baseline; padding: var(--space-6) 0 var(--space-6) var(--space-6); border-top: 1px solid var(--color-line); }
-  li:first-child { border-top: 0; }
-  /* The soil strip: a thin band on mobile, a wide block on desktop that widens a little on hover. */
-  .soil { position: absolute; left: 0; top: var(--space-3); bottom: var(--space-3); width: 8px; background: var(--soil); transform-origin: left; transition: transform 300ms var(--ease-out); }
-  h3 { font-family: var(--font-display); font-weight: 400; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); margin: 0; }
+  .head { font-size: var(--type-h2-size); font-weight: var(--type-h2-weight); line-height: var(--type-h2-leading); margin: 0 0 var(--space-8); }
+  .layers { list-style: none; margin: 0; padding: 0; }
+  .layer { position: relative; background: var(--c); color: var(--on); will-change: transform; }
+  .row { display: grid; gap: var(--space-3) var(--gutter-desktop); align-items: end; min-height: calc(var(--n) * 40px + 128px); padding-block: var(--space-6); }
+  h3 { font-size: var(--type-h1-size); font-weight: var(--type-h1-weight); line-height: var(--type-h1-leading); margin: 0; }
   p { margin: 0; }
-  .desc { color: var(--color-ink-muted); grid-column: 1 / -1; }
-  .latest { grid-column: 1 / -1; }
-  .latest a { font-family: var(--font-display); }
-  .soon { color: var(--color-ink-muted); }
-  .meta { font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); line-height: var(--type-meta-leading); letter-spacing: var(--type-meta-tracking); font-variant-numeric: tabular-nums; color: var(--color-ink-muted); }
-  .count { grid-row: 1; grid-column: 2; text-align: right; }
+  .about { display: grid; gap: var(--space-2); max-width: 44ch; }
+  .latest a { color: inherit; text-decoration-color: currentColor; font-weight: 600; }
+  .count { font-family: var(--font-display); font-stretch: 75%; font-weight: 800; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+  .layer a:focus-visible { outline-color: var(--on); }
   @media (min-width: 768px) {
     .wrap { padding-inline: var(--gutter-desktop); }
-    .sec { padding: var(--space-16) 0 var(--space-24); }
+    .sec { padding-top: var(--space-24); }
+    .head { margin-bottom: var(--space-12); }
+    .row { grid-template-columns: 5fr 5fr 2fr; padding-block: var(--space-8); }
+    .count { text-align: right; }
   }
-  @media (min-width: 1100px) {
-    li { grid-template-columns: 3fr 4fr 4fr 1fr; gap: var(--gutter-desktop); padding: var(--space-8) 0 var(--space-8) calc(64px + var(--gutter-desktop)); min-height: 120px; align-items: center; }
-    .soil { top: 0; bottom: 0; width: 64px; }
-    @media (hover: hover) { li:hover .soil { transform: scaleX(1.25); } }
-    h3 { font-size: 2rem; line-height: 1.1; }
-    .desc, .latest { grid-column: auto; }
-    .count { grid-row: auto; grid-column: auto; }
-  }
-  @media (prefers-reduced-motion: reduce) { .soil { transition: none; } }
 </style>

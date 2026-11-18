@@ -10,47 +10,22 @@ const { locale, hrefs } = Astro.props;
 const m = t(locale);
 const contribute = optionalRoute('contribute', locale);
 const [first, ...rest] = m.site.name.split(' of ');
-// A dug boundary, not a ruled line: two slow sine waves give each layer its own uneven top edge (deterministic).
-const edge = (seed: number, depth: number) => {
-  const pts = Array.from({ length: 49 }, (_, i) => {
-    const x = i / 48;
-    const y = depth * (0.5 + 0.32 * Math.sin(x * 9 + seed) + 0.18 * Math.sin(x * 23 + seed * 2.3));
-    return `${(x * 100).toFixed(2)}% ${y.toFixed(1)}px`;
-  });
-  return `clip-path:polygon(${pts.join(',')},100% 100%,0 100%)`;
-};
-// Context numbers top to bottom, the way a section drawing labels its layers.
-const layers = [101, 102, 103, 104, 105];
 ---
 <section class="mast" data-masthead aria-labelledby="site-name">
   <div class="wrap">
     <div class="top"><p class="notice" role="status" data-notice data-text={m.notice.unavailable}></p><GlobeIcon /><LangSwitch locale={locale} hrefs={hrefs} short /></div>
-    <h1 id="site-name" class="rise" style="--i:0"><span>{first}</span> <span>of {rest.join(' of ')}</span></h1>
-    <p class="manifesto rise" style="--i:1">{m.masthead.manifesto}</p>
-    {m._pendingApproval.includes('masthead.manifesto') && <Placeholder locale={locale} />}
-    <div class="actions rise" style="--i:2">
-      <a class="btn btn-primary" href="#latest-articles" data-read>{m.masthead.read}</a>
-      {contribute && <a class="btn btn-secondary" href={contribute}>{m.masthead.contribute}</a>}
-    </div>
-  </div>
-  <div class="strata" aria-hidden="true">
-    {layers.map((ctx, i) => (
-      <div class={`band b${i + 1}`} data-band>
-        <div class="layer" style={edge(i * 1.7 + 0.4, i === 3 ? 6 : 14)}>
-          <span class="ctx">({ctx})</span>
-          {i === 1 && <>
-            <svg class="sf cap" viewBox="-12 -12 24 24"><polygon points={Array.from({ length: 42 }, (_, k) => { const r = k % 2 ? 9 : 11, a = (k / 42) * Math.PI * 2; return `${(r * Math.cos(a)).toFixed(2)},${(r * Math.sin(a)).toFixed(2)}`; }).join(' ')} /><circle r="6.5" /></svg>
-            <span class="sf-tag" style="left:calc(14% + 46px);top:52%">SF 01</span>
-            <svg class="sf coin" viewBox="-10 -4 20 8"><ellipse rx="8.5" ry="2.4" /><path d="M-8.5 0v1.2a8.5 2.4 0 0 0 17 0V0" /></svg>
-            <span class="sf-tag" style="left:calc(71% + 42px);top:28%">SF 02</span>
-          </>}
-          {i === 2 && <>
-            <svg class="sf sherd" viewBox="0 0 40 18"><path d="M2 14C9 5 22 2 37 4l-3 6c-9-1-18 1-25 7z" /><path class="rim" d="M2 14C9 5 22 2 37 4" /></svg>
-            <span class="sf-tag" style="left:calc(61% + 84px);top:46%">SF 03</span>
-          </>}
-        </div>
+    {/* The name is the cover: set at full width in the condensed display cut, second line in the accent. */}
+    <h1 id="site-name" class="rise" style="--i:0"><span>{first}</span> <span class="of">of {rest.join(' of ')}</span></h1>
+    <div class="lede">
+      <div class="rise" style="--i:1">
+        <p class="manifesto">{m.masthead.manifesto}</p>
+        {m._pendingApproval.includes('masthead.manifesto') && <Placeholder locale={locale} />}
       </div>
-    ))}
+      <div class="actions rise" style="--i:2">
+        <a class="btn btn-primary" href="#latest-articles" data-read>{m.masthead.read}</a>
+        {contribute && <a class="btn btn-secondary" href={contribute}>{m.masthead.contribute}</a>}
+      </div>
+    </div>
   </div>
 </section>
 <script>
@@ -70,64 +45,27 @@ const layers = [101, 102, 103, 104, 105];
   });
 </script>
 <style>
-  .mast { display: flex; flex-direction: column; min-height: calc(100svh - 0px); }
-  .wrap { max-width: var(--max-width); margin: 0 auto; width: 100%; padding-inline: var(--margin-mobile); }
+  .mast { padding-bottom: var(--space-12); }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); }
   .notice:empty { display: none; }
   .notice { margin: 0 auto 0 0; font-size: var(--type-small-size); border-left: 2px solid var(--color-accent); padding-left: var(--space-3); }
   .top { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2); height: 56px; font-size: var(--type-small-size); }
-  h1 { font-family: var(--font-display); font-size: var(--type-display-size); font-weight: var(--type-display-weight); line-height: var(--type-display-leading); font-variation-settings: "opsz" 144; letter-spacing: -0.01em; margin: var(--space-4) 0 0; }
+  h1 { font-size: var(--type-display-size); font-weight: var(--type-display-weight); line-height: var(--type-display-leading); letter-spacing: -0.015em; margin: var(--space-4) 0 0; text-wrap: initial; }
   h1 span { display: block; }
-  .manifesto { font-family: var(--font-display); font-size: var(--type-manifesto-size); font-weight: var(--type-manifesto-weight); line-height: var(--type-manifesto-leading); max-width: 52ch; margin: var(--space-6) 0 var(--space-3); }
-  .actions { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-6); }
+  .of { color: var(--color-accent); }
+  .lede { display: grid; gap: var(--space-8); margin-top: var(--space-8); padding-bottom: var(--space-12); border-bottom: 3px solid var(--color-ink); }
+  .manifesto { font-size: var(--type-manifesto-size); font-weight: var(--type-manifesto-weight); line-height: var(--type-manifesto-leading); max-width: 30ch; margin: 0 0 var(--space-3); }
+  .actions { display: flex; flex-direction: column; gap: var(--space-3); }
   .actions .btn { width: 100%; }
   /* Fade-up once on load (0.6s, power3.out = easeOutQuart, 24px). Pure CSS so the text never waits for a script (NFR7). */
   .rise { animation: rise 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) both; animation-delay: calc(var(--i) * 80ms); }
   @keyframes rise { from { opacity: 0; transform: translateY(24px); } }
   @media (prefers-reduced-motion: reduce) { .rise { animation: none; } }
-  /* Section drawing of a dig (user decision 2026-11-18, replaces the five flat bands): topsoil, modern fill
-     with pebbles and finds, terracotta clay with a sherd, a thin ash lens, hatched natural ground.
-     Fills mix the public tokens only; texture comes from masks over token colours. */
-  .strata { margin-top: auto; padding-top: var(--space-8); }
-  .band { position: relative; margin-top: -10px; filter: drop-shadow(0 -1px 0 var(--color-ink)); will-change: transform; }
-  .band:first-child { margin-top: 0; }
-  .layer { position: relative; height: 100%; background: var(--fill); }
-  .layer::before, .layer::after { content: ''; position: absolute; inset: 0; pointer-events: none; }
-  .layer::before { background: var(--grain-ink, var(--color-ink)); opacity: 0.22; -webkit-mask: var(--tex-grain); mask: var(--tex-grain); }
-  .b1 { height: 40px; --fill: color-mix(in oklab, var(--color-ink) 80%, var(--color-accent)); --grain-ink: var(--color-paper); --ctx: var(--color-paper); }
-  .b2 { height: 84px; --fill: var(--color-surface); }
-  .b2 .layer::after { background: var(--color-ink); opacity: 0.4; -webkit-mask: var(--tex-pebbles); mask: var(--tex-pebbles); }
-  .b3 { height: 64px; --fill: color-mix(in oklab, var(--color-accent) 42%, var(--color-surface)); }
-  .b4 { height: 18px; --fill: var(--color-ink-muted); --grain-ink: var(--color-paper); --ctx: var(--color-paper); }
-  .b5 { height: 96px; --fill: color-mix(in oklab, var(--color-ink) 18%, var(--color-surface)); }
-  .b5 .layer::after { background: repeating-linear-gradient(60deg, transparent 0 13px, var(--color-ink-muted) 13px 14px); opacity: 0.45; }
-  .ctx { position: absolute; right: var(--margin-mobile); top: 50%; z-index: 1; font: var(--type-meta-weight) 11px/1 var(--font-body); font-variant-numeric: tabular-nums; color: var(--ctx, var(--color-ink)); }
-  .b4 .ctx { top: 6px; font-size: 10px; }
-  .sf { position: absolute; z-index: 1; overflow: visible; fill: var(--color-paper); stroke: var(--color-ink); stroke-width: 1.25; }
-  .cap { left: 14%; top: 42%; width: 26px; }
-  .coin { left: 71%; top: 24%; width: 24px; }
-  .sherd { left: 61%; top: 34%; width: 52px; fill: var(--color-accent); }
-  .sherd .rim { fill: none; stroke-width: 2; }
-  .sf-tag { display: none; position: absolute; z-index: 1; font: var(--type-meta-weight) 10px/1 var(--font-body); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; color: var(--color-ink); }
-  @media (min-width: 768px) {
-    .ctx { right: var(--gutter-desktop); }
-    .band { margin-top: -14px; }
-    .b1 { height: 64px; } .b2 { height: 136px; } .b3 { height: 104px; } .b4 { height: 26px; } .b5 { height: 150px; }
-    .cap { width: 34px; } .coin { width: 32px; } .sherd { width: 72px; }
-    .ctx, .sf-tag { font-size: 12px; }
-    .sf-tag { display: block; }
-    .b4 .ctx { top: 8px; font-size: 11px; }
-  }
   @media (min-width: 768px) {
     .wrap { padding-inline: var(--gutter-desktop); }
     .top { height: 72px; }
     .actions { flex-direction: row; flex-wrap: wrap; }
     .actions .btn { width: auto; }
-    .strata { padding-top: var(--space-12); }
   }
-  /* Wide screens: title on the left, the reading text offset to the right, so the page reads as a diagonal. */
-  @media (min-width: 1100px) {
-    .manifesto, .actions, .wrap > :global(.ph) { margin-left: 50%; max-width: 40ch; }
-    .manifesto { margin-top: var(--space-8); }
-    .actions { max-width: none; }
-  }
+  @media (min-width: 1100px) { .lede { grid-template-columns: 1fr auto; align-items: end; } }
 </style>

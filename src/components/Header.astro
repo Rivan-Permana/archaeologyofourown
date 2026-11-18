@@ -54,26 +54,27 @@ const home = routeFor('home', locale);
 <style>
   .skip { position: absolute; left: var(--space-2); top: -100px; background: var(--color-paper); padding: var(--space-3) var(--space-4); z-index: 20; }
   .skip:focus { top: var(--space-2); }
-  .bar { position: sticky; top: 0; z-index: 10; background: var(--color-paper); border-bottom: 1px solid var(--color-line); }
+  .bar { position: sticky; top: 0; z-index: 10; background: var(--color-paper); border-bottom: 1px solid var(--color-ink); }
   /* Over the Masthead the bar is hidden; it fades and drops in 8px once the Masthead has passed. Exit is quicker than enter. */
   .over { position: fixed; inset-inline: 0; visibility: hidden; opacity: 0; transform: translateY(-8px); transition: opacity 140ms var(--ease-out), transform 140ms var(--ease-out), visibility 0s linear 140ms; }
   .over.shown { visibility: visible; opacity: 1; transform: none; transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out); }
   @media (prefers-reduced-motion: reduce) { .over, .over.shown { transition: none; } }
   .inner { height: calc(var(--header-height) - 1px); max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); display: flex; align-items: center; gap: var(--space-6); }
-  .wordmark { font-family: var(--font-display); font-size: var(--type-h3-size); line-height: var(--type-h3-leading); text-decoration: none; margin-right: auto; }
+  .wordmark { font-family: var(--font-display); font-stretch: 75%; font-weight: 800; letter-spacing: -0.01em; font-size: 1.5rem; line-height: 1; text-decoration: none; margin-right: auto; }
   ul { list-style: none; margin: 0; padding: 0; }
   .nav ul { display: flex; gap: var(--space-6); }
-  .nav a { display: inline-flex; align-items: center; min-height: 44px; font-size: var(--type-small-size); }
+  .nav a { display: inline-flex; align-items: center; min-height: 44px; font-size: var(--type-small-size); font-weight: 500; text-decoration: none; }
+  .nav a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
   .switch { display: flex; align-items: center; gap: var(--space-2); font-size: var(--type-small-size); }
   .menu-btn { display: none; }
   button { font: inherit; color: var(--color-ink); background: none; border: 1px solid var(--color-ink); border-radius: var(--radius-none); min-height: 48px; padding-inline: var(--space-5); cursor: pointer; }
   button:hover { background: var(--color-surface); }
   .panel { width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; border: 0; padding: var(--space-4) var(--margin-mobile); background: var(--color-paper); color: var(--color-ink); }
   .close { display: block; margin-left: auto; }
-  .items > li { border-bottom: 1px solid var(--color-line); padding-block: var(--space-4); font-family: var(--font-display); font-size: var(--type-h3-size); line-height: var(--type-h3-leading); }
+  .items > li { border-bottom: 1px solid var(--color-ink); padding-block: var(--space-4); font-family: var(--font-display); font-stretch: 75%; font-weight: 800; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); }
   .items :global(a) { min-height: 48px; }
   @media (max-width: 767px) {
-    .wordmark { font-size: var(--type-body-size); white-space: nowrap; }
+    .wordmark { font-size: 1.25rem; white-space: nowrap; }
     .nav, .switch { display: none; }
     .menu-btn { display: inline-flex; align-items: center; }
   }
