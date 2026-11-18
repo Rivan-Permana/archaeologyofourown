@@ -1,0 +1,24 @@
+---
+import { t } from '../i18n/index.ts';
+import { otherLocale, routeFor, type Locale } from '../i18n/routes.ts';
+import Base from '../layouts/Base.astro';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const m = t(locale);
+const other = otherLocale(locale);
+---
+<Base locale={locale} title={m.site.name} description={m.site.placeholder}>
+  <main>
+    <h1>{m.site.name}</h1>
+    <p>{m.site.placeholder}</p>
+    <p>
+      <a href={routeFor('home', other)} lang={other} hreflang={other}>{m.language.switchTo}</a>
+    </p>
+  </main>
+</Base>
+<style>
+  main { max-width: var(--measure); margin: 0 auto; padding: var(--space-12) var(--margin-mobile); }
+  h1 { font-family: var(--font-display); font-size: var(--type-h1-size); font-weight: var(--type-h1-weight); line-height: var(--type-h1-leading); margin: 0 0 var(--space-6); }
+  p { margin: 0 0 var(--space-4); }
+</style>

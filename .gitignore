@@ -16,3 +16,4 @@ src/content/snapshot/
 _bmad/
 _bmad-output/
 .understand-anything/
+worker-configuration.d.ts

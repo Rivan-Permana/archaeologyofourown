@@ -1,0 +1,12 @@
+{
+  "site": {
+    "name": "Archaeology of Our Own",
+    "placeholder": "Situs ini sedang disiapkan. Isinya masih contoh.",
+    "placeholderMarker": "Contoh"
+  },
+  "language": {
+    "id": "Bahasa Indonesia",
+    "en": "English",
+    "switchTo": "English"
+  }
+}

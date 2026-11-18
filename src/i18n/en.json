@@ -1,0 +1,12 @@
+{
+  "site": {
+    "name": "Archaeology of Our Own",
+    "placeholder": "This site is being prepared. Its content is still a placeholder.",
+    "placeholderMarker": "Placeholder"
+  },
+  "language": {
+    "id": "Bahasa Indonesia",
+    "en": "English",
+    "switchTo": "Bahasa Indonesia"
+  }
+}

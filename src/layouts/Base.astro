@@ -1,0 +1,22 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import type { Locale } from '../i18n/routes.ts';
+
+interface Props { locale: Locale; title: string; description: string }
+const { locale, title, description } = Astro.props;
+const launched = import.meta.env.PUBLIC_LAUNCH === 'true';
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {!launched && <meta name="robots" content="noindex" />}
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

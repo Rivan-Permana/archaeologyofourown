@@ -1,0 +1,10 @@
+# Names only. Copy to .dev.vars (git-ignored) and fill values locally. Never commit values.
+TURNSTILE_SECRET=
+DEPLOY_HOOK_URL=
+BUILDS_READ_TOKEN=
+ACCESS_AUD=
+ACCESS_TEAM_DOMAIN=
+EDITOR_EMAILS=
+RL_HMAC_KEY=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
