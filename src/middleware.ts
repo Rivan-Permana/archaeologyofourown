@@ -1,6 +1,7 @@
 import { defineMiddleware } from 'astro:middleware';
 import { env } from 'cloudflare:workers';
-import { authConfigured, classify, type AuthEnv } from './server/auth/gate.ts';
+import { classify } from './server/auth/gate.ts';
+import { verifyAccess, type AccessEnv } from './server/auth/access.ts';
 import { securityHeaders } from './shared/headers.ts';
 
 const launched = import.meta.env.PUBLIC_LAUNCH === 'true';
@@ -15,13 +16,20 @@ function deny(status: number, code: string): Response {
 export const onRequest = defineMiddleware(async (context, next) => {
   // Prerendered pages are built once and served as static assets; the gate is for on-demand paths.
   if (context.isPrerendered) return next();
-  const decision = classify(new URL(context.request.url).pathname);
+  const { pathname } = new URL(context.request.url);
+  const decision = classify(pathname);
   let response: Response;
   if (decision === 'deny') {
     response = deny(404, 'not_found');
   } else if (decision === 'protected') {
-    // Fail closed: Access JWT verification lands in Story 4.1.
-    response = deny(authConfigured(env as AuthEnv) ? 401 : 503, 'unauthorized');
+    const scope = pathname.startsWith('/api/build/') ? 'service' : 'editor';
+    const result = await verifyAccess(context.request, env as AccessEnv, scope);
+    if (result.ok) {
+      context.locals.identity = result.identity;
+      response = await next();
+    } else {
+      response = deny(401, result.code);
+    }
   } else {
     response = await next();
   }

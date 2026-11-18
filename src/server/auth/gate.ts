@@ -12,14 +12,3 @@ export function classify(pathname: string): GateDecision {
   }
   return 'deny';
 }
-
-export interface AuthEnv {
-  ACCESS_AUD?: string;
-  ACCESS_TEAM_DOMAIN?: string;
-  EDITOR_EMAILS?: string;
-}
-
-// Story 4.1 adds Access JWT verification. Until then protected paths always fail closed (NFR14).
-export function authConfigured(env: AuthEnv): boolean {
-  return Boolean(env.ACCESS_AUD && env.ACCESS_TEAM_DOMAIN && env.EDITOR_EMAILS);
-}

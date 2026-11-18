@@ -8,3 +8,5 @@ EDITOR_EMAILS=
 RL_HMAC_KEY=
 R2_ACCESS_KEY_ID=
 R2_SECRET_ACCESS_KEY=
+# Access service token Client ID (ends in .access), not the token UUID; must equal the JWT common_name.
+BUILD_SERVICE_TOKEN_ID=

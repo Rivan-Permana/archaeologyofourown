@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { authConfigured, classify } from '../src/server/auth/gate.ts';
+import { classify } from '../src/server/auth/gate.ts';
 import { securityHeaders } from '../src/shared/headers.ts';
 
 test('public paths', () => {
@@ -13,11 +13,6 @@ test('protected paths', () => {
 
 test('everything else is denied, including lookalikes', () => {
   for (const p of ['/api/other', '/administrator', '/api/subscribe/x', '/api/administer']) assert.equal(classify(p), 'deny');
-});
-
-test('auth config missing fails closed', () => {
-  assert.equal(authConfigured({}), false);
-  assert.equal(authConfigured({ ACCESS_AUD: 'a', ACCESS_TEAM_DOMAIN: 'b' }), false);
 });
 
 test('headers: noindex only before launch', () => {
