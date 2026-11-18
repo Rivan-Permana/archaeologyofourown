@@ -131,9 +131,9 @@ const tint = pick && tintOf(pick, pool);
   @media (min-width: 768px) { .wrap { padding-inline: var(--gutter-desktop); } .aotd { padding: var(--space-16) 0 var(--space-24); } }
   @media (min-width: 1100px) {
     .panel { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter-desktop); align-items: start; }
-    .panel :global(.aotd-figure) { grid-column: 2 / span 5; }
-    .panel :global(.aotd-body) { grid-column: 8 / span 4; }
-    .controls { margin-left: calc(100% / 12 * 7 + var(--gutter-desktop)); }
+    .panel :global(.aotd-figure) { grid-column: 1 / span 4; }
+    .panel :global(.aotd-body) { grid-column: 6 / span 5; }
+    .controls { margin-left: calc((100% + var(--gutter-desktop)) / 12 * 5); }
   }
   @media (prefers-reduced-motion: reduce) { .aotd, .panel { transition: none; } }
 </style>

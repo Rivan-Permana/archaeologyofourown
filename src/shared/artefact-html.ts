@@ -13,7 +13,8 @@ const imageRef = (a: PublicArtefactT) => a.refs.filter((r) => r.role === 'image'
 
 export function tintOf(a: PublicArtefactT, pool: Pool): { light: string; dark: string } | undefined {
   const m = pool.media.find((x) => x.id === imageRef(a)?.mediaId);
-  return m?.tintLight && m.tintDark ? { light: m.tintLight, dark: m.tintDark } : undefined;
+  // A Placeholder image has no real palette to borrow; the section stays on the paper surface.
+  return m && !m.isPlaceholder && m.tintLight && m.tintDark ? { light: m.tintLight, dark: m.tintDark } : undefined;
 }
 
 export function panelHtml(a: PublicArtefactT, pool: Pool, lang: Lang, labels: RenderLabels, placeholderMarker: string): string {

@@ -48,6 +48,14 @@ body:has(dialog[open]) { overflow: hidden; }
 /* Placeholder marker (UX-DR35): accent border on paper, always visible on Placeholder content. */
 .ph { display: inline-block; font: var(--type-meta-weight) var(--type-meta-size)/1 var(--font-body); padding: var(--space-1) var(--space-2); border: 1px solid var(--color-accent); color: var(--color-accent); background: var(--color-paper); }
 
+/* Image slot without a photo: section hatching, the drafting convention for "not yet excavated" (UX-DR35).
+   Line colour only, no hue; the Placeholder marker still labels it. */
+.slot {
+  background-color: var(--color-surface);
+  background-image: repeating-linear-gradient(135deg, transparent 0 9px, var(--color-line) 9px 10px);
+  box-shadow: inset 0 0 0 1px var(--color-line);
+}
+
 /* Catalogue Record block and Category tag (UX-DR18, UX-DR19): used in Articles, the Artefact of the Day and cards. */
 .catalogue-record { display: grid; grid-template-columns: max-content 1fr; margin: var(--space-8) 0; border: 1px solid var(--color-line); }
 .catalogue-record dt, .catalogue-record dd { margin: 0; padding: var(--space-3) var(--space-4); border-top: 1px solid var(--color-line); }

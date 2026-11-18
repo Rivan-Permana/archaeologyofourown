@@ -76,4 +76,10 @@ const [first, ...rest] = m.site.name.split(' of ');
     .b1 { height: 48px; } .b2 { height: 12px; } .b3 { height: 88px; } .b4 { height: 20px; } .b5 { height: 40px; }
     .find { top: 38px; }
   }
+  /* Wide screens: title on the left, the reading text offset to the right, so the page reads as a diagonal. */
+  @media (min-width: 1100px) {
+    .manifesto, .actions, .wrap > :global(.ph) { margin-left: 50%; max-width: 40ch; }
+    .manifesto { margin-top: var(--space-8); }
+    .actions { max-width: none; }
+  }
 </style>
