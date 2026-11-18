@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { body } from '../src/shared/blocks.ts';
-import { esc, jsonForScript, readingMinutes, renderArticleHtml, type RenderContext } from '../src/shared/render.ts';
+import { esc, jsonForScript, readingMinutes, renderArticleHtml, tocOf, type RenderContext } from '../src/shared/render.ts';
 
 const U = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
 const ctx: RenderContext = {
@@ -21,11 +21,11 @@ test('renders semantic blocks, inline marks and the catalogue record', () => {
     { type: 'catalogueRecord', props: { artefactId: U(2) } },
   ]);
   assert.equal(renderArticleHtml(doc, ctx), [
-    '<h2>Judul</h2>',
+    '<h2 id="section-1" tabindex="-1">Judul</h2>',
     '<p>Halo <span lang="en"><em>world</em></span></p>',
     '<blockquote><p>Kutipan</p></blockquote>',
     `<figure><img src="/media/${U(1)}-w2000.webp" srcset="/media/${U(1)}-w640.webp 640w, /media/${U(1)}-w1280.webp 1280w, /media/${U(1)}-w2000.webp 2000w" sizes="(min-width: 768px) 68ch, 100vw" width="2000" height="1333" alt="Gambar" loading="lazy" decoding="async"><figcaption>Ket <span class="credit">Kredit</span></figcaption></figure>`,
-    '<dl class="catalogue-record" aria-label="Artefak &lt;b&gt;"><dt>No.</dt><dd>INV-1</dd><dt>Tahun</dt><dd>1998</dd><dt>Kategori</dt><dd>Proses</dd><dt>Asal</dt><dd>Asal</dd><dt>Kredit</dt><dd>Kontributor Contoh</dd></dl>',
+    '<dl class="catalogue-record" aria-label="Artefak &lt;b&gt;"><dt>No.</dt><dd>INV-1</dd><dt>Tahun</dt><dd>1998</dd><dt>Kategori</dt><dd><span class="category-tag">Proses</span></dd><dt>Asal</dt><dd>Asal</dd><dt>Kredit</dt><dd>Kontributor Contoh</dd></dl>',
   ].join('\n'));
 });
 
@@ -65,4 +65,15 @@ test('json for script escapes < and line separators', () => {
   assert.ok(!out.includes('<') && !out.includes(' '));
   assert.deepEqual(JSON.parse(out), { a: '</script><!--', b: ' ' });
   assert.equal(esc(`&<>"'`), '&amp;&lt;&gt;&quot;&#39;');
+});
+
+test('toc lists h2 headings in order with the ids used in the markup', () => {
+  const doc = body.parse([
+    { type: 'heading', props: { level: 2 }, content: [t('Satu')] },
+    { type: 'heading', props: { level: 3 }, content: [t('Sub')] },
+    { type: 'heading', props: { level: 2 }, content: [t('Dua '), t('<b>', { bold: true })] },
+  ]);
+  assert.deepEqual(tocOf(doc), [{ id: 'section-1', text: 'Satu' }, { id: 'section-2', text: 'Dua <b>' }]);
+  const out = renderArticleHtml(doc, ctx);
+  assert.ok(out.includes('id="section-2"') && out.includes('<h3>Sub</h3>'));
 });

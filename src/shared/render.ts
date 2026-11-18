@@ -54,16 +54,25 @@ function record(b: Extract<Block, { type: 'catalogueRecord' }>, ctx: RenderConte
   if (!a || !tr) return ''; // not published in this language: omitted
   const L = ctx.labels;
   const rows: [string, string | null][] = [
-    [L.inventoryNumber, a.inventoryNumber], [L.year, a.year], [L.category, L.categories[a.category] ?? a.category],
-    [L.provenance, tr.provenance || null], [L.credit, a.contributorCredit],
+    [L.inventoryNumber, a.inventoryNumber && esc(a.inventoryNumber)], [L.year, a.year && esc(a.year)], [L.category, `<span class="category-tag">${esc(L.categories[a.category] ?? a.category)}</span>`],
+    [L.provenance, tr.provenance ? esc(tr.provenance) : null], [L.credit, a.contributorCredit && esc(a.contributorCredit)],
   ];
-  const items = rows.filter((r): r is [string, string] => Boolean(r[1])).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('');
+  const items = rows.filter((r): r is [string, string] => Boolean(r[1])).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('');
   return `<dl class="catalogue-record" aria-label="${esc(tr.title)}">${items}</dl>`;
 }
 
-const html = (b: Block, ctx: RenderContext): string => {
+const text = (b: { content: Inline[] }) => b.content.map((t) => t.text).join('');
+const h2Id = (n: number) => `section-${n}`;
+
+/** The h2 headings in order, for the table of contents; ids match the rendered markup. */
+export function tocOf(doc: Body): { id: string; text: string }[] {
+  return doc.filter((b) => b.type === 'heading' && b.props.level === 2).map((b, i) => ({ id: h2Id(i + 1), text: text(b as { content: Inline[] }) }));
+}
+
+const html = (b: Block, ctx: RenderContext, h2: { n: number }): string => {
   switch (b.type) {
-    case 'heading': return `<h${b.props.level}>${inline(b.content)}</h${b.props.level}>`;
+    // h2 gets an id and tabindex so a table of contents link can move focus to it.
+    case 'heading': return b.props.level === 2 ? `<h2 id="${h2Id(++h2.n)}" tabindex="-1">${inline(b.content)}</h2>` : `<h3>${inline(b.content)}</h3>`;
     case 'paragraph': return `<p>${inline(b.content)}</p>`;
     case 'quote': return `<blockquote><p>${inline(b.content)}</p></blockquote>`;
     case 'image': return image(b, ctx);
@@ -72,7 +81,8 @@ const html = (b: Block, ctx: RenderContext): string => {
 };
 
 export function renderArticleHtml(doc: Body, ctx: RenderContext): string {
-  return doc.map((b) => html(b, ctx)).join('\n');
+  const h2 = { n: 0 };
+  return doc.map((b) => html(b, ctx, h2)).join('\n');
 }
 
 /** Whole minutes at 200 words per minute, at least 1, from the text blocks of the published body. */

@@ -72,5 +72,16 @@
     "title": "Latest articles",
     "empty": "No articles in this language yet.",
     "readingTime": "min read"
+  },
+  "article": {
+    "by": "By",
+    "related": "Related articles",
+    "toc": "On this page",
+    "share": "Share",
+    "copy": "Copy link",
+    "copied": "Link copied"
+  },
+  "notice": {
+    "unavailable": "This article isn't available in English yet."
   }
 }

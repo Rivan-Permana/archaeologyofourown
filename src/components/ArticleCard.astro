@@ -26,7 +26,7 @@ const Heading = featured ? 'h2' : 'h3';
     {(isPlaceholder || media?.isPlaceholder) && <span class="mark"><Placeholder locale={locale} /></span>}
   </div>
   <p class="meta series">{m.series[series as keyof typeof m.series].label}</p>
-  <Heading><a href={`${articleBase[locale]}${slug}`}>{title}</a></Heading>
+  <Heading><a href={`${articleBase[locale]}${slug}/`}>{title}</a></Heading>
   <p class="excerpt">{excerpt}</p>
   <p class="meta"><time datetime={date}>{when}</time> · {minutes} {m.latest.readingTime}</p>
 </article>

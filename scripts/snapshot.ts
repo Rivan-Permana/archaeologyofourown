@@ -3,7 +3,7 @@
 //   remote: SNAPSHOT_URL (site origin) + BUILD_ACCESS_CLIENT_ID + BUILD_ACCESS_CLIENT_SECRET (Access service token)
 //   local:  --local reads the local D1 through wrangler (dev and CI fixtures only, never remote)
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { renderArticleHtml, readingMinutes, type RenderContext } from '../src/shared/render.ts';
+import { renderArticleHtml, readingMinutes, tocOf, type RenderContext } from '../src/shared/render.ts';
 import { Snapshot } from '../src/shared/public.ts';
 import type { RenderedArticle } from '../src/shared/rendered.ts';
 
@@ -44,7 +44,7 @@ const articles: RenderedArticle[] = snapshot.articles.map((a) => ({
   translations: a.translations.map((t) => {
     const ctx: RenderContext = { lang: t.lang, media, artefacts, labels: labelsFor(t.lang) };
     const { body, ...rest } = t;
-    return { ...rest, html: renderArticleHtml(body, ctx), readingMinutes: readingMinutes(body) };
+    return { ...rest, html: renderArticleHtml(body, ctx), toc: tocOf(body), readingMinutes: readingMinutes(body) };
   }),
 }));
 

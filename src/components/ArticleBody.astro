@@ -1,0 +1,23 @@
+---
+// One of the two files allowed to inject HTML: it only ever receives renderArticleHtml() output (AD-6).
+const { html } = Astro.props as { html: string };
+---
+<div class="body" set:html={html} />
+<style is:global>
+  .body > * { margin: 0 0 var(--space-6); }
+  .body h2 { font-family: var(--font-display); font-weight: var(--type-h2-weight); font-size: var(--type-h2-size); line-height: var(--type-h2-leading); margin-top: var(--space-12); }
+  .body h3 { font-family: var(--font-display); font-weight: var(--type-h3-weight); font-size: var(--type-h3-size); line-height: var(--type-h3-leading); margin-top: var(--space-8); }
+  /* Pull quote: Fraunces roman at h2 size, no italic, no rule; size alone sets it apart (UX-DR22). */
+  .body blockquote { margin: var(--space-12) 0; padding: 0; font-family: var(--font-display); font-style: normal; font-size: var(--type-h2-size); line-height: var(--type-h2-leading); }
+  .body blockquote p { margin: 0; }
+  .body figure { margin: var(--space-8) 0; }
+  .body img { display: block; width: 100%; height: auto; background: var(--color-surface); }
+  .body figcaption { margin-top: var(--space-2); font-size: var(--type-small-size); line-height: var(--type-small-leading); color: var(--color-ink-muted); }
+  .body figcaption .credit::before { content: '· '; }
+  .catalogue-record { display: grid; grid-template-columns: max-content 1fr; margin: var(--space-8) 0; border: 1px solid var(--color-line); }
+  .catalogue-record dt, .catalogue-record dd { margin: 0; padding: var(--space-3) var(--space-4); border-top: 1px solid var(--color-line); }
+  .catalogue-record dt:first-of-type, .catalogue-record dt:first-of-type + dd { border-top: 0; }
+  .catalogue-record dt { font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); line-height: var(--type-meta-leading); letter-spacing: var(--type-meta-catalogue-tracking); text-transform: uppercase; color: var(--color-ink-muted); }
+  .catalogue-record dd { font-size: var(--type-small-size); }
+  .category-tag { display: inline-block; border: 1px solid var(--color-ink); padding: 2px var(--space-2); font-size: var(--type-meta-size); line-height: var(--type-meta-leading); }
+</style>

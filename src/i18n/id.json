@@ -72,5 +72,16 @@
     "title": "Artikel terbaru",
     "empty": "Belum ada artikel dalam bahasa ini.",
     "readingTime": "menit baca"
+  },
+  "article": {
+    "by": "Oleh",
+    "related": "Artikel terkait",
+    "toc": "Di halaman ini",
+    "share": "Bagikan",
+    "copy": "Salin tautan",
+    "copied": "Tautan tersalin"
+  },
+  "notice": {
+    "unavailable": "Artikel ini belum tersedia dalam bahasa Indonesia."
   }
 }

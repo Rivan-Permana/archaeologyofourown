@@ -15,7 +15,7 @@ const langs: Locale[] = ['id', 'en'];
         href={hrefs[l]}
         lang={l}
         hreflang={l}
-        aria-label={short ? m.language[l] : undefined}
+        aria-label={short ? `${l.toUpperCase()}, ${m.language[l]}` : undefined}
         aria-current={l === locale ? 'true' : undefined}
       >{short ? l.toUpperCase() : m.language[l]}</a>
     </li>

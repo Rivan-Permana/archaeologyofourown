@@ -13,7 +13,7 @@ const [first, ...rest] = m.site.name.split(' of ');
 ---
 <section class="mast" data-masthead aria-labelledby="site-name">
   <div class="wrap">
-    <div class="top"><GlobeIcon /><LangSwitch locale={locale} hrefs={hrefs} short /></div>
+    <div class="top"><p class="notice" role="status" data-notice hidden>{m.notice.unavailable}</p><GlobeIcon /><LangSwitch locale={locale} hrefs={hrefs} short /></div>
     <h1 id="site-name"><span>{first}</span> <span>of {rest.join(' of ')}</span></h1>
     <p class="manifesto">{m.masthead.manifesto}</p>
     {m.masthead.manifestoIsPlaceholder && <Placeholder locale={locale} />}
@@ -29,6 +29,10 @@ const [first, ...rest] = m.site.name.split(' of ');
   </div>
 </section>
 <script>
+  // Arriving from an Article with no translation shows a notice (FR-2); the page itself is static.
+  if (new URLSearchParams(location.search).has('unavailable')) document.querySelector<HTMLElement>('[data-notice]')?.removeAttribute('hidden');
+</script>
+<script>
   // "Baca artikel" moves focus to the Latest Articles heading (UX-DR73). The default anchor jump would
   // reset focus to the page, so scroll and focus are done here; without JS the anchor still scrolls.
   document.querySelector('[data-read]')?.addEventListener('click', (e) => {
@@ -43,6 +47,7 @@ const [first, ...rest] = m.site.name.split(' of ');
 <style>
   .mast { display: flex; flex-direction: column; min-height: calc(100svh - 0px); }
   .wrap { max-width: var(--max-width); margin: 0 auto; width: 100%; padding-inline: var(--margin-mobile); }
+  .notice { margin: 0 auto 0 0; font-size: var(--type-small-size); border-left: 2px solid var(--color-accent); padding-left: var(--space-3); }
   .top { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2); height: 56px; font-size: var(--type-small-size); }
   h1 { font-family: var(--font-display); font-size: var(--type-display-size); font-weight: var(--type-display-weight); line-height: var(--type-display-leading); font-variation-settings: "opsz" 144; letter-spacing: -0.01em; margin: var(--space-4) 0 0; }
   h1 span { display: block; }

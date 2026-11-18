@@ -6,7 +6,7 @@ import '../styles/global.css';
 import displayFont from '@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url';
 import type { Locale } from '../i18n/routes.ts';
 
-interface Props { locale: Locale; title: string; description: string; alternates?: Record<Locale, string> }
+interface Props { locale: Locale; title: string; description: string; alternates?: Partial<Record<Locale, string>> }
 const { locale, title, description, alternates } = Astro.props;
 const launched = import.meta.env.PUBLIC_LAUNCH === 'true';
 ---
@@ -18,7 +18,7 @@ const launched = import.meta.env.PUBLIC_LAUNCH === 'true';
     <link rel="preload" as="font" type="font/woff2" href={displayFont} crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
-    {alternates && Object.entries(alternates).map(([l, href]) => <link rel="alternate" hreflang={l} href={new URL(href, Astro.site)} />)}
+    {alternates && Object.entries(alternates).map(([l, href]: [string, string]) => <link rel="alternate" hreflang={l} href={new URL(href, Astro.site)} />)}
     {!launched && <meta name="robots" content="noindex" />}
   </head>
   <body>
