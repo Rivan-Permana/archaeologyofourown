@@ -1,0 +1,96 @@
+---
+import { t } from '../i18n/index.ts';
+import type { Locale } from '../i18n/routes.ts';
+
+// The share slip at the end of an Article, laid out like a find label. App links are plain links, so they work
+// without JavaScript; copy and the native sheet need JavaScript and stay hidden without it (UX-DR25).
+const { locale, title } = Astro.props as { locale: Locale; title: string };
+const m = t(locale).article;
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const shown = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+const text = encodeURIComponent(`${title} ${url}`);
+const u = encodeURIComponent(url);
+const apps = [
+  { label: 'WhatsApp', href: `https://wa.me/?text=${text}` },
+  { label: 'X (Twitter)', href: `https://x.com/intent/post?text=${encodeURIComponent(title)}&url=${u}` },
+  { label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${u}` },
+  { label: m.email, href: `mailto:?subject=${encodeURIComponent(title)}&body=${u}` },
+];
+---
+<section class="share" aria-labelledby="share-heading" data-share data-title={title} data-url={url}>
+  <div class="intro">
+    <h2 id="share-heading">{m.shareTitle}</h2>
+    <p>{m.shareHint}</p>
+  </div>
+  <div class="tools">
+    <div class="field">
+      <span class="url">{shown}</span>
+      <button type="button" class="copy" data-copy data-done={m.copied} hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-link" d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /><path class="i-check" d="M20 6 9 17l-5-5" /></svg>
+        <span data-label>{m.copy}</span>
+      </button>
+    </div>
+    <ul class="apps">
+      {apps.map((a) => <li><a href={a.href} target="_blank" rel="noopener noreferrer">{a.label}</a></li>)}
+      <li><button type="button" data-native hidden>{m.more}</button></li>
+    </ul>
+    <p role="status" class="status" data-status></p>
+  </div>
+</section>
+<script>
+  const root = document.querySelector<HTMLElement>('[data-share]');
+  if (root) {
+    const status = root.querySelector<HTMLElement>('[data-status]')!;
+    const copy = root.querySelector<HTMLButtonElement>('[data-copy]')!;
+    const label = copy.querySelector<HTMLElement>('[data-label]')!;
+    const native = root.querySelector<HTMLButtonElement>('[data-native]')!;
+    const idle = label.textContent;
+    let timer: number | undefined;
+    copy.hidden = false;
+    if ('share' in navigator) native.hidden = false;
+    copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(root.dataset.url!);
+        // The button shows the result for two seconds; the status line announces it once.
+        copy.dataset.copied = '';
+        label.textContent = status.textContent = copy.dataset.done ?? '';
+        clearTimeout(timer);
+        timer = window.setTimeout(() => { delete copy.dataset.copied; label.textContent = idle; status.textContent = ''; }, 2000);
+      } catch { status.textContent = ''; }
+    });
+    native.addEventListener('click', () => navigator.share({ title: root.dataset.title, url: root.dataset.url }).catch(() => {}));
+  }
+</script>
+<style>
+  .share { position: relative; display: grid; gap: var(--space-6); padding: var(--space-6); border-top: 3px solid var(--color-ink); background: var(--color-surface); }
+  h2 { font-weight: 800; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); margin: 0 0 var(--space-2); }
+  .intro p { margin: 0; font-size: var(--type-small-size); line-height: var(--type-small-leading); color: var(--color-ink-muted); }
+  .tools { display: grid; gap: var(--space-3); }
+  /* Mobile: the link on its own line and the copy button full width under it; side by side from 560px. */
+  .field { display: grid; border: 1px solid var(--color-ink); background: var(--color-paper); }
+  .url { min-width: 0; display: block; line-height: 48px; padding-inline: var(--space-4); font-size: var(--type-small-size); font-variant-numeric: tabular-nums; color: var(--color-ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  button, .apps a { font: 500 var(--type-small-size)/1.2 var(--font-body); color: var(--color-ink); cursor: pointer; }
+  .copy { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: 48px; padding-inline: var(--space-4); border: 0; border-top: 1px solid var(--color-ink); border-radius: var(--radius-none); background: var(--color-ink); color: var(--color-paper); transition: background-color 150ms ease, transform 120ms var(--ease-out); }
+  .copy:hover { background: color-mix(in oklab, var(--color-ink) 85%, var(--color-paper)); }
+  .copy[data-copied] { background: var(--color-accent); color: var(--color-on-accent); }
+  .copy:active { transform: scale(0.97); }
+  svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+  .i-check, .copy[data-copied] .i-link { display: none; }
+  .copy[data-copied] .i-check { display: inline; }
+  .apps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+  .apps li:has([hidden]) { display: none; }
+  .apps a, .apps button { display: flex; width: 100%; justify-content: center; align-items: center; min-height: 48px; padding-inline: var(--space-4); border: 1px solid var(--color-ink); border-radius: var(--radius-none); background: transparent; text-decoration: none; transition: border-color 150ms ease, background-color 150ms ease; }
+  .apps a:hover, .apps button:hover { background: var(--color-ink); color: var(--color-paper); }
+  .apps a:active, .apps button:active { transform: scale(0.97); }
+  /* The button already shows the result; the status line only announces it. */
+  .status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
+  .tools { grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 560px) {
+    .field { grid-template-columns: minmax(0, 1fr) auto; }
+    .copy { border-top: 0; border-left: 1px solid var(--color-ink); }
+    .apps { display: flex; flex-wrap: wrap; }
+    .apps a, .apps button { width: auto; }
+  }
+  @media (min-width: 768px) { .share { padding: var(--space-8); } }
+  @media (prefers-reduced-motion: reduce) { .copy, .apps a, .apps button { transition: none; } .copy:active { transform: none; } }
+</style>

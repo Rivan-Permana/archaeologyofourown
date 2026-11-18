@@ -14,5 +14,12 @@ src/content/snapshot/
 # local agent and planning tooling, reviewed separately before publishing
 .claude/
 _bmad/
-_bmad-output/
 .understand-anything/
+worker-configuration.d.ts
+public/version.json
+public/artefacts.json
+.playwright-mcp/
+public/_headers
+
+# impeccable critique snapshots (local)
+.impeccable/

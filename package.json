@@ -1,0 +1,46 @@
+{
+  "name": "archaeologyofourown",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.22.0 <25"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "types": "wrangler types",
+    "check": "npm run types && astro check",
+    "test": "node --test --experimental-strip-types \"tests/**/*.test.ts\"",
+    "seed": "wrangler d1 migrations apply DB --local && node --experimental-strip-types scripts/seed.ts",
+    "license": "node --experimental-strip-types scripts/check-licenses.ts",
+    "snapshot": "node --experimental-strip-types scripts/snapshot.ts",
+    "gate": "node --experimental-strip-types scripts/launch-gate.ts",
+    "build": "npm run gate && astro build",
+    "leak": "node --experimental-strip-types scripts/check-dist.ts",
+    "build:ci": "npm run snapshot && npm run build && npm run leak",
+    "contrast": "node --experimental-strip-types scripts/check-contrast.ts",
+    "ci": "npm run license && npm run contrast && npm run check && npm test && npm run snapshot -- --local && npm run build && npm run leak"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "14.4.8",
+    "@astrojs/react": "7.1.9",
+    "@fontsource-variable/bricolage-grotesque": "5.3.0",
+    "@fontsource-variable/fraunces": "5.3.0",
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource-variable/plus-jakarta-sans": "5.3.0",
+    "astro": "7.4.12",
+    "drizzle-orm": "0.45.4",
+    "gsap": "3.15.1",
+    "jose": "6.2.17",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "drizzle-kit": "0.31.11",
+    "typescript": "6.0.3",
+    "wrangler": "4.164.0"
+  }
+}

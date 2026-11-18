@@ -1,0 +1,95 @@
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+}
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-accent);
+  outline-offset: var(--focus-ring-offset);
+}
+a { color: var(--color-ink); text-decoration-color: var(--color-accent); text-underline-offset: 3px; }
+/* Meta text: tabular figures; only meta-catalogue is uppercase and tracked (UX-DR3). */
+.meta, .meta-catalogue {
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
+  font-variant-numeric: tabular-nums;
+}
+.meta-catalogue { letter-spacing: var(--type-meta-catalogue-tracking); }
+
+/* Chrome: header height drives scroll-padding so focus is never hidden under the sticky bar (UX-DR72). */
+:root { --header-height: calc(var(--space-12) + var(--space-2)); }
+html { scroll-padding-top: calc(var(--header-height) + 2px); }
+main:focus { outline: none; }
+dialog[open] { display: block; }
+body:has(dialog[open]) { overflow: hidden; }
+
+/* 12 / 6 / 4 column grid with 16px side gutter on mobile (UX-DR38). */
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); max-width: var(--max-width); margin-inline: auto; padding-inline: var(--margin-mobile); }
+@media (min-width: 768px) { .grid { grid-template-columns: repeat(6, 1fr); gap: var(--gutter-desktop); padding-inline: var(--gutter-desktop); } }
+@media (min-width: 1100px) { .grid { grid-template-columns: repeat(12, 1fr); } }
+
+/* Buttons (UX-DR13): square, 48px, accent primary and ink-bordered secondary; a small scale on press. */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: var(--space-3) var(--space-6); font: 500 var(--type-body-size)/1.25 var(--font-body); text-decoration: none; border: 1px solid var(--color-ink); border-radius: var(--radius-none); background: transparent; color: var(--color-ink); cursor: pointer; transition: background-color 150ms ease, border-color 150ms ease, transform 160ms var(--ease-out); }
+.btn-primary { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-on-accent); }
+.btn-primary:hover { background: color-mix(in srgb, var(--color-accent) 92%, black); border-color: color-mix(in srgb, var(--color-accent) 92%, black); }
+.btn-secondary:hover { background: var(--color-surface); }
+.btn:active { transform: scale(0.97); }
+.btn[aria-disabled="true"] { opacity: 0.4; cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } .btn:active { transform: none; } }
+
+/* Placeholder marker (UX-DR35): accent border on paper, always visible on Placeholder content. */
+.ph { display: inline-block; font: var(--type-meta-weight) var(--type-meta-size)/1 var(--font-body); padding: var(--space-1) var(--space-2); border: 1px solid var(--color-accent); color: var(--color-accent); background: var(--color-paper); }
+
+/* Catalogue Record block and Category tag (UX-DR18, UX-DR19): used in Articles, the Artefact of the Day and cards. */
+.catalogue-record { display: grid; grid-template-columns: max-content 1fr; margin: var(--space-8) 0; border: 1px solid var(--color-line); }
+.catalogue-record dt, .catalogue-record dd { margin: 0; padding: var(--space-3) var(--space-4); border-top: 1px solid var(--color-line); }
+.catalogue-record dt:first-of-type, .catalogue-record dt:first-of-type + dd { border-top: 0; }
+.catalogue-record dt { font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); line-height: var(--type-meta-leading); letter-spacing: var(--type-meta-catalogue-tracking); color: var(--color-ink-muted); }
+.catalogue-record dd { font-size: var(--type-small-size); }
+.category-tag { display: inline-block; border: 1px solid var(--color-ink); padding: 2px var(--space-2); font-size: var(--type-meta-size); line-height: var(--type-meta-leading); }
+
+/* Motion: one strong ease-out for entrances (emil-design-eng); scroll and fade-up curves are set where they are used. */
+:root { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); }
+
+/* Finds register (user decision 2026-11-19): an image slot without a photo shows a line drawing of an everyday
+   find, the way an excavation report draws its small finds, with the black-and-white photo scale in the corner.
+   Drawings are masks, so the line colour is always --color-ink. The Placeholder marker still labels the slot. */
+:root {
+  --find-cap: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='60' cy='50' rx='30' ry='12'/%3E%3Cellipse cx='60' cy='50' rx='21' ry='8'/%3E%3Cpath d='M30 50v13a30 12 0 0 0 60 0V50'/%3E%3Cpath d='M36 58v12M44 60v13M52 61v13M60 62v13M68 61v13M76 60v13M84 58v12'/%3E%3Ccircle cx='50' cy='47' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='55' cy='52' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='63' cy='46' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='68' cy='51' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='59' cy='49' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='46' cy='51' r='.7' fill='%23000' stroke='none'/%3E%3C/svg%3E");
+  --find-coin: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='60' cy='60' r='34'/%3E%3Ccircle cx='60' cy='60' r='28'/%3E%3Ccircle cx='60' cy='48' r='6'/%3E%3Ccircle cx='71.4' cy='56.3' r='6'/%3E%3Ccircle cx='67.1' cy='69.7' r='6'/%3E%3Ccircle cx='52.9' cy='69.7' r='6'/%3E%3Ccircle cx='48.6' cy='56.3' r='6'/%3E%3Ccircle cx='60' cy='60' r='2.5'/%3E%3Ccircle cx='40' cy='40' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='82' cy='44' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='84' cy='78' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='38' cy='80' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='60' cy='90' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='30' cy='60' r='.7' fill='%23000' stroke='none'/%3E%3C/svg%3E");
+  --find-sherd: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 54C30 36 66 30 100 36l-6 18C86 72 68 86 44 90 32 76 22 66 14 54Z'/%3E%3Cpath d='M19 60C35 44 68 39 97 44'/%3E%3Cpath d='M38 68l10-6M50 72l10-6M62 74l10-6'/%3E%3Cpath d='M106 36h5l-2 20h-4z' fill='%23000'/%3E%3Ccircle cx='30' cy='62' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='44' cy='80' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='58' cy='82' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='76' cy='64' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='84' cy='58' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='36' cy='72' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='70' cy='76' r='.7' fill='%23000' stroke='none'/%3E%3C/svg%3E");
+  --find-bottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M52 12h16v9H52z'/%3E%3Cpath d='M54 21v14c0 6-14 10-14 22v48c0 4 4 7 8 7h24c4 0 8-3 8-7V57c0-12-14-16-14-22V21'/%3E%3Cpath d='M40 68h40v24H40z'/%3E%3Cpath d='M46 60v40'/%3E%3Cpath d='M48 80h24M52 86h16'/%3E%3C/svg%3E");
+  --find-glass: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='60' cy='22' rx='25' ry='5'/%3E%3Cpath d='M35 22l6 84h38l6-84'/%3E%3Cpath d='M43 106a17 3 0 0 0 34 0'/%3E%3Cpath d='M45 32l3 66M53 32l1.5 68M60 32v68M67 32l-1.5 68M75 32l-3 66'/%3E%3Cpath d='M38 50h44'/%3E%3C/svg%3E");
+  --find-key: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='34' cy='60' r='17'/%3E%3Ccircle cx='34' cy='60' r='6'/%3E%3Cpath d='M51 57h56v6H51'/%3E%3Cpath d='M88 63v10h5v-6h5v9h5V63'/%3E%3Ccircle cx='26' cy='50' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='42' cy='70' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='24' cy='66' r='.7' fill='%23000' stroke='none'/%3E%3Ccircle cx='44' cy='52' r='.7' fill='%23000' stroke='none'/%3E%3C/svg%3E");
+}
+/* "Indeks" direction (user decision 2026-11-19). Each editorial series owns one colour; a slot without a photo is
+   its series colour with the drawn find in the series text colour. Series colours are the same in both themes, so
+   they carry fixed text colours rather than the theme ink. */
+.s-temuan { --c: var(--color-kunyit); --on: var(--color-series-ink); }
+.s-jejak-proses { --c: var(--color-jambu); --on: var(--color-series-ink); }
+.s-ingatan-bersama { --c: var(--color-botol); --on: var(--color-series-paper); }
+.s-stratigrafi { --c: var(--color-nila); --on: var(--color-series-paper); }
+.slot { position: relative; background: var(--c, var(--color-surface)); }
+/* Each find sits the way it was laid out on the recording sheet, not centred like an icon: its own size, offset and
+   turn, some cropped by the edge. A 5 cm scale sits bottom left, as on a finds photo. */
+.slot { overflow: hidden; }
+.slot::after { content: ''; position: absolute; inset: var(--at, 14% 22%); rotate: var(--turn, 0deg); background: var(--on, var(--color-ink)); -webkit-mask: var(--find, var(--find-sherd)) center / contain no-repeat; mask: var(--find, var(--find-sherd)) center / contain no-repeat; }
+.slot::before { content: '5 cm'; position: absolute; left: var(--space-4); bottom: var(--space-3); z-index: 1; padding-top: 6px; width: 64px; border-top: 3px solid var(--on, var(--color-ink)); font: 600 11px/1 var(--font-body); color: var(--on, var(--color-ink)); }
+.slot[data-find="cap"] { --find: var(--find-cap); --at: 4% 10% 24% 30%; --turn: -8deg; }
+.slot[data-find="coin"] { --find: var(--find-coin); --at: 10% 30% 18% 14%; }
+.slot[data-find="sherd"] { --find: var(--find-sherd); --at: 6% -12% 14% 18%; --turn: 12deg; }
+.slot[data-find="bottle"] { --find: var(--find-bottle); --at: 8% 24% -22% 30%; --turn: 6deg; }
+.slot[data-find="glass"] { --find: var(--find-glass); --at: -18% 32% 18% 20%; }
+.slot[data-find="key"] { --find: var(--find-key); --at: 12% 4% 20% 14%; --turn: -14deg; }
+.dot { display: inline-block; width: 12px; height: 12px; flex: none; background: var(--c); outline: 1px solid var(--color-ink); outline-offset: -1px; }
+
+/* Headings are the condensed display cut; the width axis is not a token in DESIGN.md, so it is set once here. */
+h1, h2, h3, .disp { font-family: var(--font-display); font-stretch: 75%; letter-spacing: -0.02em; text-wrap: balance; }

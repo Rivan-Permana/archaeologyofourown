@@ -1,0 +1,8 @@
+---
+import { jsonForScript } from '../shared/render.ts';
+
+// Island data as inert JSON, `<` escaped (AR47). One of the two files allowed to use set:html.
+interface Props { id: string; data: unknown }
+const { id, data } = Astro.props;
+---
+<script type="application/json" id={id} set:html={jsonForScript(data)} />

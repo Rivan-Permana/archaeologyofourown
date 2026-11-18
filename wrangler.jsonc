@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "archaeology-of",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/admin/*", "/api/*", "/media/*"]
+  },
+  "preview_urls": false,
+  // Neutral names (AR3). Database ids are not secrets; local dev uses miniflare.
+  "d1_databases": [{ "binding": "DB", "database_name": "archaeologyofourown", "database_id": "38f1c34c-8b42-40ac-a709-d00dae6339c8", "migrations_dir": "src/server/db/migrations" }],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "archaeologyofourown-media" }],
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } }
+}

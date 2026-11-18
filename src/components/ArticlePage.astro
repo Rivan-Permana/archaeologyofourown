@@ -1,0 +1,178 @@
+---
+import { getCollection } from 'astro:content';
+import { articlesIn } from '../lib/articles.ts';
+import { t } from '../i18n/index.ts';
+import { articleBase, otherLocale, routeFor, type Locale } from '../i18n/routes.ts';
+import Page from '../layouts/Page.astro';
+import type { RenderedArticle } from '../shared/rendered.ts';
+import ArticleBody from './ArticleBody.astro';
+import ArticleCard from './ArticleCard.astro';
+import Placeholder from './Placeholder.astro';
+import ShareControl from './ShareControl.astro';
+import Toc from './Toc.astro';
+import { findFor } from '../shared/finds.ts';
+
+interface Props { locale: Locale; article: RenderedArticle; tr: RenderedArticle['translations'][number] }
+const { locale, article, tr } = Astro.props;
+const m = t(locale);
+const other = otherLocale(locale);
+const otherTr = article.translations.find((x) => x.lang === other);
+const url = (l: Locale, slug: string) => `${articleBase[l]}${slug}/`;
+// The switch lands on the equivalent page, or on the other home with a notice when there is no translation (FR-2).
+const hrefs = {
+  [locale]: url(locale, tr.slug),
+  [other]: otherTr ? url(other, otherTr.slug) : `${routeFor('home', other)}?unavailable=1`,
+} as Record<Locale, string>;
+// hreflang only for versions that exist (FR-1).
+const alternates: Partial<Record<Locale, string>> = { [locale]: url(locale, tr.slug), ...(otherTr ? { [other]: url(other, otherTr.slug) } : {}) };
+
+const media = new Map((await getCollection('media')).map((e) => [e.data.id, e.data]));
+const hero = article.refs.find((r) => r.role === 'hero');
+const heroMedia = hero && media.get(hero.mediaId);
+const heroAlt = hero?.alt[locale];
+const realHero = heroMedia && !heroMedia.isPlaceholder && heroAlt ? heroMedia : undefined;
+const widths = realHero ? [...realHero.variants].sort((a, b) => a - b) : [];
+const src = (w: number) => `/media/${realHero!.id}-w${w}.webp`;
+const when = new Intl.DateTimeFormat(locale === 'id' ? 'id-ID' : 'en-GB', { dateStyle: 'long', timeZone: 'Asia/Jakarta' }).format(new Date(article.date));
+
+// Share preview: the hero image (a Placeholder hero is still an image file) and Article structured data (FR-8).
+const ogWidth = heroMedia && [...heroMedia.variants].sort((a, b) => a - b).find((w) => w >= 1200) ;
+const ogImage = heroMedia && ogWidth ? `/media/${heroMedia.id}-w${ogWidth}.webp` : undefined;
+const ogHeight = heroMedia && ogWidth ? Math.round((ogWidth * heroMedia.height) / heroMedia.width) : undefined;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: tr.title,
+  description: tr.standfirst,
+  datePublished: article.date,
+  inLanguage: locale,
+  author: { '@type': 'Person', name: article.author },
+  ...(ogImage ? { image: [new URL(ogImage, Astro.site).href] } : {}),
+  mainEntityOfPage: new URL(url(locale, tr.slug), Astro.site).href,
+};
+
+const related = (await articlesIn(locale))
+  .filter((e) => e.article.series === article.series && e.article.id !== article.id)
+  .sort((a, b) => b.article.date.localeCompare(a.article.date))
+  .slice(0, 3)
+  .map(({ article: a, tr: x }) => {
+    const h = a.refs.find((r) => r.role === 'hero');
+    return { locale, series: a.series, slug: x.slug, title: x.title, excerpt: x.standfirst, date: a.date, minutes: x.readingMinutes, isPlaceholder: a.isPlaceholder, media: h && media.get(h.mediaId), alt: h?.alt[locale] };
+  });
+---
+<Page locale={locale} title={`${tr.title} | ${m.site.name}`} description={tr.standfirst} hrefs={hrefs} alternates={alternates} og={ogImage ? { image: ogImage, alt: heroAlt, type: 'article', width: ogWidth, height: ogHeight } : { type: 'article' }} jsonLd={jsonLd}>
+  <div class="progress" aria-hidden="true"><div class="bar" data-progress></div></div>
+  <article class="article">
+    {/* Cover: the article opens on its series colour, title on the left and the hero (photo or drawn find) on the right. */}
+    <header class={`cover s-${article.series}`}>
+      <div class="cover-in">
+        <div class="cover-txt">
+          {article.isPlaceholder && <p class="ph-line"><Placeholder locale={locale} /></p>}
+          <p class="series">{m.series[article.series].label}</p>
+          <h1>{tr.title}</h1>
+          <p class="standfirst">{tr.standfirst}</p>
+          <dl class="sheet">
+            <div><dt>{m.article.author}</dt><dd>{article.author}</dd></div>
+            <div><dt>{m.article.date}</dt><dd><time datetime={article.date}>{when}</time></dd></div>
+            <div><dt>{m.article.reading}</dt><dd>{tr.readingMinutes} {m.latest.readingTime}</dd></div>
+          </dl>
+        </div>
+        <figure class="hero">
+          <div class:list={['media', { photo: realHero }]}>
+            {realHero
+              ? <img src={src(widths[widths.length - 1])} srcset={widths.map((w) => `${src(w)} ${w}w`).join(', ')} sizes="(min-width: 1100px) 50vw, 100vw" width="3" height="2" alt={heroAlt} fetchpriority="high" decoding="async" />
+              : (article.isPlaceholder || heroMedia?.isPlaceholder)
+                ? <div class="slot" data-find={findFor(tr.slug)} role="img" aria-label={heroAlt ?? m.site.placeholderMarker}></div>
+                : <div class="slot" data-find={findFor(tr.slug)} aria-hidden="true"></div>}
+            {/* The cover already carries the article's marker; the image gets its own only when the article is real. */}
+            {!article.isPlaceholder && heroMedia?.isPlaceholder && <span class="mark"><Placeholder locale={locale} /></span>}
+          </div>
+          {(hero?.caption[locale] || hero?.credit[locale]) && (
+            <figcaption>{hero?.caption[locale]}{hero?.credit[locale] && <span class="credit">, {hero.credit[locale]}</span>}</figcaption>
+          )}
+        </figure>
+      </div>
+    </header>
+    <div class="layout">
+      <Toc locale={locale} items={tr.toc} />
+      <div class="main">
+        <ArticleBody html={tr.html} />
+        <div class="foot"><ShareControl locale={locale} title={tr.title} /></div>
+      </div>
+    </div>
+  </article>
+  {related.length > 0 && (
+    <section class="related" aria-labelledby="related-heading">
+      <h2 id="related-heading">{m.article.related}</h2>
+      <div class="row">{related.map((c) => <ArticleCard {...c} />)}</div>
+    </section>
+  )}
+</Page>
+<script>
+  // Reading progress tracks the article body only (UX-DR23).
+  const bar = document.querySelector<HTMLElement>('[data-progress]');
+  const body = document.querySelector<HTMLElement>('.body');
+  if (bar && body) {
+    const update = () => {
+      // 0 when the body's top reaches the viewport bottom, 1 when its end does.
+      const r = body.getBoundingClientRect();
+      const done = Math.min(1, Math.max(0, (innerHeight - r.top) / r.height));
+      bar.style.transform = `scaleX(${done})`;
+    };
+    addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    update();
+  }
+</script>
+<style>
+  .progress { position: sticky; top: calc(var(--header-height) - 1px); height: 3px; z-index: 9; pointer-events: none; }
+  .bar { height: 3px; background: var(--color-accent); transform: scaleX(0); transform-origin: left; }
+  /* The cover keeps its series colour in both themes, so text inside uses the series text colour. */
+  .cover { background: var(--c); color: var(--on); }
+  .cover-in { max-width: var(--max-width); margin: 0 auto; padding: var(--space-8) var(--margin-mobile) var(--space-12); display: grid; gap: var(--space-8); }
+  .cover-txt > * { margin: 0 0 var(--space-6); }
+  .ph-line { margin-bottom: var(--space-4); }
+  .series { font-weight: 600; }
+  h1 { font-size: var(--type-h1-size); font-weight: var(--type-h1-weight); line-height: var(--type-h1-leading); letter-spacing: -0.025em; max-width: 14ch; }
+  .standfirst { font-size: var(--type-standfirst-size); font-weight: var(--type-standfirst-weight); line-height: var(--type-standfirst-leading); max-width: 36ch; }
+  .sheet { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); padding-top: var(--space-4); border-top: 3px solid currentColor; margin-bottom: 0; }
+  .sheet dt { font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); line-height: var(--type-meta-leading); opacity: 0.8; margin-bottom: var(--space-1); }
+  .sheet dd { margin: 0; font-size: var(--type-small-size); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .hero { margin: 0; }
+  .media { position: relative; aspect-ratio: 4 / 3; }
+  .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .media .slot { width: 100%; height: 100%; background: transparent; }
+  .media .slot::after { inset: 4% 12%; rotate: none; }
+  .mark { position: absolute; top: 0; left: 0; }
+  figcaption { margin-top: var(--space-2); font-size: var(--type-small-size); line-height: var(--type-small-leading); }
+  .layout { max-width: var(--max-width); margin: 0 auto; padding: var(--space-12) var(--margin-mobile) 0; display: block; }
+  .main { max-width: var(--measure); margin: 0 auto; }
+  .foot { margin-top: var(--space-12); }
+  .related { max-width: var(--max-width); margin: var(--space-16) auto 0; padding: 0 var(--margin-mobile); }
+  .related h2 { font-size: var(--type-h3-size); font-weight: var(--type-h3-weight); line-height: var(--type-h3-leading); margin: 0 0 var(--space-8); padding-top: var(--space-4); border-top: 3px solid var(--color-ink); }
+  .row { display: grid; grid-template-columns: 1fr; gap: var(--space-12) var(--gutter-desktop); }
+  /* Below 1100px the cover must leave the first paragraph on screen: a drawn find shrinks to a small tag above the
+     title, a photo goes 16:9, and the sheet becomes one line (labels stay for screen readers). */
+  @media (max-width: 1099px) {
+    .cover-in { gap: var(--space-4); }
+    .hero { order: -1; }
+    .media:not(.photo) { width: 72px; aspect-ratio: 1; }
+    .media:not(.photo) .slot::after { inset: 0; }
+    .media:not(.photo) .mark { position: static; }
+    .media:not(.photo) .slot::before, .hero:not(:has(.photo)) figcaption { display: none; }
+    .media.photo { aspect-ratio: 16 / 9; }
+    .sheet { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+    .sheet dt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .cover-txt > .sheet { margin-bottom: 0; }
+  }
+  @media (min-width: 768px) {
+    .cover-in, .layout, .related { padding-inline: var(--gutter-desktop); }
+    .row { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 1100px) {
+    .cover-in { grid-template-columns: 7fr 5fr; align-items: center; min-height: calc(88svh - var(--header-height)); padding-block: var(--space-12); }
+    .layout { display: grid; grid-template-columns: 1fr minmax(0, var(--measure)) 1fr; column-gap: var(--gutter-desktop); padding-top: var(--space-16); }
+    .layout > :global(.toc.side) { grid-column: 1; justify-self: end; align-self: start; width: 220px; }
+    .main { grid-column: 2; margin: 0; }
+  }
+</style>

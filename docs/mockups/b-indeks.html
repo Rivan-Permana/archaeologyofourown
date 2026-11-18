@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup B · Indeks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAFAF8; --ink: #161A33; --muted: #565A72; --line: #DCDCE4;
+    --kunyit: #E8B21A; --nila: #2B3A8C; --botol: #1F6B5C; --jambu: #EFA3B3;
+    --display: 'Bricolage Grotesque', system-ui, sans-serif; --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.6 var(--body); }
+  a { color: inherit; }
+  svg.f { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .wrap { max-width: 1440px; margin: 0 auto; padding-inline: 16px; }
+  @media (min-width: 768px) { .wrap { padding-inline: 40px; } }
+  .disp { font-family: var(--display); font-variation-settings: "wdth" 75, "opsz" 96; font-weight: 800; letter-spacing: -0.02em; }
+
+  .nav { display: flex; justify-content: space-between; align-items: center; height: 64px; font-weight: 500; font-size: 15px; }
+  .nav .links { display: flex; gap: 28px; }
+  .nav b { border-bottom: 2px solid currentColor; }
+  @media (max-width: 767px) { .nav .links { display: none; } }
+
+  /* The wordmark fills the width: the name is the cover. */
+  .mast h1 { margin: 8px 0 0; font-size: clamp(3.4rem, 15.2vw, 15.5rem); line-height: 0.8; text-transform: none; }
+  .mast h1 span { display: block; }
+  .mast h1 span:last-child { color: var(--nila); }
+  .lede { display: grid; gap: 32px; padding: 40px 0 56px; border-bottom: 3px solid var(--ink); }
+  .lede p { margin: 0; font-size: clamp(1.3rem, 2.3vw, 2rem); line-height: 1.3; max-width: 30ch; font-weight: 500; }
+  .today { display: grid; grid-template-columns: 96px 1fr; gap: 16px; align-items: center; text-decoration: none; }
+  .today .chip { aspect-ratio: 1; background: var(--kunyit); display: grid; place-items: center; }
+  .today .chip svg { width: 70%; }
+  .today small { display: block; color: var(--muted); font-size: 14px; }
+  .today strong { font-size: 20px; }
+  @media (min-width: 900px) { .lede { grid-template-columns: 1fr auto; align-items: end; } }
+
+  /* Feature: half colour plate, half text, the plate bleeds to the edge. */
+  .feature { display: grid; margin-top: 56px; }
+  @media (min-width: 900px) { .feature { grid-template-columns: 7fr 5fr; } }
+  .feature .plate { background: var(--jambu); aspect-ratio: 4 / 3; display: grid; place-items: center; overflow: hidden; }
+  .feature .plate svg { width: 54%; transition: transform 600ms var(--ease); }
+  .feature:hover .plate svg { transform: translateY(-8px) rotate(-4deg); }
+  .feature .txt { background: var(--ink); color: var(--paper); padding: 40px 32px; display: grid; align-content: space-between; gap: 32px; }
+  .feature .txt .meta { display: flex; gap: 16px; font-size: 14px; color: #B9BBCC; }
+  .feature h2 { font-size: clamp(2.6rem, 5.2vw, 5.4rem); line-height: 0.9; margin: 0; }
+  .feature p { margin: 0; font-size: 19px; max-width: 34ch; color: #E3E4EE; }
+  .btn { display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; background: var(--kunyit); color: var(--ink); font-weight: 700; text-decoration: none; justify-self: start; transition: transform 160ms var(--ease); }
+  .btn:active { transform: scale(.97); }
+
+  /* Index: articles as big type rows; hovering a row fills it with the series colour and shows its find. */
+  .sec { padding: 96px 0 72px; }
+  .sec h2.head { font-size: clamp(2.4rem, 6vw, 5.5rem); line-height: 0.9; margin: 0 0 32px; }
+  .index { list-style: none; margin: 0; padding: 0; border-top: 3px solid var(--ink); }
+  .index li { position: relative; display: grid; grid-template-columns: 56px 1fr; gap: 8px 16px; align-items: center; padding: 20px 8px; border-bottom: 1px solid var(--ink); isolation: isolate; }
+  .index li::before { content: ''; position: absolute; inset: 0; background: var(--c); transform: scaleY(0); transform-origin: bottom; transition: transform 320ms var(--ease); z-index: -1; }
+  .index li:hover::before { transform: scaleY(1); }
+  .index .no { font: 700 15px var(--body); }
+  .index .t { font-size: clamp(1.6rem, 3.6vw, 3.2rem); line-height: 1; text-decoration: none; }
+  .index .t::after { content: ''; position: absolute; inset: 0; }
+  .index .ser { grid-column: 2; display: flex; gap: 12px; align-items: center; font-size: 14px; font-weight: 500; }
+  .index .dot { width: 12px; height: 12px; background: var(--c); outline: 1px solid var(--ink); }
+  .index svg { display: none; }
+  @media (min-width: 900px) {
+    .index li { grid-template-columns: 72px 1fr 220px 120px; }
+    .index .ser { grid-column: auto; }
+    .index time { text-align: right; font-size: 14px; }
+    .index svg { display: block; position: absolute; right: 360px; top: 50%; width: 120px; translate: 0 -50%; opacity: 0; scale: .9; transition: opacity 200ms ease, scale 320ms var(--ease); pointer-events: none; }
+    .index li:hover svg { opacity: 1; scale: 1; }
+  }
+  @media (max-width: 899px) { .index time { display: none; } }
+
+  /* Series: four full-width soil layers, the thickness of each follows its article count. */
+  .layers { margin-top: 32px; }
+  .layer { display: grid; gap: 8px 32px; align-items: end; background: var(--c); color: var(--on, var(--ink)); padding: 24px 16px; min-height: calc(var(--n) * 48px + 112px); }
+  @media (min-width: 768px) { .layer { grid-template-columns: 1fr 1fr auto; padding: 32px 40px; } }
+  .layer h3 { margin: 0; font-size: clamp(2.2rem, 5vw, 4.6rem); line-height: 0.9; }
+  .layer p { margin: 0; max-width: 36ch; }
+  .layer span { font: 800 20px var(--display); }
+
+  footer { background: var(--ink); color: var(--paper); padding: 48px 0; font-size: 14px; }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+  .note { position: fixed; bottom: 12px; right: 12px; background: var(--ink); color: var(--paper); font-size: 12px; padding: 6px 10px; z-index: 9; }
+  @media (prefers-reduced-motion: reduce) { .index li::before, .index svg, .feature .plate svg, .btn { transition: none; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="cap" viewBox="0 0 120 120"><ellipse cx="60" cy="50" rx="30" ry="12"/><ellipse cx="60" cy="50" rx="21" ry="8"/><path d="M30 50v13a30 12 0 0 0 60 0V50"/><path d="M36 58v12M44 60v13M52 61v13M60 62v13M68 61v13M76 60v13M84 58v12"/></symbol>
+    <symbol id="coin" viewBox="0 0 120 120"><circle cx="60" cy="60" r="34"/><circle cx="60" cy="60" r="28"/><circle cx="60" cy="48" r="6"/><circle cx="71.4" cy="56.3" r="6"/><circle cx="67.1" cy="69.7" r="6"/><circle cx="52.9" cy="69.7" r="6"/><circle cx="48.6" cy="56.3" r="6"/><circle cx="60" cy="60" r="2.5"/></symbol>
+    <symbol id="sherd" viewBox="0 0 120 120"><path d="M14 54C30 36 66 30 100 36l-6 18C86 72 68 86 44 90 32 76 22 66 14 54Z"/><path d="M19 60C35 44 68 39 97 44"/><path d="M38 68l10-6M50 72l10-6M62 74l10-6"/></symbol>
+    <symbol id="bottle" viewBox="0 0 120 120"><path d="M52 12h16v9H52z"/><path d="M54 21v14c0 6-14 10-14 22v48c0 4 4 7 8 7h24c4 0 8-3 8-7V57c0-12-14-16-14-22V21"/><path d="M40 68h40v24H40z"/><path d="M46 60v40"/><path d="M48 80h24M52 86h16"/></symbol>
+    <symbol id="glass" viewBox="0 0 120 120"><ellipse cx="60" cy="22" rx="25" ry="5"/><path d="M35 22l6 84h38l6-84"/><path d="M43 106a17 3 0 0 0 34 0"/><path d="M45 32l3 66M53 32l1.5 68M60 32v68M67 32l-1.5 68M75 32l-3 66"/><path d="M38 50h44"/></symbol>
+    <symbol id="key" viewBox="0 0 120 120"><circle cx="34" cy="60" r="17"/><circle cx="34" cy="60" r="6"/><path d="M51 57h56v6H51"/><path d="M88 63v10h5v-6h5v9h5V63"/></symbol>
+  </defs>
+</svg>
+
+<header class="mast"><div class="wrap">
+  <nav class="nav"><span class="links"><a href="#">Artikel</a><a href="#">Artefak hari ini</a><a href="#">Seri</a></span><span><b>ID</b>&nbsp;&nbsp;EN</span></nav>
+  <h1 class="disp"><span>Archaeology</span><span>of Our Own</span></h1>
+  <div class="lede">
+    <p>Kami membaca benda sehari-hari Indonesia seperti lapisan tanah: apa yang ada sebelum, di sekitar, dan sesudah benda itu dibuat.</p>
+    <a class="today" href="#"><span class="chip"><svg class="f" viewBox="0 0 120 120"><use href="#cap"/></svg></span><span><small>Artefak hari ini</small><strong>Tutup botol limun, 1998</strong></span></a>
+  </div>
+  <article class="feature">
+    <div class="plate" style="background:var(--kunyit)"><svg class="f" viewBox="0 0 120 120"><use href="#bottle"/></svg></div>
+    <div class="txt">
+      <div class="meta"><span>No. 07</span><span>Temuan</span><span>7 Oktober 2026</span></div>
+      <h2 class="disp">Botol kecap yang tidak pernah dibuang</h2>
+      <p>Kenapa hampir setiap dapur menyimpan botol bekas, dan apa yang tersisa dari kebiasaan itu.</p>
+      <a class="btn" href="#">Baca artikel</a>
+    </div>
+  </article>
+</div></header>
+
+<section class="sec"><div class="wrap">
+  <h2 class="head disp">Semua artikel</h2>
+  <ol class="index">
+    <li style="--c:var(--jambu)"><span class="no">06</span><a class="t disp" href="#">Gelas belimbing di setiap warung</a><span class="ser"><i class="dot"></i>Jejak Proses</span><time>6 Okt 2026</time><svg class="f" viewBox="0 0 120 120"><use href="#glass"/></svg></li>
+    <li style="--c:var(--botol)"><span class="no">05</span><a class="t disp" href="#">Kunci gembok rumah nenek</a><span class="ser"><i class="dot"></i>Ingatan Bersama</span><time>5 Okt 2026</time><svg class="f" viewBox="0 0 120 120"><use href="#key"/></svg></li>
+    <li style="--c:var(--kunyit)"><span class="no">04</span><a class="t disp" href="#">Koin lima ratus bergambar melati</a><span class="ser"><i class="dot"></i>Temuan</span><time>4 Okt 2026</time><svg class="f" viewBox="0 0 120 120"><use href="#coin"/></svg></li>
+    <li style="--c:var(--nila)"><span class="no">03</span><a class="t disp" href="#">Pecahan piring kaleng di halaman belakang</a><span class="ser"><i class="dot"></i>Stratigrafi</span><time>3 Okt 2026</time><svg class="f" viewBox="0 0 120 120"><use href="#sherd"/></svg></li>
+  </ol>
+</div></section>
+
+<section class="sec" style="padding-top:0"><div class="wrap">
+  <h2 class="head disp">Empat seri, empat lapisan</h2>
+</div>
+  <div class="layers">
+    <div class="layer" style="--c:var(--kunyit);--n:3"><h3 class="disp">Temuan</h3><p>Temuan dari budaya visual sehari-hari.</p><span>3 artikel</span></div>
+    <div class="layer" style="--c:var(--jambu);--n:2"><h3 class="disp">Jejak Proses</h3><p>Jejak proses di balik benda-benda.</p><span>2 artikel</span></div>
+    <div class="layer" style="--c:var(--botol);--on:var(--paper);--n:0"><h3 class="disp">Ingatan Bersama</h3><p>Segera hadir.</p><span>0 artikel</span></div>
+    <div class="layer" style="--c:var(--nila);--on:var(--paper);--n:2"><h3 class="disp">Stratigrafi</h3><p>Esai yang membaca lapisan demi lapisan.</p><span>2 artikel</span></div>
+  </div>
+</section>
+<footer><div class="wrap"><span>Archaeology of Our Own</span><span>Bahasa Indonesia &nbsp; English</span></div></footer>
+<div class="note">Mockup B · judul artikel hanya contoh</div>
+</body>
+</html>

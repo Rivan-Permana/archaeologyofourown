@@ -1,0 +1,148 @@
+/* Single token source. Mirrors the public and admin tokens in UX DESIGN.md 1:1 (AD-12).
+   Components use these names only; no literal colours, radii or font stacks elsewhere. */
+:root {
+  /* public colour */
+  --color-paper: #FAFAF8;
+  --color-surface: #EFEFEA;
+  --color-ink: #161A33;
+  --color-ink-muted: #50546B;
+  --color-line: #D6D7E0;
+  --color-accent: #2B3A8C;
+  --color-on-accent: #FFFFFF;
+  /* series colours, the same in both themes */
+  --color-kunyit: #E8B21A;
+  --color-jambu: #EFA3B3;
+  --color-botol: #1F6B5C;
+  --color-nila: #2B3A8C;
+  --color-series-ink: #161A33;
+  --color-series-paper: #FAFAF8;
+  color-scheme: light;
+
+  /* admin colour (light only in v1) */
+  --color-admin-room: #EDEBE6;
+  --color-admin-rail: #E4E1DA;
+  --color-admin-rail-hover: #EBE8E2;
+  --color-admin-sheet: #FCFCFA;
+  --color-admin-sheet-footer: #F6F5F1;
+  --color-admin-button-hover: #F0EEE9;
+  --color-admin-text: #24221F;
+  --color-admin-muted: #5F5B55;
+  --color-admin-control: #857F76;
+  --color-admin-line: #D9D5CD;
+  --color-admin-accent: #B4462B;
+  --color-admin-accent-press: #9A3B24;
+  --color-admin-on-accent: #FFFFFF;
+
+  /* font families: public "Indeks" direction (2026-11-19); the admin keeps Fraunces and Inter */
+  --font-display: 'Bricolage Grotesque Variable', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'Plus Jakarta Sans Variable', system-ui, sans-serif;
+  --font-admin-serif: 'Fraunces Variable', Fraunces, Georgia, serif;
+  --font-admin-sans: 'Inter Variable', Inter, system-ui, sans-serif;
+
+  /* public type */
+  --type-display-size: clamp(2.75rem, 11vw, 7.5rem);
+  --type-display-weight: 800;
+  --type-display-leading: 0.85;
+  --type-manifesto-size: clamp(1.3rem, 2.3vw, 2rem);
+  --type-manifesto-weight: 500;
+  --type-manifesto-leading: 1.3;
+  --type-h1-size: clamp(3rem, 11vw, 7rem);
+  --type-h1-weight: 800;
+  --type-h1-leading: 0.9;
+  --type-h2-size: clamp(2.4rem, 6vw, 5.5rem);
+  --type-h2-weight: 800;
+  --type-h2-leading: 0.9;
+  --type-h3-size: clamp(1.6rem, 3vw, 2.4rem);
+  --type-h3-weight: 800;
+  --type-h3-leading: 1;
+  --type-standfirst-size: 1.375rem;
+  --type-standfirst-weight: 500;
+  --type-standfirst-leading: 1.4;
+  --type-body-size: 1.0625rem;
+  --type-body-weight: 400;
+  --type-body-leading: 1.65;
+  --type-small-size: 0.875rem;
+  --type-small-weight: 400;
+  --type-small-leading: 1.5;
+  --type-meta-size: 0.8125rem;
+  --type-meta-weight: 500;
+  --type-meta-leading: 1.4;
+  --type-meta-tracking: 0em;
+  --type-meta-catalogue-size: 0.8125rem;
+  --type-meta-catalogue-weight: 500;
+  --type-meta-catalogue-leading: 1.4;
+  --type-meta-catalogue-tracking: 0em;
+
+  /* admin type */
+  --type-admin-title-size: 34px;
+  --type-admin-title-leading: 1.18;
+  --type-admin-editor-title-size: 30px;
+  --type-admin-editor-title-leading: 1.2;
+  --type-admin-standfirst-size: 19px;
+  --type-admin-standfirst-leading: 1.5;
+  --type-admin-heading-size: 24px;
+  --type-admin-heading-weight: 500;
+  --type-admin-heading-leading: 1.25;
+  --type-admin-reading-size: 19px;
+  --type-admin-reading-leading: 1.65;
+  --type-admin-editor-body-size: 18px;
+  --type-admin-editor-body-leading: 1.65;
+  --type-admin-body-size: 16px;
+  --type-admin-body-leading: 1.5;
+  --type-admin-ui-size: 15px;
+  --type-admin-ui-leading: 1.3;
+  --type-admin-small-size: 14px;
+  --type-admin-small-leading: 1.45;
+  --type-admin-meta-size: 13px;
+  --type-admin-meta-leading: 1.35;
+  --type-admin-strip-value-size: 15px;
+  --type-admin-strip-value-leading: 20px;
+
+  /* radius */
+  --radius-none: 0;
+  --radius-admin-xs: 6px;
+  --radius-admin-sm: 8px;
+  --radius-admin-md: 10px;
+  --radius-admin-lg: 14px;
+
+  /* spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --gutter-desktop: 32px;
+  --margin-mobile: 16px;
+  --max-width: 1440px;
+  --measure: 56ch;
+  --admin-nav-width: 200px;
+  --admin-rail-width: 300px;
+  --admin-room-padding: 32px;
+  --admin-sheet-max: 900px;
+  --admin-sheet-padding-top: 48px;
+  --admin-sheet-padding: 64px;
+  --admin-measure: 60ch;
+
+  /* focus */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #0F1124;
+    --color-surface: #191C36;
+    --color-ink: #F1F0EA;
+    --color-ink-muted: #A6A9C0;
+    --color-line: #2E3252;
+    --color-accent: #8C9BEA;
+    --color-on-accent: #0F1124;
+    color-scheme: dark;
+  }
+}

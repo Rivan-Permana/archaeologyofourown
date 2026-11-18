@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup kunci · Beranda</title>
+<style>
+/* Key screen: public home (/), Indonesian. Rendered 2026-11-17 for UX Finalize.
+   Governing spine sections: DESIGN.md Brand & Style, Colors (public), Typography, Layout & Spacing,
+   Elevation (no shadows), Shapes (radius 0), Components (public): Header, Mobile menu panel, Buttons,
+   Article card, Featured article card, Series block, Catalogue Record block, Category tag, Artefact of the Day,
+   Contribute invitation, Newsletter form, Placeholder marker. EXPERIENCE.md: Information Architecture (home order),
+   Voice and Tone, Component Patterns (Header hidden over Masthead, Menu panel), State Patterns (Placeholder,
+   Series empty), Accessibility Floor, UJ-1, UJ-3; .memlog decisions on header, mobile menu, /kirim, anti-slop audit.
+   Accepted anti-slop fixes applied: no em dashes; sentence-case meta, uppercase tracking only on the inventory
+   line; no section reveal (motion lives only in the Masthead strata and Artefact of the Day swap); no shadows in UI;
+   card hover = title underline only; placeholder images are plain labelled slots.
+   Contrast (WCAG): #1E1B18 on #F4EFE7 14.98; #5E574F on #F4EFE7 6.21; #5E574F on #EAE3D7 5.58; #B4462B on #F4EFE7 4.76; #FFFFFF on #B4462B 5.45; #FFFFFF on #A64028 6.20; #1E1B18 on #D5DEDA 12.48; #5E574F on #D5DEDA 5.18; #F4EFE7 on #5E574F 6.21; #1E1B18 on #EAE3D7 13.44; #1E1B18 on #CFC6B8 10.14
+   Fonts: Fraunces and Inter are named but not loaded (no network); Georgia and the system sans render. */
+
+:root{
+  --paper:#F4EFE7;--surface:#EAE3D7;--ink:#1E1B18;--muted:#5E574F;--line:#CFC6B8;
+  --accent:#B4462B;--accent-hover:#A64028;--on-accent:#FFFFFF;
+  --serif:Fraunces,Georgia,"Times New Roman",serif;
+  --sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#DDD5C8;color:var(--ink);font:400 16px/1.5 var(--sans);padding:48px 32px 96px}
+a,button,label[for],label.ro,label.chk,summary,input[type=radio],input[type=checkbox]{cursor:pointer}
+button[disabled]{cursor:not-allowed}
+img,svg{display:block}
+
+/* presentation chrome, not product UI */
+.doc{max-width:1440px;margin:0 auto 48px}
+.doc h1{font:500 28px/1.2 var(--sans);margin:0 0 12px}
+.doc p{max-width:80ch;margin:0 0 8px}
+.doc .src{color:var(--muted);font-size:14px}
+.shot{max-width:1440px;margin:0 auto 64px}
+.shot-cap{font-size:14px;line-height:1.5;color:var(--muted);margin:0 0 12px;max-width:96ch}
+.shot-cap b{color:var(--ink);font-weight:500}
+.scroller{overflow-x:auto;padding-bottom:8px}
+.row{display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start}
+.frame{position:relative;width:1440px;background:var(--paper);border:1px solid #A89F92}
+.frame.m{width:377px}
+.frame.crop{overflow:hidden}
+.urlbar{height:32px;display:flex;align-items:center;padding:0 12px;border-bottom:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.fold{position:absolute;left:0;right:0;border-top:1px dashed var(--accent);pointer-events:none}
+.fold span{position:absolute;right:8px;top:-12px;background:var(--paper);color:var(--accent);font-size:12px;line-height:1;padding:4px 8px;border:1px solid var(--accent)}
+
+/* product */
+.site{container-type:inline-size;position:relative;background:var(--paper);color:var(--ink)}
+.site a{color:inherit}
+.site :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1440px;margin:0 auto;padding:0 32px}
+.skip{position:absolute;left:16px;top:-64px;z-index:2;background:var(--paper);padding:12px 16px;border:1px solid var(--ink)}
+.skip:focus{top:16px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.tnum{font-variant-numeric:tabular-nums}
+
+.meta{font:500 12px/1.4 var(--sans);letter-spacing:.01em;color:var(--muted);font-variant-numeric:tabular-nums;margin:0}
+.series{color:var(--accent)}
+/* uppercase + tracking only on the inventory line of a Catalogue Record: it is the one string
+   that imitates a museum register (review-antislop M2) */
+.inv{text-transform:uppercase;letter-spacing:.08em}
+.ph{display:inline-block;font:500 12px/1 var(--sans);padding:4px 8px;border:1px solid var(--accent);color:var(--accent);background:var(--paper);vertical-align:middle}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 24px;font:500 16px/1.25 var(--sans);text-decoration:none;border:1px solid var(--ink);border-radius:0;background:transparent;color:var(--ink);transition:background-color 150ms ease,border-color 150ms ease}
+.btn-p{background:var(--accent);border-color:var(--accent);color:var(--on-accent)!important}
+.btn-p:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn-s:hover{background:var(--surface)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.4}
+.lnk{text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px}
+.lnk:hover{text-decoration-thickness:2px}
+
+/* header: thin sticky bar (home: only after the Masthead; other pages: from the top) */
+.hdr{border-bottom:1px solid var(--line);background:var(--paper)}
+.hdr-in{display:flex;align-items:center;gap:32px;height:56px}
+.wm{font:400 20px/1 var(--serif);text-decoration:none;margin-right:auto}
+.hnav{display:flex;gap:24px}
+.hnav a{display:flex;align-items:center;height:56px;font-size:15px;text-decoration:none;border-bottom:2px solid transparent}
+.hnav a:hover{border-bottom-color:var(--line)}
+.hnav a[aria-current]{border-bottom-color:var(--accent)}
+.lang{display:flex;align-items:center;gap:4px;font-size:15px}
+.lang .ic{margin-right:4px;color:var(--muted)}
+.lang a{display:inline-flex;align-items:center;min-height:44px;min-width:44px;justify-content:center;text-decoration:none}
+.lang a[aria-current]{text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:2px;text-underline-offset:6px}
+.menu-btn{display:none}
+@container (max-width:767px){
+  .wrap{padding:0 16px}
+  .hnav,.hdr .lang{display:none}
+  .hdr-in{height:56px}
+  .wm{font-size:18px}
+  .menu-btn{display:inline-flex;min-height:44px;padding:8px 12px;font-size:15px}
+}
+
+/* footer */
+.ftr{border-top:1px solid var(--ink);padding:48px 0 32px}
+.ftr-in{display:grid;grid-template-columns:5fr 4fr 3fr;gap:32px;align-items:start}
+.ftr .wm{font-size:24px;display:inline-block;margin:0 0 8px}
+.ftr p{margin:0;font-size:14px;color:var(--muted)}
+.ftr ul{list-style:none;margin:0;padding:0;font-size:15px}
+.ftr li a{display:inline-flex;min-height:44px;align-items:center}
+.ftr .lang{justify-self:end}
+.ftr .meta{grid-column:1/-1;padding-top:24px;border-top:1px solid var(--line)}
+@container (max-width:767px){
+  .ftr-in{grid-template-columns:1fr;gap:24px}
+  .ftr .lang{justify-self:start;margin-left:-12px}
+}
+
+
+/* masthead: the header is hidden here; the strata bands are the signature */
+.mast{display:flex;flex-direction:column;min-height:900px}
+.mast-top{display:flex;justify-content:flex-end;align-items:center;height:72px}
+.mast-name{font:300 160px/.92 var(--serif);font-variation-settings:"opsz" 144;letter-spacing:-.02em;margin:40px 0 0}
+.mast-man{font:400 28px/1.3 var(--serif);max-width:52ch;margin:40px 0 12px}
+.mast-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.strata{margin-top:auto;padding-top:48px}
+.band{position:relative;border-top:1px solid var(--ink)}
+.band span{position:absolute;left:32px;top:50%;transform:translateY(-50%);font-size:12px;line-height:1;color:var(--muted)}
+.b1{height:48px;background:var(--surface)}
+.b2{height:12px;background:var(--line)}
+.b3{height:88px;background:var(--surface)}
+.b4{height:20px;background:var(--line)}
+.b5{height:40px;background:var(--muted);border-bottom:1px solid var(--ink)}
+.b5 span{color:var(--paper)}
+.find{position:absolute;left:61%;top:36px;width:12px;height:12px;background:var(--accent)}
+@container (max-width:767px){
+  .mast{min-height:780px}
+  .mast-top{height:56px}
+  .mast-name{font-size:52px;line-height:.95;letter-spacing:-.01em;margin-top:24px}
+  .mast-man{font-size:20px;margin-top:24px}
+  .mast-actions{flex-direction:column;margin-top:24px}
+  .mast-actions .btn{width:100%}
+  .strata{padding-top:40px}
+  .band span{left:16px}
+  .b1{height:28px}.b2{height:8px}.b3{height:48px}.b4{height:12px}.b5{height:28px}
+  .find{top:20px}
+}
+
+/* section heads: rule + heading, no numbered uppercase eyebrow (review-antislop M2) */
+.sec{padding:64px 0 96px}
+.sec-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-top:1px solid var(--ink);padding-top:16px;margin-bottom:40px}
+.sec-head h2{font:400 44px/1.1 var(--serif);margin:0}
+@container (max-width:767px){
+  .sec{padding:48px 0 64px}
+  .sec-head{margin-bottom:24px}
+  .sec-head h2{font-size:30px}
+}
+
+/* image slots: plain surface at the real ratio, honestly labelled (review-antislop M8) */
+.slot{position:relative;background:var(--surface);display:flex;align-items:flex-end;padding:12px}
+.slot .ph{position:absolute;top:12px;left:12px}
+.slot-t{font-size:13px;color:var(--muted)}
+.r32{aspect-ratio:3/2}
+
+/* latest articles: featured spans 8 of 12 columns, two compact cards stacked beside it */
+.latest{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:48px 32px}
+.feat{grid-column:1/span 8}
+.side{grid-column:9/span 4;display:grid;gap:40px;align-content:start}
+.third{grid-column:span 4}
+.card a{display:block;text-decoration:none}
+.card .slot{margin-bottom:16px}
+.card h3{font:400 22px/1.25 var(--serif);margin:8px 0 8px}
+.feat h3{font-size:44px;line-height:1.1;margin:12px 0 12px;max-width:20ch}
+.card .ex{margin:0 0 12px;font-size:16px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:60ch}
+.feat .ex{font-size:17px}
+.card a:hover h3{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+@container (max-width:767px){
+  .latest{grid-template-columns:1fr;gap:40px}
+  .feat,.side,.third{grid-column:auto}
+  .feat h3{font-size:28px}
+}
+
+/* artefact of the day: background tint taken from the image (here from the drawing's lid) */
+.aotd{background:var(--tint,var(--surface));padding:96px 0}
+.aotd-in{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:32px;align-items:start}
+.aotd figure{grid-column:2/span 5;margin:0}
+.aotd .photo{position:relative;aspect-ratio:4/5;background:#E9E5DD;display:flex;align-items:center;justify-content:center}
+.aotd .photo svg{width:76%;height:auto}
+.aotd .photo .ph{position:absolute;top:12px;left:12px}
+.aotd figcaption{font-size:13px;color:var(--muted);margin-top:8px}
+.aotd-body{grid-column:8/span 4}
+.aotd-body h2{font:400 44px/1.1 var(--serif);margin:0 0 8px}
+.art-title{font:400 30px/1.2 var(--serif);margin:40px 0 16px}
+.rec{margin:0;border:1px solid var(--ink)}
+.rec div{display:grid;grid-template-columns:136px 1fr;gap:16px;padding:12px 16px;border-top:1px solid var(--ink)}
+.rec div:first-child{border-top:0}
+.rec dt{font-size:13px;color:var(--muted)}
+.rec dd{margin:0;font-size:15px}
+.tag{display:inline-block;border:1px solid var(--ink);padding:2px 8px;font-size:13px}
+.art-note{margin:20px 0 24px;font-size:16px;line-height:1.6}
+.aotd .meta{margin-top:12px}
+@container (max-width:767px){
+  .aotd{padding:48px 0 64px}
+  .aotd-in{grid-template-columns:1fr;gap:24px}
+  .aotd figure,.aotd-body{grid-column:auto}
+  .aotd-body h2{font-size:30px}
+  .art-title{font-size:24px;margin-top:24px}
+  .rec div{grid-template-columns:104px 1fr;gap:12px}
+}
+
+/* editorial series: ruled register rows, not a card grid */
+.slist{list-style:none;margin:0;padding:0;border-bottom:1px solid var(--line)}
+.slist li{display:grid;grid-template-columns:3fr 4fr 4fr 1fr;gap:32px;align-items:baseline;padding:24px 0;border-top:1px solid var(--line);transition:border-color 150ms ease}
+.slist li:hover{border-top-color:var(--accent)}
+.slist h3{font:400 28px/1.2 var(--serif);margin:0}
+.slist p{margin:0}
+.slist .desc{color:var(--muted)}
+.slist .cnt{text-align:right}
+.slist .soon{color:var(--muted)}
+@container (max-width:767px){
+  .slist li{grid-template-columns:1fr auto;gap:8px 16px}
+  .slist h3{font-size:24px}
+  .slist .desc,.slist .latestlink{grid-column:1/-1}
+  .slist .cnt{grid-row:1;grid-column:2}
+}
+
+/* contribute invitation */
+.invite{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:64px 0}
+.invite-in{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:32px;align-items:start}
+.invite h2{grid-column:1/span 5;font:400 44px/1.1 var(--serif);margin:0}
+.invite-body{grid-column:7/span 5}
+.invite-body p{margin:0 0 24px;font-size:17px;line-height:1.6;max-width:52ch}
+@container (max-width:767px){
+  .invite{padding:48px 0}
+  .invite-in{grid-template-columns:1fr;gap:16px}
+  .invite h2,.invite-body{grid-column:auto}
+  .invite h2{font-size:30px}
+  .invite-body .btn{width:100%}
+}
+
+/* newsletter */
+.news-in{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:32px;align-items:start}
+.news-in .sec-head{grid-column:1/-1;margin-bottom:0}
+.news-text{grid-column:1/span 5;margin:0;font-size:17px;line-height:1.6;max-width:44ch}
+.news-form{grid-column:7/span 6}
+.news-form label{display:block;font-weight:500;margin-bottom:8px}
+.news-row{display:flex;gap:12px}
+.inp{width:100%;min-height:48px;border:1px solid var(--ink);border-radius:0;background:var(--paper);color:var(--ink);font:400 16px/1.4 var(--sans);padding:12px}
+.inp::placeholder{color:var(--muted)}
+.ts{display:flex;align-items:center;justify-content:center;width:300px;max-width:100%;height:68px;border:1px dashed var(--muted);color:var(--muted);font-size:13px;text-align:center;padding:8px;margin:16px 0}
+.fine{font-size:14px;color:var(--muted);margin:0;max-width:60ch}
+@container (max-width:767px){
+  .news-in{grid-template-columns:1fr;gap:24px}
+  .news-text,.news-form{grid-column:auto}
+  .news-row{flex-direction:column}
+}
+
+/* mobile menu: full-screen panel */
+.panel{min-height:812px;display:flex;flex-direction:column}
+.panel ul{list-style:none;margin:24px 0 0;padding:0;border-bottom:1px solid var(--line)}
+.panel li a{display:flex;align-items:center;min-height:64px;border-top:1px solid var(--line);font:400 28px/1.2 var(--serif);text-decoration:none}
+.panel li a[aria-current]{text-decoration:underline;text-decoration-color:var(--accent);text-decoration-thickness:2px;text-underline-offset:6px}
+.panel .lang-block{margin-top:32px}
+.panel .lang-block p{margin:0 0 4px}
+.panel .lang{margin-left:-12px;font-size:17px}
+.panel .lang a{padding:0 12px}
+
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="tin" viewBox="0 0 300 300">
+<circle cx="156" cy="158" r="134" fill="#1E1B18" opacity=".14"/>
+<circle cx="150" cy="150" r="134" fill="#8F7340"/><circle cx="150" cy="150" r="127" fill="#B89A58"/>
+<circle cx="150" cy="150" r="116" fill="#2F5D5A"/>
+<circle cx="150" cy="150" r="98" fill="none" stroke="#E8DCC2" stroke-width="4"/>
+<circle cx="150" cy="150" r="56" fill="none" stroke="#E8DCC2" stroke-width="4"/>
+<circle cx="227.0" cy="144.0" r="5" fill="#A8432E"/><circle cx="232.7" cy="148.1" r="5" fill="#A8432E"/><circle cx="230.5" cy="154.9" r="5" fill="#A8432E"/><circle cx="223.5" cy="154.9" r="5" fill="#A8432E"/><circle cx="221.3" cy="148.1" r="5" fill="#A8432E"/><circle cx="227.0" cy="150.0" r="4.0" fill="#E2C46B"/><circle cx="204.4" cy="198.4" r="5" fill="#A8432E"/><circle cx="210.1" cy="202.5" r="5" fill="#A8432E"/><circle cx="207.9" cy="209.3" r="5" fill="#A8432E"/><circle cx="200.9" cy="209.3" r="5" fill="#A8432E"/><circle cx="198.7" cy="202.5" r="5" fill="#A8432E"/><circle cx="204.4" cy="204.4" r="4.0" fill="#E2C46B"/><circle cx="150.0" cy="221.0" r="5" fill="#A8432E"/><circle cx="155.7" cy="225.1" r="5" fill="#A8432E"/><circle cx="153.5" cy="231.9" r="5" fill="#A8432E"/><circle cx="146.5" cy="231.9" r="5" fill="#A8432E"/><circle cx="144.3" cy="225.1" r="5" fill="#A8432E"/><circle cx="150.0" cy="227.0" r="4.0" fill="#E2C46B"/><circle cx="95.6" cy="198.4" r="5" fill="#A8432E"/><circle cx="101.3" cy="202.5" r="5" fill="#A8432E"/><circle cx="99.1" cy="209.3" r="5" fill="#A8432E"/><circle cx="92.1" cy="209.3" r="5" fill="#A8432E"/><circle cx="89.9" cy="202.5" r="5" fill="#A8432E"/><circle cx="95.6" cy="204.4" r="4.0" fill="#E2C46B"/><circle cx="73.0" cy="144.0" r="5" fill="#A8432E"/><circle cx="78.7" cy="148.1" r="5" fill="#A8432E"/><circle cx="76.5" cy="154.9" r="5" fill="#A8432E"/><circle cx="69.5" cy="154.9" r="5" fill="#A8432E"/><circle cx="67.3" cy="148.1" r="5" fill="#A8432E"/><circle cx="73.0" cy="150.0" r="4.0" fill="#E2C46B"/><circle cx="95.6" cy="89.6" r="5" fill="#A8432E"/><circle cx="101.3" cy="93.7" r="5" fill="#A8432E"/><circle cx="99.1" cy="100.5" r="5" fill="#A8432E"/><circle cx="92.1" cy="100.5" r="5" fill="#A8432E"/><circle cx="89.9" cy="93.7" r="5" fill="#A8432E"/><circle cx="95.6" cy="95.6" r="4.0" fill="#E2C46B"/><circle cx="150.0" cy="67.0" r="5" fill="#A8432E"/><circle cx="155.7" cy="71.1" r="5" fill="#A8432E"/><circle cx="153.5" cy="77.9" r="5" fill="#A8432E"/><circle cx="146.5" cy="77.9" r="5" fill="#A8432E"/><circle cx="144.3" cy="71.1" r="5" fill="#A8432E"/><circle cx="150.0" cy="73.0" r="4.0" fill="#E2C46B"/><circle cx="204.4" cy="89.6" r="5" fill="#A8432E"/><circle cx="210.1" cy="93.7" r="5" fill="#A8432E"/><circle cx="207.9" cy="100.5" r="5" fill="#A8432E"/><circle cx="200.9" cy="100.5" r="5" fill="#A8432E"/><circle cx="198.7" cy="93.7" r="5" fill="#A8432E"/><circle cx="204.4" cy="95.6" r="4.0" fill="#E2C46B"/>
+<circle cx="150" cy="150" r="48" fill="#E8DCC2"/>
+<path d="M150 150c-18-6-30-20-26-34 14 2 24 16 26 34Zm0 0c18-6 30-20 26-34-14 2-24 16-26 34Z" fill="#5F7F4E"/>
+<circle cx="150.0" cy="145.0" r="11" fill="#A8432E"/><circle cx="162.4" cy="154.0" r="11" fill="#A8432E"/><circle cx="157.6" cy="168.5" r="11" fill="#A8432E"/><circle cx="142.4" cy="168.5" r="11" fill="#A8432E"/><circle cx="137.6" cy="154.0" r="11" fill="#A8432E"/><circle cx="150" cy="158" r="8.8" fill="#E2C46B"/>
+<path d="M236 188c12 4 18 16 13 29-5 11-17 15-27 10-7-5-4-13 2-18 6-5 6-15 12-21Z" fill="#A9A396"/>
+<path d="M60 108c6-10 14-18 24-24" stroke="#F4EFE7" stroke-width="3" fill="none" opacity=".45" stroke-linecap="round"/>
+</symbol>
+<symbol id="tinside" viewBox="0 0 300 300">
+<ellipse cx="152" cy="236" rx="104" ry="14" fill="#1E1B18" opacity=".14"/>
+<rect x="56" y="104" width="188" height="128" fill="#2F5D5A"/>
+<ellipse cx="150" cy="232" rx="94" ry="12" fill="#264C49"/>
+<rect x="50" y="84" width="200" height="30" fill="#B89A58"/><ellipse cx="150" cy="84" rx="100" ry="14" fill="#C9AD6E"/>
+<path d="M56 160h188" stroke="#E8DCC2" stroke-width="4"/>
+<circle cx="80.0" cy="186.0" r="5" fill="#A8432E"/><circle cx="85.7" cy="190.1" r="5" fill="#A8432E"/><circle cx="83.5" cy="196.9" r="5" fill="#A8432E"/><circle cx="76.5" cy="196.9" r="5" fill="#A8432E"/><circle cx="74.3" cy="190.1" r="5" fill="#A8432E"/><circle cx="80" cy="192" r="4.0" fill="#E2C46B"/><circle cx="114.0" cy="186.0" r="5" fill="#A8432E"/><circle cx="119.7" cy="190.1" r="5" fill="#A8432E"/><circle cx="117.5" cy="196.9" r="5" fill="#A8432E"/><circle cx="110.5" cy="196.9" r="5" fill="#A8432E"/><circle cx="108.3" cy="190.1" r="5" fill="#A8432E"/><circle cx="114" cy="192" r="4.0" fill="#E2C46B"/><circle cx="148.0" cy="186.0" r="5" fill="#A8432E"/><circle cx="153.7" cy="190.1" r="5" fill="#A8432E"/><circle cx="151.5" cy="196.9" r="5" fill="#A8432E"/><circle cx="144.5" cy="196.9" r="5" fill="#A8432E"/><circle cx="142.3" cy="190.1" r="5" fill="#A8432E"/><circle cx="148" cy="192" r="4.0" fill="#E2C46B"/><circle cx="182.0" cy="186.0" r="5" fill="#A8432E"/><circle cx="187.7" cy="190.1" r="5" fill="#A8432E"/><circle cx="185.5" cy="196.9" r="5" fill="#A8432E"/><circle cx="178.5" cy="196.9" r="5" fill="#A8432E"/><circle cx="176.3" cy="190.1" r="5" fill="#A8432E"/><circle cx="182" cy="192" r="4.0" fill="#E2C46B"/><circle cx="216.0" cy="186.0" r="5" fill="#A8432E"/><circle cx="221.7" cy="190.1" r="5" fill="#A8432E"/><circle cx="219.5" cy="196.9" r="5" fill="#A8432E"/><circle cx="212.5" cy="196.9" r="5" fill="#A8432E"/><circle cx="210.3" cy="190.1" r="5" fill="#A8432E"/><circle cx="216" cy="192" r="4.0" fill="#E2C46B"/>
+<path d="M196 124c10 2 16 10 14 20-3 8-12 10-18 6-4-4-2-10 1-14 2-4 0-9 3-12Z" fill="#A9A396"/>
+</symbol>
+<symbol id="tinbottom" viewBox="0 0 300 300">
+<circle cx="156" cy="158" r="128" fill="#1E1B18" opacity=".14"/>
+<circle cx="150" cy="150" r="128" fill="#A9A396"/><circle cx="150" cy="150" r="112" fill="#BDB8AC"/>
+<circle cx="150" cy="150" r="84" fill="none" stroke="#9A9486" stroke-width="3"/>
+<circle cx="150" cy="150" r="56" fill="none" stroke="#9A9486" stroke-width="3"/>
+<path d="M96 196c20 10 52 12 76 2" stroke="#8C6A3F" stroke-width="6" fill="none" opacity=".5" stroke-linecap="round"/>
+</symbol>
+</svg>
+<header class="doc"><h1>Mockup kunci · Beranda publik</h1><p>Beranda dalam bahasa Indonesia pada lebar 1440 dan 375. Semua artikel, artefak, dan angka di dalamnya contoh dan diberi tanda Placeholder (FR-25). Gambar artefak digambar dengan kode karena belum ada foto.</p><p class="src">Sumber: DESIGN.md, EXPERIENCE.md, .memlog.md, review-antislop.md, PRD §3, §4.2, §4.4, UJ-1. Garis putus-putus merah menandai batas layar pertama (FR-3).</p></header>
+<main>
+<section class="shot"><p class="shot-cap"><b>1 · Desktop 1440, seluruh halaman.</b> Header disembunyikan selama Masthead terlihat. Pita strata di bawah nama adalah detail khas: saat digulir, pita-pita ini merenggang (scrub) dan berhenti di bawah <code>prefers-reduced-motion</code>. Pemilih bahasa ID/EN tetap ada di Masthead agar selalu terjangkau (FR-2).</p><div class="scroller"><div class="frame"><div class="urlbar">/</div><div class="site" id="d-top"><a class="skip" href="#d-h-art">Langsung ke artikel</a><section class="mast" aria-labelledby="d-name"><div class="wrap"><div class="mast-top"><nav class="lang" aria-label="Bahasa"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><a href="#d-top" lang="id" aria-current="true">ID</a><a href="#d-top" lang="en" hreflang="en">EN</a></nav></div><h1 class="mast-name" id="d-name">Archaeology<br>of Our Own</h1><p class="mast-man">Kami membaca benda sehari-hari Indonesia seperti lapisan tanah: apa yang ada sebelum, di sekitar, dan sesudah benda itu dibuat.</p><span class="ph">Placeholder: manifesto menunggu teks dari klien</span><div class="mast-actions"><a class="btn btn-p" href="#d-h-art">Baca artikel</a><a class="btn btn-s" href="key-screen-kirim.html">Kirim artefak</a></div></div><div class="strata" aria-hidden="true"><div class="band b1"><span>Lapisan 1 · sebelum dibuat</span></div><div class="band b2"></div><div class="band b3"><span>Lapisan 2 · di sekitar pembuatan</span><i class="find"></i></div><div class="band b4"></div><div class="band b5"><span>Lapisan 3 · sesudah dipakai</span></div></div></section><main><section class="sec" id="d-artikel" aria-labelledby="d-h-art"><div class="wrap"><div class="sec-head"><h2 id="d-h-art" tabindex="-1">Artikel terbaru</h2></div><div class="latest"><article class="card feat"><a href="#d-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Temuan</p><h3>Huruf tangan di gerobak bakso: siapa yang melukisnya?</h3><p class="ex">Di Yogyakarta, beberapa pelukis gerobak masih bekerja dengan kuas dan cat minyak. Kami mengikuti satu pesanan dari sketsa kapur sampai huruf terakhir di kaca etalase.</p><p class="meta"><time datetime="2026-11-14">14 November 2026</time> · 12 menit baca</p></a></article><div class="side"><article class="card "><a href="#d-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Jejak Proses</p><h3>Sketsa sampul yang tidak pernah dicetak</h3><p class="ex">Lembar-lembar kalkir dari meja seorang ilustrator buku anak tahun 1980-an, dan alasan penerbit memilih gambar lain.</p><p class="meta"><time datetime="2026-11-11">11 November 2026</time> · 8 menit baca</p></a></article><article class="card "><a href="#d-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Ingatan Bersama</p><h3>Kaleng biskuit yang berganti jadi kotak jahit</h3><p class="ex">Hampir setiap rumah punya satu. Isinya jarang biskuit: benang, kancing, surat tanah, atau foto yang tidak muat di album.</p><p class="meta"><time datetime="2026-11-07">7 November 2026</time> · 6 menit baca</p></a></article></div><article class="card third"><a href="#d-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Temuan</p><h3>Label botol kecap dari kota-kota kecil</h3><p class="ex">Ayam jago dan huruf bersulur: membaca label cetak saring dari pabrik kecap rumahan di pesisir utara Jawa.</p><p class="meta"><time datetime="2026-11-04">4 November 2026</time> · 7 menit baca</p></a></article><article class="card third"><a href="#d-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Ingatan Bersama</p><h3>Kalender dinding dari toko emas</h3><p class="ex">Hadiah akhir tahun yang digantung sampai warnanya pudar, lalu disimpan karena ada catatan tangan di setiap bulannya.</p><p class="meta"><time datetime="2026-10-31">31 Oktober 2026</time> · 5 menit baca</p></a></article><article class="card third"><a href="#d-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Jejak Proses</p><h3>Dari stempel karet ke cetak saring</h3><p class="ex">Cara sebuah percetakan kecil di Bandung membuat kartu undangan pernikahan sebelum ada mesin cetak digital.</p><p class="meta"><time datetime="2026-10-28">28 Oktober 2026</time> · 10 menit baca</p></a></article></div></div></section><section class="aotd" id="d-artefak" style="--tint:#D5DEDA" aria-labelledby="d-h-aotd"><div class="wrap aotd-in"><figure><div class="photo"><span class="ph">Placeholder</span><svg viewBox="0 0 300 300" role="img" aria-label="Gambar sementara: kaleng biskuit bundar dilihat dari atas, tutup hijau tua dengan lingkaran bunga merah"><use href="#tin"/></svg></div><figcaption>Gambar sementara yang digambar dengan kode, bukan foto artefak. Warna latar bagian ini diambil dari tutup kaleng.</figcaption></figure><div class="aotd-body"><h2 id="d-h-aotd">Artefak hari ini</h2><p class="meta"><time datetime="2026-11-17">Selasa, 17 November 2026</time></p><h3 class="art-title">Kaleng biskuit bundar, tutup berlukis bunga</h3><dl class="rec"><div><dt>No. inventaris</dt><dd><span class="inv tnum">AOO/ART/0042</span></dd></div><div><dt>Tahun</dt><dd><span class="tnum">Sekitar 1975</span></dd></div><div><dt>Kategori</dt><dd><span class="tag">ingatan</span></dd></div><div><dt>Asal-usul</dt><dd>Lemari dapur sebuah rumah di Surabaya</dd></div><div><dt>Kontributor</dt><dd>Kiriman pembaca, nama disamarkan atas permintaan</dd></div></dl><p class="art-note">Catnya terkelupas di tepi kanan bawah, bagian yang paling sering dibuka. Sejak isinya habis, kaleng ini menyimpan benang dan kancing.</p><span class="ph">Placeholder</span><div style="margin-top:24px"><button class="btn btn-s" type="button" aria-controls="d-artefak">Tampilkan lainnya</button></div><p class="meta">Artefak berganti setiap hari pukul 00.00 WIB.</p></div></div></section><section class="sec" id="d-seri" aria-labelledby="d-h-seri"><div class="wrap"><div class="sec-head"><h2 id="d-h-seri">Seri editorial</h2><span class="ph">Placeholder: judul dan jumlah artikel</span></div><ol class="slist"><li><h3>Temuan</h3><p class="desc">Budaya visual sehari-hari: poster, huruf, kemasan, kertas cetak.</p><p class="latestlink"><span class="vh">Terbaru: </span><a class="lnk" href="#d-artikel">Huruf tangan di gerobak bakso: siapa yang melukisnya?</a></p><p class="meta cnt">2 artikel</p></li><li><h3>Jejak Proses</h3><p class="desc">Sketsa, draf, dan karya yang ditinggalkan di tengah jalan.</p><p class="latestlink"><span class="vh">Terbaru: </span><a class="lnk" href="#d-artikel">Sketsa sampul yang tidak pernah dicetak</a></p><p class="meta cnt">2 artikel</p></li><li><h3>Ingatan Bersama</h3><p class="desc">Benda keluarga, foto lama, dan cerita komunitas.</p><p class="latestlink"><span class="vh">Terbaru: </span><a class="lnk" href="#d-artikel">Kaleng biskuit yang berganti jadi kotak jahit</a></p><p class="meta cnt">2 artikel</p></li><li><h3>Stratigrafi</h3><p class="desc">Esai yang membaca beberapa lapisan sekaligus.</p><p class="latestlink soon">Segera hadir</p><p class="meta cnt"></p></li></ol></div></section><section class="invite" id="d-kirim" aria-labelledby="d-h-inv"><div class="wrap invite-in"><h2 id="d-h-inv">Punya benda yang menyimpan cerita?</h2><div class="invite-body"><p>Kaleng biskuit yang jadi kotak jahit, atau sketsa sampul yang tidak jadi dicetak. Ceritakan bendanya dan lampirkan 1 sampai 5 foto. Editor membaca setiap kiriman, dan tidak ada yang terbit sebelum itu.</p><a class="btn btn-p" href="key-screen-kirim.html">Kirim artefak</a></div></div></section><section class="sec" id="d-kabar" aria-labelledby="d-h-news"><div class="wrap news-in"><div class="sec-head"><h2 id="d-h-news">Kabar artikel baru</h2></div><p class="news-text">Tinggalkan email Anda. Kami mengabari saat artikel baru terbit, dalam bahasa halaman ini.</p><form class="news-form" action="#d-kabar"><label for="d-em">Email</label><div class="news-row"><input class="inp" id="d-em" type="email" autocomplete="email" placeholder="nama@contoh.id" aria-describedby="d-em-n"><button class="btn btn-p" type="submit">Ikuti kabar</button></div><div class="ts" role="img" aria-label="Tempat widget verifikasi Cloudflare Turnstile">Slot Cloudflare Turnstile, 300 × 65</div><p class="fine" id="d-em-n">Email ini hanya kami pakai untuk kabar artikel baru. <a class="lnk" href="#d-top">Baca catatan privasi</a></p><p class="vh" role="status" aria-live="polite"></p></form></div></section></main><footer class="ftr"><div class="wrap ftr-in"><div><a class="wm" href="key-screen-home.html">Archaeology of Our Own</a><p>Terbitan dwibahasa tentang artefak Indonesia: budaya visual, proses kreatif, dan ingatan.</p></div><ul><li><a class="lnk" href="#d-top">Catatan privasi</a></li><li><a class="lnk" href="key-screen-kirim.html">Kirim artefak</a></li></ul><nav class="lang" aria-label="Bahasa"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><a href="#d-top" lang="id" aria-current="true">ID</a><a href="#d-top" lang="en" hreflang="en">EN</a></nav><p class="meta">© 2026 Archaeology of Our Own</p></div></footer></div><div class="fold" style="top:932px"><span>Batas layar 900 px</span></div></div></div></section>
+<section class="shot"><p class="shot-cap"><b>2 · Desktop 1440, header tipis setelah Masthead terlewati.</b> Bagian aktif (Artikel) bergaris bawah aksen.</p><div class="scroller"><div class="frame crop" style="height:360px"><div class="urlbar">/#artikel</div><div class="site" id="ds-top"><header class="hdr"><div class="wrap hdr-in"><a class="wm" href="key-screen-home.html">Archaeology of Our Own</a><nav class="hnav" aria-label="Utama"><a href="key-screen-home.html#artikel" aria-current="location">Artikel</a><a href="key-screen-home.html#artefak">Artefak hari ini</a><a href="key-screen-kirim.html">Kirim artefak</a><a href="key-screen-home.html#kabar">Kabar</a></nav><nav class="lang" aria-label="Bahasa"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><a href="#ds-top" lang="id" aria-current="true">ID</a><a href="#ds-top" lang="en" hreflang="en">EN</a></nav><button class="btn btn-s menu-btn" type="button" aria-expanded="false" aria-controls="ds-menu"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button></div></header><section class="sec" id="ds-artikel" aria-labelledby="ds-h-art"><div class="wrap"><div class="sec-head"><h2 id="ds-h-art" tabindex="-1">Artikel terbaru</h2></div><div class="latest"><article class="card feat"><a href="#ds-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Temuan</p><h3>Huruf tangan di gerobak bakso: siapa yang melukisnya?</h3><p class="ex">Di Yogyakarta, beberapa pelukis gerobak masih bekerja dengan kuas dan cat minyak. Kami mengikuti satu pesanan dari sketsa kapur sampai huruf terakhir di kaca etalase.</p><p class="meta"><time datetime="2026-11-14">14 November 2026</time> · 12 menit baca</p></a></article><div class="side"><article class="card "><a href="#ds-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Jejak Proses</p><h3>Sketsa sampul yang tidak pernah dicetak</h3><p class="ex">Lembar-lembar kalkir dari meja seorang ilustrator buku anak tahun 1980-an, dan alasan penerbit memilih gambar lain.</p><p class="meta"><time datetime="2026-11-11">11 November 2026</time> · 8 menit baca</p></a></article><article class="card "><a href="#ds-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Ingatan Bersama</p><h3>Kaleng biskuit yang berganti jadi kotak jahit</h3><p class="ex">Hampir setiap rumah punya satu. Isinya jarang biskuit: benang, kancing, surat tanah, atau foto yang tidak muat di album.</p><p class="meta"><time datetime="2026-11-07">7 November 2026</time> · 6 menit baca</p></a></article></div><article class="card third"><a href="#ds-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Temuan</p><h3>Label botol kecap dari kota-kota kecil</h3><p class="ex">Ayam jago dan huruf bersulur: membaca label cetak saring dari pabrik kecap rumahan di pesisir utara Jawa.</p><p class="meta"><time datetime="2026-11-04">4 November 2026</time> · 7 menit baca</p></a></article><article class="card third"><a href="#ds-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Ingatan Bersama</p><h3>Kalender dinding dari toko emas</h3><p class="ex">Hadiah akhir tahun yang digantung sampai warnanya pudar, lalu disimpan karena ada catatan tangan di setiap bulannya.</p><p class="meta"><time datetime="2026-10-31">31 Oktober 2026</time> · 5 menit baca</p></a></article><article class="card third"><a href="#ds-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Jejak Proses</p><h3>Dari stempel karet ke cetak saring</h3><p class="ex">Cara sebuah percetakan kecil di Bandung membuat kartu undangan pernikahan sebelum ada mesin cetak digital.</p><p class="meta"><time datetime="2026-10-28">28 Oktober 2026</time> · 10 menit baca</p></a></article></div></div></section></div></div></div></section>
+<section class="shot"><p class="shot-cap"><b>3 · Mobile 375, seluruh halaman.</b> Nama, manifesto, dan kedua tombol muat di atas batas 812 px.</p><div class="row"><div><div class="frame m"><div class="urlbar">/</div><div class="site" id="m-top"><a class="skip" href="#m-h-art">Langsung ke artikel</a><section class="mast" aria-labelledby="m-name"><div class="wrap"><div class="mast-top"><nav class="lang" aria-label="Bahasa"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><a href="#m-top" lang="id" aria-current="true">ID</a><a href="#m-top" lang="en" hreflang="en">EN</a></nav></div><h1 class="mast-name" id="m-name">Archaeology<br>of Our Own</h1><p class="mast-man">Kami membaca benda sehari-hari Indonesia seperti lapisan tanah: apa yang ada sebelum, di sekitar, dan sesudah benda itu dibuat.</p><span class="ph">Placeholder: manifesto menunggu teks dari klien</span><div class="mast-actions"><a class="btn btn-p" href="#m-h-art">Baca artikel</a><a class="btn btn-s" href="key-screen-kirim.html">Kirim artefak</a></div></div><div class="strata" aria-hidden="true"><div class="band b1"><span>Lapisan 1 · sebelum dibuat</span></div><div class="band b2"></div><div class="band b3"><span>Lapisan 2 · di sekitar pembuatan</span><i class="find"></i></div><div class="band b4"></div><div class="band b5"><span>Lapisan 3 · sesudah dipakai</span></div></div></section><main><section class="sec" id="m-artikel" aria-labelledby="m-h-art"><div class="wrap"><div class="sec-head"><h2 id="m-h-art" tabindex="-1">Artikel terbaru</h2></div><div class="latest"><article class="card feat"><a href="#m-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Temuan</p><h3>Huruf tangan di gerobak bakso: siapa yang melukisnya?</h3><p class="ex">Di Yogyakarta, beberapa pelukis gerobak masih bekerja dengan kuas dan cat minyak. Kami mengikuti satu pesanan dari sketsa kapur sampai huruf terakhir di kaca etalase.</p><p class="meta"><time datetime="2026-11-14">14 November 2026</time> · 12 menit baca</p></a></article><div class="side"><article class="card "><a href="#m-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Jejak Proses</p><h3>Sketsa sampul yang tidak pernah dicetak</h3><p class="ex">Lembar-lembar kalkir dari meja seorang ilustrator buku anak tahun 1980-an, dan alasan penerbit memilih gambar lain.</p><p class="meta"><time datetime="2026-11-11">11 November 2026</time> · 8 menit baca</p></a></article><article class="card "><a href="#m-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Ingatan Bersama</p><h3>Kaleng biskuit yang berganti jadi kotak jahit</h3><p class="ex">Hampir setiap rumah punya satu. Isinya jarang biskuit: benang, kancing, surat tanah, atau foto yang tidak muat di album.</p><p class="meta"><time datetime="2026-11-07">7 November 2026</time> · 6 menit baca</p></a></article></div><article class="card third"><a href="#m-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Temuan</p><h3>Label botol kecap dari kota-kota kecil</h3><p class="ex">Ayam jago dan huruf bersulur: membaca label cetak saring dari pabrik kecap rumahan di pesisir utara Jawa.</p><p class="meta"><time datetime="2026-11-04">4 November 2026</time> · 7 menit baca</p></a></article><article class="card third"><a href="#m-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Ingatan Bersama</p><h3>Kalender dinding dari toko emas</h3><p class="ex">Hadiah akhir tahun yang digantung sampai warnanya pudar, lalu disimpan karena ada catatan tangan di setiap bulannya.</p><p class="meta"><time datetime="2026-10-31">31 Oktober 2026</time> · 5 menit baca</p></a></article><article class="card third"><a href="#m-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Jejak Proses</p><h3>Dari stempel karet ke cetak saring</h3><p class="ex">Cara sebuah percetakan kecil di Bandung membuat kartu undangan pernikahan sebelum ada mesin cetak digital.</p><p class="meta"><time datetime="2026-10-28">28 Oktober 2026</time> · 10 menit baca</p></a></article></div></div></section><section class="aotd" id="m-artefak" style="--tint:#D5DEDA" aria-labelledby="m-h-aotd"><div class="wrap aotd-in"><figure><div class="photo"><span class="ph">Placeholder</span><svg viewBox="0 0 300 300" role="img" aria-label="Gambar sementara: kaleng biskuit bundar dilihat dari atas, tutup hijau tua dengan lingkaran bunga merah"><use href="#tin"/></svg></div><figcaption>Gambar sementara yang digambar dengan kode, bukan foto artefak. Warna latar bagian ini diambil dari tutup kaleng.</figcaption></figure><div class="aotd-body"><h2 id="m-h-aotd">Artefak hari ini</h2><p class="meta"><time datetime="2026-11-17">Selasa, 17 November 2026</time></p><h3 class="art-title">Kaleng biskuit bundar, tutup berlukis bunga</h3><dl class="rec"><div><dt>No. inventaris</dt><dd><span class="inv tnum">AOO/ART/0042</span></dd></div><div><dt>Tahun</dt><dd><span class="tnum">Sekitar 1975</span></dd></div><div><dt>Kategori</dt><dd><span class="tag">ingatan</span></dd></div><div><dt>Asal-usul</dt><dd>Lemari dapur sebuah rumah di Surabaya</dd></div><div><dt>Kontributor</dt><dd>Kiriman pembaca, nama disamarkan atas permintaan</dd></div></dl><p class="art-note">Catnya terkelupas di tepi kanan bawah, bagian yang paling sering dibuka. Sejak isinya habis, kaleng ini menyimpan benang dan kancing.</p><span class="ph">Placeholder</span><div style="margin-top:24px"><button class="btn btn-s" type="button" aria-controls="m-artefak">Tampilkan lainnya</button></div><p class="meta">Artefak berganti setiap hari pukul 00.00 WIB.</p></div></div></section><section class="sec" id="m-seri" aria-labelledby="m-h-seri"><div class="wrap"><div class="sec-head"><h2 id="m-h-seri">Seri editorial</h2><span class="ph">Placeholder: judul dan jumlah artikel</span></div><ol class="slist"><li><h3>Temuan</h3><p class="desc">Budaya visual sehari-hari: poster, huruf, kemasan, kertas cetak.</p><p class="latestlink"><span class="vh">Terbaru: </span><a class="lnk" href="#m-artikel">Huruf tangan di gerobak bakso: siapa yang melukisnya?</a></p><p class="meta cnt">2 artikel</p></li><li><h3>Jejak Proses</h3><p class="desc">Sketsa, draf, dan karya yang ditinggalkan di tengah jalan.</p><p class="latestlink"><span class="vh">Terbaru: </span><a class="lnk" href="#m-artikel">Sketsa sampul yang tidak pernah dicetak</a></p><p class="meta cnt">2 artikel</p></li><li><h3>Ingatan Bersama</h3><p class="desc">Benda keluarga, foto lama, dan cerita komunitas.</p><p class="latestlink"><span class="vh">Terbaru: </span><a class="lnk" href="#m-artikel">Kaleng biskuit yang berganti jadi kotak jahit</a></p><p class="meta cnt">2 artikel</p></li><li><h3>Stratigrafi</h3><p class="desc">Esai yang membaca beberapa lapisan sekaligus.</p><p class="latestlink soon">Segera hadir</p><p class="meta cnt"></p></li></ol></div></section><section class="invite" id="m-kirim" aria-labelledby="m-h-inv"><div class="wrap invite-in"><h2 id="m-h-inv">Punya benda yang menyimpan cerita?</h2><div class="invite-body"><p>Kaleng biskuit yang jadi kotak jahit, atau sketsa sampul yang tidak jadi dicetak. Ceritakan bendanya dan lampirkan 1 sampai 5 foto. Editor membaca setiap kiriman, dan tidak ada yang terbit sebelum itu.</p><a class="btn btn-p" href="key-screen-kirim.html">Kirim artefak</a></div></div></section><section class="sec" id="m-kabar" aria-labelledby="m-h-news"><div class="wrap news-in"><div class="sec-head"><h2 id="m-h-news">Kabar artikel baru</h2></div><p class="news-text">Tinggalkan email Anda. Kami mengabari saat artikel baru terbit, dalam bahasa halaman ini.</p><form class="news-form" action="#m-kabar"><label for="m-em">Email</label><div class="news-row"><input class="inp" id="m-em" type="email" autocomplete="email" placeholder="nama@contoh.id" aria-describedby="m-em-n"><button class="btn btn-p" type="submit">Ikuti kabar</button></div><div class="ts" role="img" aria-label="Tempat widget verifikasi Cloudflare Turnstile">Slot Cloudflare Turnstile, 300 × 65</div><p class="fine" id="m-em-n">Email ini hanya kami pakai untuk kabar artikel baru. <a class="lnk" href="#m-top">Baca catatan privasi</a></p><p class="vh" role="status" aria-live="polite"></p></form></div></section></main><footer class="ftr"><div class="wrap ftr-in"><div><a class="wm" href="key-screen-home.html">Archaeology of Our Own</a><p>Terbitan dwibahasa tentang artefak Indonesia: budaya visual, proses kreatif, dan ingatan.</p></div><ul><li><a class="lnk" href="#m-top">Catatan privasi</a></li><li><a class="lnk" href="key-screen-kirim.html">Kirim artefak</a></li></ul><nav class="lang" aria-label="Bahasa"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><a href="#m-top" lang="id" aria-current="true">ID</a><a href="#m-top" lang="en" hreflang="en">EN</a></nav><p class="meta">© 2026 Archaeology of Our Own</p></div></footer></div><div class="fold" style="top:844px"><span>Batas layar 812 px</span></div></div></div><div style="display:flex;flex-direction:column;gap:48px"><div><p class="shot-cap"><b>4 · Header tipis 375.</b> Muncul setelah Masthead, dengan tombol Menu.</p><div class="frame m crop" style="height:420px"><div class="urlbar">/#artikel</div><div class="site" id="ms-top"><header class="hdr"><div class="wrap hdr-in"><a class="wm" href="key-screen-home.html">Archaeology of Our Own</a><nav class="hnav" aria-label="Utama"><a href="key-screen-home.html#artikel" aria-current="location">Artikel</a><a href="key-screen-home.html#artefak">Artefak hari ini</a><a href="key-screen-kirim.html">Kirim artefak</a><a href="key-screen-home.html#kabar">Kabar</a></nav><nav class="lang" aria-label="Bahasa"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg><a href="#ms-top" lang="id" aria-current="true">ID</a><a href="#ms-top" lang="en" hreflang="en">EN</a></nav><button class="btn btn-s menu-btn" type="button" aria-expanded="false" aria-controls="ms-menu"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button></div></header><section class="sec" id="ms-artikel" aria-labelledby="ms-h-art"><div class="wrap"><div class="sec-head"><h2 id="ms-h-art" tabindex="-1">Artikel terbaru</h2></div><div class="latest"><article class="card feat"><a href="#ms-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Temuan</p><h3>Huruf tangan di gerobak bakso: siapa yang melukisnya?</h3><p class="ex">Di Yogyakarta, beberapa pelukis gerobak masih bekerja dengan kuas dan cat minyak. Kami mengikuti satu pesanan dari sketsa kapur sampai huruf terakhir di kaca etalase.</p><p class="meta"><time datetime="2026-11-14">14 November 2026</time> · 12 menit baca</p></a></article><div class="side"><article class="card "><a href="#ms-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Jejak Proses</p><h3>Sketsa sampul yang tidak pernah dicetak</h3><p class="ex">Lembar-lembar kalkir dari meja seorang ilustrator buku anak tahun 1980-an, dan alasan penerbit memilih gambar lain.</p><p class="meta"><time datetime="2026-11-11">11 November 2026</time> · 8 menit baca</p></a></article><article class="card "><a href="#ms-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Ingatan Bersama</p><h3>Kaleng biskuit yang berganti jadi kotak jahit</h3><p class="ex">Hampir setiap rumah punya satu. Isinya jarang biskuit: benang, kancing, surat tanah, atau foto yang tidak muat di album.</p><p class="meta"><time datetime="2026-11-07">7 November 2026</time> · 6 menit baca</p></a></article></div><article class="card third"><a href="#ms-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Temuan</p><h3>Label botol kecap dari kota-kota kecil</h3><p class="ex">Ayam jago dan huruf bersulur: membaca label cetak saring dari pabrik kecap rumahan di pesisir utara Jawa.</p><p class="meta"><time datetime="2026-11-04">4 November 2026</time> · 7 menit baca</p></a></article><article class="card third"><a href="#ms-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Ingatan Bersama</p><h3>Kalender dinding dari toko emas</h3><p class="ex">Hadiah akhir tahun yang digantung sampai warnanya pudar, lalu disimpan karena ada catatan tangan di setiap bulannya.</p><p class="meta"><time datetime="2026-10-31">31 Oktober 2026</time> · 5 menit baca</p></a></article><article class="card third"><a href="#ms-artikel"><div class="slot r32"><span class="ph">Placeholder</span><span class="slot-t">Foto sampul artikel, 3:2</span></div><p class="meta series">Jejak Proses</p><h3>Dari stempel karet ke cetak saring</h3><p class="ex">Cara sebuah percetakan kecil di Bandung membuat kartu undangan pernikahan sebelum ada mesin cetak digital.</p><p class="meta"><time datetime="2026-10-28">28 Oktober 2026</time> · 10 menit baca</p></a></article></div></div></section></div></div></div><div><p class="shot-cap"><b>5 · Menu terbuka.</b> Panel layar penuh, fokus terkunci di dalam, Esc atau Tutup mengembalikan fokus ke tombol Menu.</p><div class="frame m"><div class="urlbar">/</div><div class="site" id="mm-top"><div class="panel" id="mm-menu" role="dialog" aria-modal="true" aria-label="Menu"><div class="hdr"><div class="wrap hdr-in"><a class="wm" href="#mm-top">Archaeology of Our Own</a><button class="btn btn-s menu-btn" type="button" style="display:inline-flex"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>Tutup</button></div></div><nav class="wrap" aria-label="Utama"><ul><li><a href="#mm-top" aria-current="location">Artikel</a></li><li><a href="#mm-top">Artefak hari ini</a></li><li><a href="key-screen-kirim.html">Kirim artefak</a></li><li><a href="#mm-top">Kabar</a></li></ul><div class="lang-block"><p class="meta">Bahasa</p><div class="lang"><a href="#mm-top" lang="id" aria-current="true">Indonesia</a><a href="#mm-top" lang="en" hreflang="en">English</a></div></div></nav></div></div></div></div></div></div></section>
+</main>
+</body>
+</html>

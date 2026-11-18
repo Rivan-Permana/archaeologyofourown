@@ -1,0 +1,9 @@
+# AD-17. Script and style hashes are emitted by Astro into each page's policy at build;
+# this file adds the directives a <meta> policy cannot carry plus the shared headers.
+# This is a template: scripts/launch-gate.ts writes public/_headers and drops the noindex line when PUBLIC_LAUNCH=true (AR48).
+/*
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: frame-ancestors 'none'; object-src 'none'; base-uri 'none'
+  X-Robots-Tag: noindex

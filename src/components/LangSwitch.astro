@@ -1,0 +1,29 @@
+---
+import { t } from '../i18n/index.ts';
+import type { Locale } from '../i18n/routes.ts';
+
+// `hrefs` holds the equivalent page in each language (from routes.ts pairs).
+interface Props { locale: Locale; hrefs: Record<Locale, string>; short?: boolean }
+const { locale, hrefs, short = false } = Astro.props;
+const m = t(locale);
+const langs: Locale[] = ['id', 'en'];
+---
+<ul class="lang" aria-label={m.language.label}>
+  {langs.map((l) => (
+    <li>
+      <a
+        href={hrefs[l]}
+        lang={l}
+        hreflang={l}
+        aria-label={short ? `${l.toUpperCase()}, ${m.language[l]}` : undefined}
+        aria-current={l === locale ? 'true' : undefined}
+      >{short ? l.toUpperCase() : m.language[l]}</a>
+    </li>
+  ))}
+</ul>
+<style>
+  .lang { display: flex; gap: var(--space-4); list-style: none; margin: 0; padding: 0; }
+  a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; justify-content: center; text-decoration: none; border-bottom: 2px solid transparent; }
+  a[aria-current] { border-bottom-color: var(--color-accent); }
+  a:hover:not([aria-current]) { border-bottom-color: var(--color-line); }
+</style>

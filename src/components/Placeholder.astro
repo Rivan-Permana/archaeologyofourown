@@ -1,0 +1,8 @@
+---
+import { t } from '../i18n/index.ts';
+import type { Locale } from '../i18n/routes.ts';
+
+// The marker comes from the content's is_placeholder flag only (AD-18).
+const { locale } = Astro.props as { locale: Locale };
+---
+<span class="ph">{t(locale).site.placeholderMarker}</span>

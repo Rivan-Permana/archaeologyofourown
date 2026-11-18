@@ -1,0 +1,58 @@
+---
+import { articlesIn } from '../lib/articles.ts';
+import { t } from '../i18n/index.ts';
+import { articleBase, type Locale } from '../i18n/routes.ts';
+import { EDITORIAL_SERIES } from '../shared/enums.ts';
+
+// The four series as the layers of one dig (UX-DR16, "Indeks" direction 2026-11-19): full-width bands in each
+// series colour, thicker for series with more articles. On scroll the layers settle into place (home-motion.ts).
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const m = t(locale);
+const all = await articlesIn(locale);
+const rows = EDITORIAL_SERIES.map((series) => {
+  const items = all.filter((e) => e.article.series === series).sort((a, b) => b.article.date.localeCompare(a.article.date));
+  return { series, count: items.length, latest: items[0] };
+});
+const count = (n: number) => m.seriesSection.count[n === 1 ? 'one' : 'other'].replace('{n}', String(n));
+---
+<section class="sec" id="editorial-series" aria-labelledby="editorial-series-heading">
+  <div class="wrap"><h2 id="editorial-series-heading" class="head">{m.seriesSection.title}</h2></div>
+  <ul class="layers" data-layers>
+    {rows.map(({ series, count: n, latest }) => (
+      <li class={`layer s-${series}`} style={`--n:${Math.min(n, 6)}`} data-band>
+        <div class="wrap row">
+          <h3>{m.series[series].label}</h3>
+          <div class="about">
+            <p>{m.series[series].description}</p>
+            {latest
+              ? <p class="latest">{m.seriesSection.latest}: <a href={`${articleBase[locale]}${latest.tr.slug}/`}>{latest.tr.title}</a></p>
+              : <p class="latest">{m.seriesSection.soon}</p>}
+          </div>
+          <p class="count">{count(n)}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</section>
+<style>
+  .sec { padding-top: var(--space-16); }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); }
+  .head { font-size: var(--type-h3-size); font-weight: var(--type-h3-weight); line-height: var(--type-h3-leading); margin: 0 0 var(--space-6); padding-top: var(--space-4); border-top: 3px solid var(--color-ink); }
+  .layers { list-style: none; margin: 0; padding: 0; }
+  .layer { position: relative; background: var(--c); color: var(--on); will-change: transform; }
+  .row { display: grid; gap: var(--space-3) var(--gutter-desktop); align-items: end; min-height: calc(var(--n) * 40px + 128px); padding-block: var(--space-6); }
+  h3 { font-size: var(--type-h2-size); font-weight: var(--type-h2-weight); line-height: var(--type-h2-leading); margin: 0; }
+  p { margin: 0; }
+  .about { display: grid; gap: var(--space-2); max-width: 44ch; }
+  .latest a { color: inherit; text-decoration-color: currentColor; font-weight: 600; }
+  .count { font-family: var(--font-display); font-stretch: 75%; font-weight: 800; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+  .layer a:focus-visible { outline-color: var(--on); }
+  @media (min-width: 768px) {
+    .wrap { padding-inline: var(--gutter-desktop); }
+    .sec { padding-top: var(--space-24); }
+    .head { margin-bottom: var(--space-8); }
+    .row { grid-template-columns: 5fr 5fr 2fr; padding-block: var(--space-8); }
+    .count { text-align: right; }
+  }
+</style>

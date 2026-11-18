@@ -1,0 +1,82 @@
+---
+import { t } from '../i18n/index.ts';
+import { homeSections, routeFor, type Locale } from '../i18n/routes.ts';
+import GlobeIcon from './GlobeIcon.astro';
+import LangSwitch from './LangSwitch.astro';
+
+// `overMasthead`: on the home page the bar's wordmark stays hidden while the Masthead name is in view, so the name is
+// not shown twice; the nav and the Menu button are always available (critique 2026-11-19, replaces the hidden bar of UX-DR10).
+interface Props { locale: Locale; hrefs: Record<Locale, string>; overMasthead?: boolean }
+const { locale, hrefs, overMasthead = false } = Astro.props;
+const m = t(locale);
+const home = routeFor('home', locale);
+---
+<a class="skip" href="#main">{m.nav.skip}</a>
+<header class:list={['bar', { over: overMasthead }]} data-bar>
+  <div class="inner">
+    <a class="wordmark" href={home}>{m.site.name}</a>
+    <nav class="nav" aria-label={m.nav.label}>
+      <ul>
+        {homeSections.map((s) => <li><a href={`${home}#${s.id}`}>{m.nav[s.label]}</a></li>)}
+      </ul>
+    </nav>
+    <div class="switch"><GlobeIcon /><LangSwitch locale={locale} hrefs={hrefs} short /></div>
+    <button type="button" class="menu-btn" data-menu-open aria-haspopup="dialog">{m.nav.menu}</button>
+  </div>
+  <dialog class="panel" data-menu aria-label={m.nav.menu}>
+    <button type="button" class="close" data-menu-close>{m.nav.close}</button>
+    <ul class="items">
+      {homeSections.map((s) => <li><a href={`${home}#${s.id}`}>{m.nav[s.label]}</a></li>)}
+      <li><LangSwitch locale={locale} hrefs={hrefs} /></li>
+    </ul>
+  </dialog>
+</header>
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-bar].over');
+  const mast = document.getElementById('site-name') ?? document.querySelector('[data-masthead]');
+  if (bar && mast) {
+    new IntersectionObserver(([e]) => {
+      bar.classList.toggle('shown', !e.isIntersecting);
+    // Reveal once the Masthead is scrolled past the bar height plus a margin (scroll-padding-top is 58px).
+    }, { rootMargin: '-64px 0px 0px 0px' }).observe(mast);
+  }
+  const dialog = document.querySelector<HTMLDialogElement>('[data-menu]');
+  const open = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  // showModal traps focus, closes on Esc and returns focus to the opener; the rest is the focus target and item clicks.
+  open?.addEventListener('click', () => {
+    dialog?.showModal();
+    dialog?.querySelector<HTMLElement>('.items a')?.focus();
+  });
+  dialog?.addEventListener('close', () => open?.focus());
+  dialog?.querySelector('[data-menu-close]')?.addEventListener('click', () => dialog.close());
+  dialog?.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('.items a')) dialog.close(); });
+</script>
+<style>
+  .skip { position: absolute; left: var(--space-2); top: -100px; background: var(--color-paper); padding: var(--space-3) var(--space-4); z-index: 20; }
+  .skip:focus { top: var(--space-2); }
+  .bar { position: sticky; top: 0; z-index: 10; background: var(--color-paper); border-bottom: 1px solid var(--color-ink); }
+  /* Over the Masthead only the wordmark is hidden; it fades in once the Masthead name has passed. */
+  .over .wordmark { opacity: 0; visibility: hidden; transition: opacity 140ms var(--ease-out), visibility 0s linear 140ms; }
+  .over.shown .wordmark { opacity: 1; visibility: visible; transition: opacity 200ms var(--ease-out); }
+  @media (prefers-reduced-motion: reduce) { .over .wordmark, .over.shown .wordmark { transition: none; } }
+  .inner { height: calc(var(--header-height) - 1px); max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); display: flex; align-items: center; gap: var(--space-6); }
+  .wordmark { font-family: var(--font-display); font-stretch: 75%; font-weight: 800; letter-spacing: -0.01em; font-size: 1.5rem; line-height: 1; text-decoration: none; margin-right: auto; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  .nav ul { display: flex; gap: var(--space-6); }
+  .nav a { display: inline-flex; align-items: center; min-height: 44px; font-size: var(--type-small-size); font-weight: 500; text-decoration: none; }
+  .nav a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  .switch { display: flex; align-items: center; gap: var(--space-2); font-size: var(--type-small-size); }
+  .menu-btn { display: none; }
+  button { font: inherit; color: var(--color-ink); background: none; border: 1px solid var(--color-ink); border-radius: var(--radius-none); min-height: 48px; padding-inline: var(--space-5); cursor: pointer; }
+  button:hover { background: var(--color-surface); }
+  .panel { width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; border: 0; padding: var(--space-4) var(--margin-mobile); background: var(--color-paper); color: var(--color-ink); }
+  .close { display: block; margin-left: auto; }
+  .items > li { border-bottom: 1px solid var(--color-ink); padding-block: var(--space-4); font-family: var(--font-display); font-stretch: 75%; font-weight: 800; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); }
+  .items :global(a) { min-height: 48px; }
+  @media (max-width: 767px) {
+    .wordmark { font-size: 1.25rem; white-space: nowrap; }
+    .nav, .switch { display: none; }
+    .menu-btn { display: inline-flex; align-items: center; }
+  }
+  @media (min-width: 768px) { .panel { display: none; } .inner { padding-inline: var(--gutter-desktop); } }
+</style>

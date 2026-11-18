@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arah A · Arsip</title>
+<style>
+/* Direction A "Arsip" — same identity as the public site.
+   --paper    #F4EFE7  page background
+   --surface  #EAE3D7  bands, selected row, panels
+   --sheet    #FBF8F3  detail sheet (lighter than paper)
+   --ink      #1E1B18  text (14.98:1 on paper)
+   --muted    #5E574F  metadata (6.21:1 on paper, 5.58:1 on surface)
+   --line     #CFC6B8  decorative rules
+   --accent   #B4462B  oxide red: active nav, aging, primary action (4.76:1 on paper)
+   --on-acc   #FFFFFF  text on accent (5.45:1)
+   --acc-ink  #9A3B24  accent text on --surface (accent itself is only 4.28:1 there)
+   --chrome   #D9D3C9  browser frame chrome
+   Corners 0, no shadows except the outer browser frame. Serif: Georgia (Fraunces fallback). */
+:root{--paper:#F4EFE7;--surface:#EAE3D7;--sheet:#FBF8F3;--ink:#1E1B18;--muted:#5E574F;--line:#CFC6B8;--accent:#B4462B;--on-acc:#FFFFFF;--acc-ink:#9A3B24;--chrome:#D9D3C9;
+--serif:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#E2DCD2;color:var(--ink);font:15px/1.5 var(--sans);padding:40px 32px 80px;min-width:1520px}
+.meta{font:500 11px/1.4 var(--sans);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-variant-numeric:tabular-nums}
+.intro{max-width:1440px;margin:0 auto 28px}
+.intro h1{font:400 40px/1.05 var(--serif);margin:6px 0 10px}
+.intro p{max-width:72ch;margin:0;font-size:16px}
+.frame{width:1440px;margin:0 auto;background:var(--paper);border:1px solid #BDB4A6;box-shadow:0 18px 50px rgba(30,27,24,.18)}
+.bar{height:40px;background:var(--chrome);display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid #BDB4A6}
+.bar i{width:11px;height:11px;border-radius:50%;background:#B8AFA2;display:block}
+.bar .url{margin-left:18px;background:var(--paper);padding:3px 12px;font-size:12px;color:var(--muted);width:420px}
+.app{display:grid;grid-template-columns:232px 520px 1fr;min-height:900px}
+/* nav */
+nav{border-right:1px solid var(--line);padding:28px 0;display:flex;flex-direction:column}
+.mark{padding:0 24px 24px;border-bottom:1px solid var(--line)}
+.mark b{display:block;font:400 21px/1.1 var(--serif)}
+nav ul{list-style:none;margin:16px 0 0;padding:0}
+nav li a{display:flex;justify-content:space-between;align-items:baseline;padding:10px 24px;color:var(--ink);text-decoration:none;font-size:15px;border-left:3px solid transparent}
+nav li a[aria-current]{border-left-color:var(--accent);background:var(--surface);font-weight:600}
+nav li a span{font:500 11px var(--sans);letter-spacing:.08em;color:var(--muted)}
+nav li a[aria-current] span{color:var(--acc-ink)}
+.who{margin-top:auto;padding:16px 24px 0;border-top:1px solid var(--line)}
+/* queue */
+.queue{border-right:1px solid var(--line)}
+.qhead{padding:28px 28px 18px;border-bottom:1px solid var(--ink)}
+.qhead h2{font:400 34px/1 var(--serif);margin:6px 0 10px}
+.qhead .sort{display:flex;gap:16px}
+.qhead .sort a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+.q{list-style:none;margin:0;padding:0}
+.q li{border-bottom:1px solid var(--line)}
+.q a{display:grid;grid-template-columns:1fr auto;gap:4px 16px;padding:16px 28px;color:var(--ink);text-decoration:none}
+.q a[aria-current]{background:var(--surface);box-shadow:inset 3px 0 0 var(--accent)}
+.q .t{font:400 18px/1.25 var(--serif);grid-column:1}
+.q .age{grid-column:2;grid-row:1 / span 2;text-align:right;align-self:start}
+.q .age.old{color:var(--accent)}
+.q a[aria-current] .age.old{color:var(--acc-ink)}
+.q .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{font:500 10.5px/1 var(--sans);text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--ink);padding:4px 6px}
+/* detail */
+.detail{background:var(--sheet);padding:28px 40px 40px}
+.dtop{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:18px;border-bottom:1px solid var(--ink)}
+.dtop h3{font:400 36px/1.08 var(--serif);margin:8px 0 0;max-width:20ch}
+.status{border:1px solid var(--accent);color:var(--accent);padding:5px 8px}
+.photos{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:150px 150px;gap:8px;margin:22px 0 6px}
+.ph{position:relative;background:#CBB79A;display:flex;align-items:flex-end;padding:8px}
+.ph:first-child{grid-row:span 2;background:linear-gradient(160deg,#B79C78,#8E7457)}
+.ph:nth-child(2){background:linear-gradient(160deg,#C9B08C,#A68A66)}
+.ph:nth-child(3){background:linear-gradient(160deg,#B6A487,#8F7C60)}
+.ph:nth-child(4){grid-column:2 / span 2;background:linear-gradient(160deg,#CDBFA6,#AD9C80)}
+.ph span{background:var(--sheet);font:500 10.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:4px 6px}
+.cols{display:grid;grid-template-columns:1fr 250px;gap:32px;margin-top:22px}
+.story p{font:400 17px/1.6 var(--serif);margin:0 0 12px;max-width:62ch}
+.record{border:1px solid var(--ink);align-self:start}
+.record div{display:grid;grid-template-columns:96px 1fr;border-bottom:1px solid var(--line);padding:8px 10px;font-size:13.5px}
+.record div:last-child{border-bottom:0}
+.record dt,.record dd{margin:0}
+.decide{margin-top:26px;border-top:1px solid var(--ink);padding-top:18px}
+label{display:block;font-weight:600;margin-bottom:6px}
+textarea{width:100%;height:76px;border:1px solid var(--ink);background:var(--paper);font:15px/1.5 var(--sans);padding:10px;resize:none;border-radius:0;color:var(--ink)}
+.help{font-size:13px;color:var(--muted);margin:6px 0 16px}
+.btns{display:flex;gap:12px}
+.btn{min-height:48px;padding:0 22px;font:600 15px var(--sans);border:1px solid var(--ink);background:transparent;color:var(--ink);border-radius:0}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--on-acc)}
+.btn.ghost{border-color:transparent;text-decoration:underline;text-underline-offset:3px;margin-left:auto}
+/* secondary row */
+.below{width:1440px;margin:48px auto 0;display:grid;grid-template-columns:900px 1fr;gap:32px;align-items:start}
+.cap{margin:0 0 10px}
+.frame.sm .app{display:block;min-height:0}
+.ed{padding:28px 36px}
+.edtop{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--ink);padding-bottom:14px}
+.edtop h2{font:400 28px var(--serif);margin:0}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--muted);padding:6px 10px;font-size:13px}
+.chip i{width:8px;height:8px;border:1.5px solid var(--ink);border-radius:50%;border-top-color:transparent;display:block}
+.chip.fail{border-color:var(--accent);color:var(--accent)}
+.tabs{display:flex;gap:0;margin:18px 0 0;border-bottom:1px solid var(--line)}
+.tabs a{padding:10px 18px;color:var(--muted);text-decoration:none;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a[aria-current]{color:var(--ink);border-bottom-color:var(--accent)}
+.edgrid{display:grid;grid-template-columns:1fr 240px;gap:32px;margin-top:22px}
+.field{border:1px solid var(--ink);background:var(--sheet);padding:10px 12px;min-height:48px;margin-bottom:16px}
+.field.title{font:400 30px/1.15 var(--serif)}
+.field.stand{font:400 18px/1.45 var(--serif);color:var(--ink)}
+.field.body{min-height:150px;font:400 16px/1.6 var(--serif)}
+.series{list-style:none;padding:0;margin:0 0 16px;border:1px solid var(--ink)}
+.series li{padding:9px 12px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.series li:last-child{border-bottom:0}
+.series li b{width:14px;height:14px;border:1px solid var(--ink);border-radius:50%;display:inline-block;flex:none}
+.series li.on{background:var(--surface)}
+.series li.on b{border:4px solid var(--accent)}
+.edbtns{display:flex;gap:10px;margin-top:4px;justify-content:flex-end}
+.empty{padding:48px 36px;text-align:left}
+.empty h3{font:400 28px/1.15 var(--serif);margin:14px 0 8px}
+.empty p{margin:0 0 18px;max-width:40ch}
+.strata{display:grid;gap:5px;width:180px}
+.strata span{height:7px;background:var(--line)}
+.strata span:nth-child(2){width:86%}.strata span:nth-child(3){width:70%}.strata span:nth-child(4){width:92%}
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <p class="meta">Arah A · Arsip</p>
+  <h1>Meja editor yang terasa seperti ruang arsip.</h1>
+  <p>Dashboard memakai identitas situs publik apa adanya: kertas, tinta, satu merah oksida, judul serif, dan label katalog berhuruf kapital. Setiap kiriman diperlakukan seperti calon catatan katalog, sehingga editor sudah "membaca sebagai arsip" sebelum memutuskan. Kepadatannya sedang: cukup lapang untuk membaca cerita, tapi tujuh kiriman tetap terlihat sekaligus.</p>
+</header>
+
+<!-- HERO: Kiriman queue -->
+<div class="frame" aria-label="Mockup dashboard, layar Kiriman">
+  <div class="bar"><i></i><i></i><i></i><span class="url">aoo.id/admin/kiriman</span></div>
+  <div class="app">
+    <nav aria-label="Navigasi dashboard">
+      <div class="mark"><b>Archaeology of Our Own</b><span class="meta">Meja editor</span></div>
+      <ul>
+        <li><a href="#">Artikel <span>24</span></a></li>
+        <li><a href="#">Artefak <span>61</span></a></li>
+        <li><a href="#" aria-current="page">Kiriman <span>7 menunggu</span></a></li>
+        <li><a href="#">Pelanggan <span>318</span></a></li>
+        <li><a href="#">Aktivitas</a></li>
+      </ul>
+      <div class="who"><span class="meta">Masuk sebagai</span><br>Editor · d•••@contoh.id</div>
+    </nav>
+
+    <section class="queue" aria-label="Antrean kiriman">
+      <div class="qhead">
+        <p class="meta">03 — Kiriman · menunggu tinjauan</p>
+        <h2>7 kiriman menunggu</h2>
+        <div class="sort meta"><span>Urut: terlama dulu</span><a href="#">Disetujui</a><a href="#">Ditolak</a></div>
+      </div>
+      <ol class="q">
+        <li><a href="#" aria-current="true">
+          <span class="meta">AOO-7K3F9Q</span><span class="meta age old">12 hari</span>
+          <span class="t">Kaleng biskuit peninggalan ibu, 1970-an</span>
+          <span class="row"><span class="tag">ingatan</span><span class="meta">Bu Ratna · 4 foto</span></span></a></li>
+        <li><a href="#">
+          <span class="meta">AOO-2M8D4T</span><span class="meta age old">9 hari</span>
+          <span class="t">Sketsa sampul majalah sekolah, 1988</span>
+          <span class="row"><span class="tag">proses</span><span class="meta">Hendra K. · 3 foto</span></span></a></li>
+        <li><a href="#">
+          <span class="meta">AOO-9P1X6B</span><span class="meta age">7 hari</span>
+          <span class="t">Papan nama warung kopi, cat tangan</span>
+          <span class="row"><span class="tag">budaya visual</span><span class="meta">Mas Yudi · 2 foto</span></span></a></li>
+        <li><a href="#">
+          <span class="meta">AOO-4H7R2N</span><span class="meta age">5 hari</span>
+          <span class="t">Surat wesel untuk kakek, 1965</span>
+          <span class="row"><span class="tag">ingatan</span><span class="meta">Sekar · 5 foto</span></span></a></li>
+        <li><a href="#">
+          <span class="meta">AOO-6C3V8L</span><span class="meta age">3 hari</span>
+          <span class="t">Film sablon kaos band kampus</span>
+          <span class="row"><span class="tag">proses</span><span class="meta">Ijal · 3 foto</span></span></a></li>
+        <li><a href="#">
+          <span class="meta">AOO-1W5Q7E</span><span class="meta age">2 hari</span>
+          <span class="t">Bungkus rokok kretek bergambar wayang</span>
+          <span class="row"><span class="tag">budaya visual</span><span class="meta">Pengumpul Bandung · 1 foto</span></span></a></li>
+        <li><a href="#">
+          <span class="meta">AOO-8T2J5Z</span><span class="meta age">6 jam</span>
+          <span class="t">Album foto studio keluarga, Medan</span>
+          <span class="row"><span class="tag">ingatan</span><span class="meta">Cucu Oma Lina · 5 foto</span></span></a></li>
+      </ol>
+    </section>
+
+    <article class="detail" aria-label="Kiriman terpilih">
+      <div class="dtop">
+        <div>
+          <p class="meta">AOO-7K3F9Q · Dikirim 5 Nov 2026, 09.14 · ID</p>
+          <h3>Kaleng biskuit peninggalan ibu, 1970-an</h3>
+        </div>
+        <span class="meta status">Menunggu · 12 hari</span>
+      </div>
+
+      <div class="photos" aria-label="4 foto kiriman">
+        <div class="ph"><span>Foto 1/4 · tutup kaleng</span></div>
+        <div class="ph"><span>2/4 · sisi samping</span></div>
+        <div class="ph"><span>3/4 · isi benang</span></div>
+        <div class="ph"><span>4/4 · cap pabrik di dasar</span></div>
+      </div>
+      <p class="meta">JPG · lokasi GPS sudah dihapus</p>
+
+      <div class="cols">
+        <div class="story">
+          <p class="meta" style="margin-bottom:8px">Cerita kontributor</p>
+          <p>Kaleng ini dibeli ibu saya di Pasar Turi sekitar 1974, isinya biskuit untuk Lebaran. Setelah kosong, kaleng tidak pernah dibuang: berganti jadi tempat benang jahit, kancing, dan jarum.</p>
+          <p>Gambar di tutupnya, keluarga Belanda minum teh di taman, dulu saya kira rumah kami suatu hari nanti. Catnya sudah mengelupas di bagian yang paling sering dipegang ibu.</p>
+        </div>
+        <dl class="record" aria-label="Calon catatan katalog">
+          <div><dt class="meta">Tahun</dt><dd>± 1974 (perkiraan)</dd></div>
+          <div><dt class="meta">Kategori</dt><dd>Ingatan</dd></div>
+          <div><dt class="meta">Asal</dt><dd>Surabaya, Jawa Timur</dd></div>
+          <div><dt class="meta">Kontributor</dt><dd>Bu Ratna</dd></div>
+          <div><dt class="meta">Email</dt><dd>r•••@contoh.id</dd></div>
+          <div><dt class="meta">Izin</dt><dd>Boleh dimuat, nama samaran</dd></div>
+        </dl>
+      </div>
+
+      <div class="decide">
+        <label for="na">Catatan editor</label>
+        <textarea id="na">Cerita kuat. Minta foto tutup yang lebih tajam sebelum dijadikan artefak.</textarea>
+        <p class="help">Hanya terlihat oleh editor. Tercatat di Aktivitas bersama keputusan Anda.</p>
+        <div class="btns">
+          <button class="btn pri">Jadikan artefak</button>
+          <button class="btn">Setujui</button>
+          <button class="btn">Tolak</button>
+          <button class="btn ghost">Kiriman berikutnya →</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<!-- SECONDARY: article editor + empty-state variant -->
+<div class="below">
+  <div>
+    <p class="meta cap">Layar kedua · Artikel baru</p>
+    <div class="frame sm">
+      <div class="bar"><i></i><i></i><i></i><span class="url">aoo.id/admin/artikel/baru</span></div>
+      <div class="app ed">
+        <div class="edtop">
+          <h2>Artikel baru</h2>
+          <span class="chip" role="status"><i aria-hidden="true"></i>Sedang dibangun… ~2 menit</span>
+        </div>
+        <div class="tabs" role="tablist"><a href="#" aria-current="true">Bahasa Indonesia</a><a href="#">English · belum diisi</a></div>
+        <div class="edgrid">
+          <div>
+            <div class="field title">Kaleng-kaleng yang menyimpan rumah</div>
+            <div class="field stand">Dari Khong Guan sampai Monde, wadah biskuit menjadi lemari kecil ingatan keluarga Indonesia.</div>
+            <div class="field body">Hampir setiap rumah punya satu: kaleng biskuit yang isinya bukan biskuit. Di dapur ibu, kaleng itu berisi benang…</div>
+          </div>
+          <div>
+            <p class="meta" style="margin:0 0 6px">Seri editorial</p>
+            <ul class="series">
+              <li><b></b>Temuan</li>
+              <li><b></b>Jejak Proses</li>
+              <li class="on"><b></b>Ingatan Bersama</li>
+              <li><b></b>Stratigrafi</li>
+            </ul>
+            <p class="meta">Status: draf · disimpan 14.02</p>
+          </div>
+        </div>
+        <div class="edbtns"><button class="btn">Simpan draf</button><button class="btn">Pratinjau</button><button class="btn pri">Terbitkan</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p class="meta cap">Keadaan · antrean kosong</p>
+    <div class="frame sm">
+      <div class="bar"><i></i><i></i><i></i><span class="url">aoo.id/admin/kiriman</span></div>
+      <div class="app empty">
+        <div class="strata" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <h3>Tidak ada kiriman yang menunggu</h3>
+        <p>Semua kiriman sudah ditinjau. Kiriman baru muncul di sini, terlama di atas.</p>
+        <a class="meta" href="#" style="color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px">Lihat yang sudah disetujui</a>
+      </div>
+    </div>
+    <p class="meta cap" style="margin-top:18px">Keadaan · rebuild gagal</p>
+    <span class="chip fail" role="status">⚠ Rebuild gagal 14.06 · Coba lagi</span>
+  </div>
+</div>
+</body>
+</html>

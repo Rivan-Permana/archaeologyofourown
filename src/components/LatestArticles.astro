@@ -1,0 +1,157 @@
+---
+import { getCollection } from 'astro:content';
+import { articlesIn } from '../lib/articles.ts';
+import { t } from '../i18n/index.ts';
+import type { Locale } from '../i18n/routes.ts';
+import { articleBase } from '../i18n/routes.ts';
+import { findFor, findsFor } from '../shared/finds.ts';
+import { jakartaDate, pickDaily } from '../shared/daily.ts';
+import Placeholder from './Placeholder.astro';
+import ArticleCard from './ArticleCard.astro';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const m = t(locale);
+const media = new Map((await getCollection('media')).map((e) => [e.data.id, e.data]));
+// Only Articles available in the page language, newest first, at most six (FR-4).
+const items = (await articlesIn(locale))
+  .map(({ article: a, tr }) => ({ a, tr }))
+  .sort((x, y) => y.a.date.localeCompare(x.a.date))
+  .slice(0, 6)
+  .map(({ a, tr }) => {
+    const hero = a.refs.find((r) => r.role === 'hero');
+    return {
+      locale, series: a.series, slug: tr.slug, title: tr.title, excerpt: tr.standfirst, date: a.date, minutes: tr.readingMinutes,
+      isPlaceholder: a.isPlaceholder, media: hero && media.get(hero.mediaId), alt: hero?.alt[locale],
+    };
+  });
+// No drawing repeats on the home page: today's artefact takes its find first, then cover, cards and rows in order.
+const aotdIds = (await getCollection('artefacts')).map((e) => e.data).filter((a) => a.translations.some((x) => x.lang === locale)).map((a) => a.id);
+const aotd = pickDaily(aotdIds, jakartaDate(new Date()));
+const finds = findsFor(items.map((c) => c.slug), aotd ? [findFor(aotd)] : []);
+const [featured, ...rest] = items.map((c, i) => ({ ...c, find: finds[i] }));
+const href = (slug: string) => `${articleBase[locale]}${slug}/`;
+const when = (d: string, style: 'long' | 'medium') => new Intl.DateTimeFormat(locale === 'id' ? 'id-ID' : 'en-GB', { dateStyle: style, timeZone: 'Asia/Jakarta' }).format(new Date(d));
+// The featured plate shows the photo when there is one; otherwise its series colour and drawn find (UX-DR35).
+const real = featured?.media && !featured.media.isPlaceholder && featured.alt ? featured.media : undefined;
+const widths = real ? [...real.variants].sort((a, b) => a - b) : [];
+const src = (w: number) => `/media/${real!.id}-w${w}.webp`;
+const ph = featured && (featured.isPlaceholder || featured.media?.isPlaceholder);
+// Newest as the cover, the next three as colour-framed cards, the rest as index rows (mockups A and B, 2026-11-19).
+const cards = rest.slice(0, 3);
+const rows = rest.slice(3);
+// Long titles get a smaller cover size so a real headline never fills the whole first screen.
+const long = (featured?.title.length ?? 0) > 40;
+---
+<section class="sec" id="latest-articles" aria-labelledby="latest-articles-heading">
+  <div class="wrap"><h2 id="latest-articles-heading" class="head" tabindex="-1">{m.latest.title}</h2></div>
+  {featured
+    ? <>
+        <article class:list={['cover', `s-${featured.series}`]}>
+          <div class="wrap cover-in">
+            <p class="meta"><span class="dot"></span><span>{m.series[featured.series as keyof typeof m.series].label}</span><time datetime={featured.date}>{when(featured.date, 'long')}</time>{ph && <Placeholder locale={locale} />}</p>
+            <div class="stage">
+              <h3 class:list={{ long }}><a href={href(featured.slug)}>{featured.title}</a></h3>
+              <div class:list={['art', { photo: real }]}>
+                {real
+                  ? <img src={src(widths[widths.length - 1])} srcset={widths.map((w) => `${src(w)} ${w}w`).join(', ')} sizes="(min-width: 900px) 45vw, 100vw" width="4" height="3" alt={featured.alt} decoding="async" />
+                  : <div class="slot" data-find={featured.find} aria-hidden="true"></div>}
+              </div>
+            </div>
+            <div class="cover-foot">
+              <p class="excerpt">{featured.excerpt}</p>
+              <p class="meta">{featured.minutes} {m.latest.readingTime}</p>
+            </div>
+          </div>
+        </article>
+        <div class="wrap">
+          {cards.length > 0 && <div class="cards">{cards.map((c) => <ArticleCard {...c} />)}</div>}
+          {rows.length > 0 && (
+            <ol class="index">
+              {rows.map((c) => (
+                <li class={`s-${c.series}`}>
+                  <a class="t" href={href(c.slug)}>{c.title}</a>
+                  <span class="ser"><span class="dot"></span>{m.series[c.series as keyof typeof m.series].label}</span>
+                  <time datetime={c.date}>{when(c.date, 'medium')}</time>
+                  <span class="find slot" data-find={c.find} aria-hidden="true"></span>
+                  {(c.isPlaceholder || c.media?.isPlaceholder) && <span class="ph-row"><Placeholder locale={locale} /></span>}
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      </>
+    : <div class="wrap"><p>{m.latest.empty}</p></div>}
+</section>
+<style>
+  .sec { padding: var(--space-16) 0; }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); }
+  /* Section names are labels at h3 size; the cover title below is the screen's one display moment. */
+  .head { font-size: var(--type-h3-size); font-weight: var(--type-h3-weight); line-height: var(--type-h3-leading); margin: 0 0 var(--space-6); padding-top: var(--space-4); border-top: 3px solid var(--color-ink); }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); margin: 0; font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); line-height: var(--type-meta-leading); font-variant-numeric: tabular-nums; }
+
+  /* Cover (mockup A): the newest article fills a full-width band in its series colour; the title is set huge and
+     the drawn find sits large behind it on the right. The band keeps its colour in both themes. */
+  .cover { position: relative; background: var(--c); color: var(--on); overflow: hidden; }
+  .cover-in { display: grid; gap: var(--space-6); padding-block: var(--space-8) var(--space-12); grid-template-rows: auto 1fr auto; }
+  .cover .dot { outline-color: var(--on); background: var(--on); }
+  .stage { position: relative; display: grid; align-content: center; }
+  .cover h3 { position: relative; z-index: 1; margin: 0; max-width: 14ch; font-size: clamp(3.5rem, 15vw, 10rem); font-weight: 800; line-height: 0.86; letter-spacing: -0.03em; }
+  .cover h3.long { max-width: 18ch; font-size: clamp(2.5rem, 9vw, 6.5rem); line-height: 0.92; }
+  .cover h3 a { color: inherit; text-decoration: none; }
+  .cover h3 a::after { content: ''; position: absolute; inset: 0; z-index: 2; }
+  .cover:hover h3 a { text-decoration: underline; text-decoration-thickness: 0.06em; text-underline-offset: 0.08em; }
+  .cover h3 a:focus-visible { outline: none; }
+  .cover:has(a:focus-visible) { outline: var(--focus-ring-width) solid var(--on); outline-offset: -8px; }
+  /* Mobile: the find sits above the title; from 900px it moves behind the title on the right. */
+  .art { order: -1; width: 62%; aspect-ratio: 1; margin: 0 auto var(--space-4); pointer-events: none; }
+  .art .slot { width: 100%; height: 100%; background: transparent; transition: transform 700ms var(--ease-out); }
+  .art .slot::after { inset: 0; rotate: none; opacity: 0.9; }
+  .art .slot::before { display: none; }
+  @media (hover: hover) { .cover:hover .art .slot { transform: rotate(-4deg) translateY(-8px); } }
+  .art.photo { position: relative; right: auto; top: auto; translate: none; width: 100%; aspect-ratio: 4 / 3; margin: 0 0 var(--space-6); }
+  .art.photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cover-foot { display: grid; gap: var(--space-3); }
+  .excerpt { margin: 0; font-size: var(--type-standfirst-size); line-height: var(--type-standfirst-leading); font-weight: var(--type-standfirst-weight); max-width: 32ch; }
+  @media (min-width: 900px) {
+    .cover-in { min-height: min(64svh, 640px); }
+    .art { position: absolute; right: -6%; top: 50%; translate: 0 -50%; width: min(70%, 640px); margin: 0; }
+    .stage:has(.photo) { grid-template-columns: 1fr 1fr; gap: var(--gutter-desktop); align-items: center; }
+    .art.photo { position: relative; right: auto; top: auto; translate: none; width: 100%; order: 0; margin: 0; }
+  }
+
+  /* Cards (mockup A): three colour-framed finds under the cover. */
+  .cards { display: grid; gap: var(--space-12) var(--gutter-desktop); margin-top: var(--space-12); }
+  @media (min-width: 768px) { .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: var(--space-16); } }
+
+  /* Index: one big type row per article; on hover the row fills with its series colour and shows its find. */
+  .index { list-style: none; margin: var(--space-16) 0 0; padding: 0; border-top: 3px solid var(--color-ink); }
+  .index li { position: relative; isolation: isolate; display: grid; gap: var(--space-2) var(--space-4); align-items: center; padding: var(--space-5) var(--space-2); border-bottom: 1px solid var(--color-ink); }
+  .index li::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--c); transform: scaleY(0); transform-origin: bottom; transition: transform 320ms var(--ease-out); }
+  .t { font-family: var(--font-display); font-stretch: 75%; font-weight: 800; letter-spacing: -0.02em; font-size: 1.5rem; line-height: 1.1; text-decoration: none; text-wrap: balance; }
+  .t::after { content: ''; position: absolute; inset: 0; }
+  .t:focus-visible { outline: none; }
+  .index li:has(.t:focus-visible) { outline: var(--focus-ring-width) solid var(--on); outline-offset: -4px; color: var(--on); }
+  .index li:has(.t:focus-visible)::before { transform: scaleY(1); }
+  .index li:has(.t:focus-visible) time { color: var(--on); }
+  .ser { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--type-small-size); font-weight: 500; }
+  .index time { font-size: var(--type-small-size); font-variant-numeric: tabular-nums; color: var(--color-ink-muted); }
+  .find { display: none; }
+  .ph-row { grid-row: 1; justify-self: start; }
+  @media (hover: hover) {
+    .index li:hover::before { transform: scaleY(1); }
+    .index li:hover, .index li:hover time { color: var(--on); }
+    .index li:hover .dot { outline-color: var(--on); }
+  }
+  @media (min-width: 900px) {
+    .index li { grid-template-columns: 1fr 200px 120px; padding-inline: var(--space-4); min-height: 96px; }
+    .index time { text-align: right; }
+    .ph-row { grid-row: auto; grid-column: 1; }
+    .find { display: block; position: absolute; right: 360px; top: 50%; width: 96px; height: 96px; translate: 0 -50%; background: transparent; opacity: 0; scale: 0.9; transition: opacity 200ms ease, scale 320ms var(--ease-out); pointer-events: none; }
+    .find::after { inset: 0; rotate: none; }
+    .find::before { display: none; }
+    .index li:hover .find { opacity: 1; scale: 1; }
+  }
+  @media (min-width: 768px) { .wrap { padding-inline: var(--gutter-desktop); } .sec { padding: var(--space-24) 0; } .head { margin-bottom: var(--space-8); } }
+  @media (prefers-reduced-motion: reduce) { .index li::before, .find, .art .slot { transition: none; } }
+</style>

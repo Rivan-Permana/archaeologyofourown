@@ -1,0 +1,63 @@
+---
+import { t } from '../i18n/index.ts';
+import type { Locale } from '../i18n/routes.ts';
+
+// Shown only with three or more h2 headings (UX-DR24). Sidebar on desktop, collapsed disclosure on mobile.
+interface Props { locale: Locale; items: { id: string; text: string }[] }
+const { locale, items } = Astro.props;
+const label = t(locale).article.toc;
+---
+{items.length >= 3 && (
+  <>
+    <nav class="toc side" aria-label={label}>
+      <p class="meta">{label}</p>
+      <ol>{items.map((i) => <li><a href={`#${i.id}`} data-toc>{i.text}</a></li>)}</ol>
+    </nav>
+    <details class="toc top">
+      <summary>{label}</summary>
+      <ol>{items.map((i) => <li><a href={`#${i.id}`} data-toc>{i.text}</a></li>)}</ol>
+    </details>
+  </>
+)}
+<script>
+  // A ToC link moves focus to its heading (UX-DR24); the current heading is marked while reading.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-toc]')];
+  for (const a of links) {
+    a.addEventListener('click', (e) => {
+      const h = document.getElementById(a.hash.slice(1));
+      if (!h) return;
+      e.preventDefault();
+      history.pushState(null, '', a.hash);
+      h.scrollIntoView({ block: 'start' });
+      h.focus({ preventScroll: true });
+    });
+  }
+  const heads = links.map((a) => document.getElementById(a.hash.slice(1))).filter((h): h is HTMLElement => !!h);
+  const mark = (id: string) => links.forEach((a) => (a.hash === `#${id}` ? a.setAttribute('aria-current', 'location') : a.removeAttribute('aria-current')));
+  // Current heading = the last one that has reached the top of the reading area.
+  if (heads.length) {
+    const update = () => {
+      const cur = [...heads].reverse().find((h) => h.getBoundingClientRect().top <= 96);
+      if (cur) mark(cur.id);
+    };
+    addEventListener('scroll', update, { passive: true });
+    update();
+  }
+  // Mobile starts collapsed; without JS the disclosure stays open.
+  const top = document.querySelector<HTMLDetailsElement>('details.toc');
+  if (top && matchMedia('(max-width: 1099px)').matches) top.open = false;
+</script>
+<style>
+  .toc ol { list-style: none; margin: 0; padding: 0; }
+  .toc a { display: block; padding: var(--space-2) 0 var(--space-2) var(--space-3); border-left: 2px solid transparent; text-decoration: none; font-size: var(--type-small-size); line-height: var(--type-small-leading); min-height: 24px; }
+  .toc a:hover { border-left-color: var(--color-line); }
+  .toc a[aria-current] { border-left-color: var(--color-accent); }
+  .meta { margin: 0 0 var(--space-2); font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); color: var(--color-ink-muted); }
+  .side { display: none; }
+  .top { margin-bottom: var(--space-8); border-block: 1px solid var(--color-line); padding-block: var(--space-2); }
+  summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-size: var(--type-small-size); font-weight: 500; }
+  @media (min-width: 1100px) {
+    .side { display: block; position: sticky; top: calc(var(--header-height) + var(--space-8)); }
+    .top { display: none; }
+  }
+</style>

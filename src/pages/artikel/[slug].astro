@@ -1,0 +1,10 @@
+---
+import { articlesIn } from '../../lib/articles.ts';
+import ArticlePage from '../../components/ArticlePage.astro';
+
+export async function getStaticPaths() {
+  return (await articlesIn('id')).map(({ article, tr }) => ({ params: { slug: tr.slug }, props: { article, tr } }));
+}
+const { article, tr } = Astro.props;
+---
+<ArticlePage locale="id" article={article} tr={tr} />

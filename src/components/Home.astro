@@ -1,0 +1,25 @@
+---
+import { t } from '../i18n/index.ts';
+import { routeFor, type Locale } from '../i18n/routes.ts';
+import Page from '../layouts/Page.astro';
+import ArtefactOfTheDay from './ArtefactOfTheDay.astro';
+import LatestArticles from './LatestArticles.astro';
+import Masthead from './Masthead.astro';
+import SeriesSection from './SeriesSection.astro';
+
+// Section order: Masthead, Artefact of the Day, Latest Articles, Editorial series (changed 2026-11-19 from UX-DR39).
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const m = t(locale);
+const hrefs = { id: routeFor('home', 'id'), en: routeFor('home', 'en') };
+---
+<Page locale={locale} title={m.site.name} description={m.masthead.manifesto} hrefs={hrefs} overMasthead>
+  <Masthead locale={locale} hrefs={hrefs} />
+  {/* The page opens on a find, then the articles (user decision 2026-11-19, critique). */}
+  <ArtefactOfTheDay locale={locale} />
+  <LatestArticles locale={locale} />
+  <SeriesSection locale={locale} />
+</Page>
+<script>
+  import '../scripts/home-motion.ts';
+</script>

@@ -1,0 +1,42 @@
+---
+import { t } from '../i18n/index.ts';
+import { optionalRoute, type Locale } from '../i18n/routes.ts';
+import LangSwitch from './LangSwitch.astro';
+
+interface Props { locale: Locale; hrefs: Record<Locale, string> }
+const { locale, hrefs } = Astro.props;
+const m = t(locale);
+const [first, ...rest] = m.site.name.split(' of ');
+const privacy = optionalRoute('privacy', locale);
+const contribute = optionalRoute('contribute', locale);
+---
+<footer class="foot" aria-label={m.footer.label}>
+  <div class="inner">
+    <p class="name"><span>{first}</span> <span>of {rest.join(' of ')}</span></p>
+    <p class="small">{m.site.description}</p>
+    <ul class="links">
+      {privacy && <li><a href={privacy}>{m.footer.privacy}</a></li>}
+      {contribute && <li><a href={contribute}>{m.footer.contribute}</a></li>}
+    </ul>
+    <LangSwitch locale={locale} hrefs={hrefs} />
+    <p class="small muted">© {new Date().getFullYear()} {m.site.name}</p>
+  </div>
+</footer>
+<style>
+  /* An ink block in both themes: the page ends on the darkest layer. */
+  .foot { margin-top: var(--space-24); background: var(--color-series-ink); color: var(--color-series-paper);
+    --color-ink: var(--color-series-paper); --color-paper: var(--color-series-ink); --color-accent: var(--color-kunyit); }
+  .inner { max-width: var(--max-width); margin: 0 auto; padding: var(--space-12) var(--margin-mobile); display: grid; gap: var(--space-4); font-size: var(--type-small-size); line-height: var(--type-small-leading); }
+  p { margin: 0; }
+  /* A colophon, not a second masthead (critique 2026-11-19). */
+  .name { font-family: var(--font-display); font-stretch: 75%; font-weight: 800; letter-spacing: -0.015em; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); margin-bottom: var(--space-2); }
+  .name span { display: inline; }
+  .name span:last-child { color: var(--color-kunyit); }
+  .muted { opacity: 0.75; }
+  .foot :global(a) { color: inherit; text-decoration-color: var(--color-kunyit); }
+  .links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-6); }
+  .links a { display: inline-flex; align-items: center; min-height: 44px; }
+  /* In dark mode the ink block is close to the page colour, so a kunyit edge marks where the page ends. */
+  @media (prefers-color-scheme: dark) { .foot { border-top: 3px solid var(--color-kunyit); } }
+  @media (min-width: 768px) { .inner { padding-inline: var(--gutter-desktop); } }
+</style>
