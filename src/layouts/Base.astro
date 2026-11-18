@@ -1,6 +1,9 @@
 ---
+import '../styles/fonts.css';
 import '../styles/tokens.css';
 import '../styles/global.css';
+// Only the display weight's latin subset is preloaded (AD-12).
+import displayFont from '@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url';
 import type { Locale } from '../i18n/routes.ts';
 
 interface Props { locale: Locale; title: string; description: string }
@@ -12,6 +15,7 @@ const launched = import.meta.env.PUBLIC_LAUNCH === 'true';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" as="font" type="font/woff2" href={displayFont} crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
     {!launched && <meta name="robots" content="noindex" />}

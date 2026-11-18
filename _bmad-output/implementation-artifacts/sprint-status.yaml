@@ -37,7 +37,7 @@ story_location: _bmad-output/implementation-artifacts
 development_status:
   epic-1: in-progress
   1-1-project-scaffold-and-bilingual-shell-on-workers-dev: review
-  1-2-design-tokens-self-hosted-fonts-and-device-theme: backlog
+  1-2-design-tokens-self-hosted-fonts-and-device-theme: review
   1-3-public-chrome-header-mobile-menu-language-switch-footer-and: backlog
   1-4-content-schema-media-serving-and-placeholder-seed: backlog
   1-5-build-snapshot-endpoint-with-public-dtos: backlog

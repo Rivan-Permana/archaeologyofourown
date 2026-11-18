@@ -59,6 +59,9 @@
   --type-meta-weight: 500;
   --type-meta-leading: 1.4;
   --type-meta-tracking: 0.01em;
+  --type-meta-catalogue-size: 0.75rem;
+  --type-meta-catalogue-weight: 500;
+  --type-meta-catalogue-leading: 1.4;
   --type-meta-catalogue-tracking: 0.08em;
 
   /* admin type */

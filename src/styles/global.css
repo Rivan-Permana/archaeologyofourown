@@ -14,3 +14,12 @@ body {
   outline-offset: var(--focus-ring-offset);
 }
 a { color: var(--color-ink); text-decoration-color: var(--color-accent); text-underline-offset: 3px; }
+/* Meta text: tabular figures; only meta-catalogue is uppercase and tracked (UX-DR3). */
+.meta, .meta-catalogue {
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
+  font-variant-numeric: tabular-nums;
+}
+.meta-catalogue { letter-spacing: var(--type-meta-catalogue-tracking); text-transform: uppercase; }
