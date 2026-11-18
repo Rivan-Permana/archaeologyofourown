@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { jakartaDate, pickDaily } from '../src/shared/daily.ts';
 import { clampTint, contrast, relativeLuminance, THEME, DARK_MAX_LUMINANCE, LIGHT_MIN_LUMINANCE } from '../src/shared/tint.ts';
+import { panelHtml, type Pool } from '../src/shared/artefact-html.ts';
 import { parseDesign } from '../scripts/design-tokens.ts';
 
 test('jakartaDate flips at 00:00 WIB (17:00 UTC)', () => {
@@ -49,4 +50,18 @@ test('tint constants match the DESIGN.md public colours', () => {
   const c = parseDesign().colors;
   assert.deepEqual([THEME.light.surface, THEME.light.ink, THEME.light.inkMuted, THEME.light.accent].map((v) => v.toLowerCase()), [c.surface, c.ink, c['ink-muted'], c.accent].map((v) => v.toLowerCase()));
   assert.deepEqual([THEME.dark.surface, THEME.dark.ink, THEME.dark.inkMuted, THEME.dark.accent].map((v) => v.toLowerCase()), [c['surface-dark'], c['ink-dark'], c['ink-muted-dark'], c['accent-dark']].map((v) => v.toLowerCase()));
+});
+
+const labels = { inventoryNumber: 'No.', year: 'Y', category: 'C', provenance: 'P', credit: 'K', categories: { proses: 'Proses' } };
+const mk = (flag: boolean, mediaFlag: boolean, alt?: string): Pool => ({
+  artefacts: [{ id: 'a', inventoryNumber: 'I', year: null, category: 'proses', contributorCredit: null, isPlaceholder: flag, refs: [{ mediaId: '00000000-0000-4000-8000-000000000001', role: 'image', position: 0, alt: alt ? { id: alt } : {}, caption: {}, credit: {} }], translations: [{ lang: 'id', title: 'T', provenance: '', publishedAt: 'x' }] }],
+  media: [{ id: '00000000-0000-4000-8000-000000000001', mime: 'image/webp', width: 2000, height: 2500, variants: [640], tintLight: null, tintDark: null, isPlaceholder: mediaFlag }],
+});
+test('Artefact of the Day marker follows is_placeholder only', () => {
+  const html = (p: Pool) => panelHtml(p.artefacts[0], p, 'id', labels, 'Contoh');
+  assert.ok(html(mk(true, false, 'alt')).includes('class="ph"'), 'placeholder record with a real photo is marked');
+  assert.ok(html(mk(false, true, 'alt')).includes('class="ph"'), 'placeholder media is marked');
+  assert.ok(!html(mk(false, false, 'alt')).includes('class="ph"'), 'real content is not marked');
+  assert.ok(!html(mk(false, false)).includes('class="ph"'), 'a real photo without alt is not marked as a placeholder');
+  assert.ok(!html(mk(false, false)).includes('aria-label="Contoh"'), 'and is not announced as one');
 });

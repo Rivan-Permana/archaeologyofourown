@@ -72,7 +72,9 @@ const related = (await articlesIn(locale))
       <div class="media">
         {realHero
           ? <img src={src(widths[widths.length - 1])} srcset={widths.map((w) => `${src(w)} ${w}w`).join(', ')} sizes="(min-width: 1100px) 1000px, 100vw" width="3" height="2" alt={heroAlt} fetchpriority="high" decoding="async" />
-          : <div class="slot" role="img" aria-label={heroAlt ?? m.site.placeholderMarker}></div>}
+          : (article.isPlaceholder || heroMedia?.isPlaceholder)
+            ? <div class="slot" role="img" aria-label={heroAlt ?? m.site.placeholderMarker}></div>
+            : <div class="slot" aria-hidden="true"></div>}
         {(article.isPlaceholder || heroMedia?.isPlaceholder) && <span class="mark"><Placeholder locale={locale} /></span>}
       </div>
       {(hero?.caption[locale] || hero?.credit[locale]) && (

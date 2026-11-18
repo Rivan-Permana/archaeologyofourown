@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { articlesIn } from '../lib/articles.ts';
 import { t } from '../i18n/index.ts';
 import type { Locale } from '../i18n/routes.ts';
 import ArticleCard from './ArticleCard.astro';
@@ -9,11 +10,8 @@ const { locale } = Astro.props;
 const m = t(locale);
 const media = new Map((await getCollection('media')).map((e) => [e.data.id, e.data]));
 // Only Articles available in the page language, newest first, at most six (FR-4).
-const items = (await getCollection('articles'))
-  .flatMap(({ data: a }) => {
-    const tr = a.translations.find((x) => x.lang === locale);
-    return tr ? [{ a, tr }] : [];
-  })
+const items = (await articlesIn(locale))
+  .map(({ article: a, tr }) => ({ a, tr }))
   .sort((x, y) => y.a.date.localeCompare(x.a.date))
   .slice(0, 6)
   .map(({ a, tr }) => {

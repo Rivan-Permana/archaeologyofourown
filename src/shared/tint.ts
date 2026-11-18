@@ -70,8 +70,8 @@ function shift(dominant: string, mode: 'light' | 'dark'): string {
 }
 
 const passes = (tint: string, t: { ink: string; inkMuted: string; accent: string }) =>
-  contrast(t.ink, tint) >= 4.5 && contrast(t.inkMuted, tint) >= 4.5 && // text
-  contrast(t.ink, tint) >= 3 && contrast(t.accent, tint) >= 3; // borders and focus ring
+  contrast(t.ink, tint) >= 4.5 && contrast(t.inkMuted, tint) >= 4.5 && // text (ink also covers borders, 3:1)
+  contrast(t.accent, tint) >= 3; // focus ring
 
 /** Light and dark tints for a dominant colour (`#RRGGBB`); a theme that cannot pass contrast gets its surface. */
 export function clampTint(dominant: string): { light: string; dark: string } {

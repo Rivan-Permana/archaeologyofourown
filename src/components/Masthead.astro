@@ -13,7 +13,7 @@ const [first, ...rest] = m.site.name.split(' of ');
 ---
 <section class="mast" data-masthead aria-labelledby="site-name">
   <div class="wrap">
-    <div class="top"><p class="notice" role="status" data-notice hidden>{m.notice.unavailable}</p><GlobeIcon /><LangSwitch locale={locale} hrefs={hrefs} short /></div>
+    <div class="top"><p class="notice" role="status" data-notice data-text={m.notice.unavailable}></p><GlobeIcon /><LangSwitch locale={locale} hrefs={hrefs} short /></div>
     <h1 id="site-name" class="rise" style="--i:0"><span>{first}</span> <span>of {rest.join(' of ')}</span></h1>
     <p class="manifesto rise" style="--i:1">{m.masthead.manifesto}</p>
     {m._pendingApproval.includes('masthead.manifesto') && <Placeholder locale={locale} />}
@@ -30,7 +30,7 @@ const [first, ...rest] = m.site.name.split(' of ');
 </section>
 <script>
   // Arriving from an Article with no translation shows a notice (FR-2); the page itself is static.
-  if (new URLSearchParams(location.search).has('unavailable')) document.querySelector<HTMLElement>('[data-notice]')?.removeAttribute('hidden');
+  if (new URLSearchParams(location.search).has('unavailable')) { const n = document.querySelector<HTMLElement>('[data-notice]'); if (n) n.textContent = n.dataset.text ?? ''; }
 </script>
 <script>
   // "Baca artikel" moves focus to the Latest Articles heading (UX-DR73). The default anchor jump would
@@ -47,6 +47,7 @@ const [first, ...rest] = m.site.name.split(' of ');
 <style>
   .mast { display: flex; flex-direction: column; min-height: calc(100svh - 0px); }
   .wrap { max-width: var(--max-width); margin: 0 auto; width: 100%; padding-inline: var(--margin-mobile); }
+  .notice:empty { display: none; }
   .notice { margin: 0 auto 0 0; font-size: var(--type-small-size); border-left: 2px solid var(--color-accent); padding-left: var(--space-3); }
   .top { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-2); height: 56px; font-size: var(--type-small-size); }
   h1 { font-family: var(--font-display); font-size: var(--type-display-size); font-weight: var(--type-display-weight); line-height: var(--type-display-leading); font-variation-settings: "opsz" 144; letter-spacing: -0.01em; margin: var(--space-4) 0 0; }

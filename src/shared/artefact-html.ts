@@ -25,11 +25,13 @@ export function panelHtml(a: PublicArtefactT, pool: Pool, lang: Lang, labels: Re
   const widths = m ? [...m.variants].sort((x, y) => x - y) : [];
   const src = (w: number) => `/media/${m!.id}-w${w}.webp`;
   const big = widths[widths.length - 1];
+  // The marker comes from is_placeholder only (AR48); a missing alt just gives an unlabelled slot.
+  const marker = a.isPlaceholder || m?.isPlaceholder ? `<span class="mark"><span class="ph">${esc(placeholderMarker)}</span></span>` : '';
   const photo = !m
     ? ''
     : m.isPlaceholder || !alt
-      ? `<div class="slot" role="img" aria-label="${esc(alt || placeholderMarker)}"></div><span class="mark"><span class="ph">${esc(placeholderMarker)}</span></span>`
-      : `<img src="${src(big)}" srcset="${widths.map((w) => `${src(w)} ${w}w`).join(', ')}" sizes="(min-width: 1100px) 40vw, 100vw" width="${big}" height="${Math.round((big * m.height) / m.width)}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
+      ? `<div class="slot" ${a.isPlaceholder || m.isPlaceholder ? `role="img" aria-label="${esc(alt || placeholderMarker)}"` : 'aria-hidden="true"'}></div>${marker}`
+      : `<img src="${src(big)}" srcset="${widths.map((w) => `${src(w)} ${w}w`).join(', ')}" sizes="(min-width: 1100px) 40vw, 100vw" width="${big}" height="${Math.round((big * m.height) / m.width)}" alt="${esc(alt)}" loading="lazy" decoding="async">${marker}`;
   const cap = [ref?.caption[lang] && esc(ref.caption[lang]!), ref?.credit[lang] && `<span class="credit">${esc(ref.credit[lang]!)}</span>`].filter(Boolean).join(' ');
   return `<figure class="aotd-figure"><div class="photo">${photo}</div>${cap ? `<figcaption>${cap}</figcaption>` : ''}</figure>` +
     `<div class="aotd-body"><h3 class="art-title">${esc(tr.title)}</h3>${catalogueRecordHtml(a, tr, labels)}</div>`;
