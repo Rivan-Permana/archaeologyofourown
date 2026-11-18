@@ -7,7 +7,7 @@ import Page from '../layouts/Page.astro';
 const id = t('id');
 const en = t('en');
 ---
-<Page locale="id" title={`${id.notFound.title} | ${id.site.name}`} description={id.notFound.text} alternates={false}>
+<Page locale="id" title={`${id.notFound.title} | ${id.site.name}`} description={id.notFound.text} alternates={false} noindex>
   <div class="page">
     <h1>{id.notFound.title}</h1>
     <p lang="id">{id.notFound.text}</p>

@@ -1,6 +1,6 @@
 # AD-17. Script and style hashes are emitted by Astro into each page's policy at build;
 # this file adds the directives a <meta> policy cannot carry plus the shared headers.
-# X-Robots-Tag is removed by Story 1.13 when PUBLIC_LAUNCH=true (AR48).
+# This is a template: scripts/launch-gate.ts writes public/_headers and drops the noindex line when PUBLIC_LAUNCH=true (AR48).
 /*
   Strict-Transport-Security: max-age=63072000; includeSubDomains
   X-Content-Type-Options: nosniff

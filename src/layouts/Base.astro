@@ -5,10 +5,22 @@ import '../styles/global.css';
 // Only the display weight's latin subset is preloaded (AD-12).
 import displayFont from '@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url';
 import type { Locale } from '../i18n/routes.ts';
+import { jsonForScript } from '../shared/render.ts';
 
-interface Props { locale: Locale; title: string; description: string; alternates?: Partial<Record<Locale, string>> }
-const { locale, title, description, alternates } = Astro.props;
+// Every public page gets a title, description, canonical URL and Open Graph image (FR-8).
+// This file and the other raw-HTML files are the only ones allowed to inject JSON (tests/no-raw-html.test.ts).
+interface Props {
+  locale: Locale; title: string; description: string;
+  alternates?: Partial<Record<Locale, string>>;
+  og?: { image?: string; alt?: string; type?: 'website' | 'article'; width?: number; height?: number };
+  jsonLd?: Record<string, unknown>;
+  noindex?: boolean;
+}
+const { locale, title, description, alternates, og, jsonLd, noindex = false } = Astro.props;
 const launched = import.meta.env.PUBLIC_LAUNCH === 'true';
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const image = new URL(og?.image ?? '/og-default.png', Astro.site).href;
+const beacon = import.meta.env.PUBLIC_CF_BEACON_TOKEN as string | undefined;
 ---
 <!doctype html>
 <html lang={locale}>
@@ -16,10 +28,27 @@ const launched = import.meta.env.PUBLIC_LAUNCH === 'true';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="preload" as="font" type="font/woff2" href={displayFont} crossorigin />
+    {/* No favicon asset yet (the logo is a client item); an empty icon stops the 404 request on every page. */}
+    <link rel="icon" href="data:," />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     {alternates && Object.entries(alternates).map(([l, href]: [string, string]) => <link rel="alternate" hreflang={l} href={new URL(href, Astro.site)} />)}
-    {!launched && <meta name="robots" content="noindex" />}
+    <meta property="og:site_name" content="Archaeology of Our Own" />
+    <meta property="og:type" content={og?.type ?? 'website'} />
+    <meta property="og:locale" content={locale === 'id' ? 'id_ID' : 'en_GB'} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    {og?.width && <meta property="og:image:width" content={String(og.width)} />}
+    {og?.height && <meta property="og:image:height" content={String(og.height)} />}
+    {og?.alt && <meta property="og:image:alt" content={og.alt} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    {(!launched || noindex) && <meta name="robots" content="noindex" />}
+    {jsonLd && <script type="application/ld+json" set:html={jsonForScript(jsonLd)} />}
+    {/* Cloudflare Web Analytics: cookieless, public pages only (AR49). Rendered only once the site's token is set. */}
+    {beacon && <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: beacon })}></script>}
   </head>
   <body>
     <slot />

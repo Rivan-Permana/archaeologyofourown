@@ -34,6 +34,22 @@ const widths = realHero ? [...realHero.variants].sort((a, b) => a - b) : [];
 const src = (w: number) => `/media/${realHero!.id}-w${w}.webp`;
 const when = new Intl.DateTimeFormat(locale === 'id' ? 'id-ID' : 'en-GB', { dateStyle: 'long', timeZone: 'Asia/Jakarta' }).format(new Date(article.date));
 
+// Share preview: the hero image (a Placeholder hero is still an image file) and Article structured data (FR-8).
+const ogWidth = heroMedia && [...heroMedia.variants].sort((a, b) => a - b).find((w) => w >= 1200) ;
+const ogImage = heroMedia && ogWidth ? `/media/${heroMedia.id}-w${ogWidth}.webp` : undefined;
+const ogHeight = heroMedia && ogWidth ? Math.round((ogWidth * heroMedia.height) / heroMedia.width) : undefined;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: tr.title,
+  description: tr.standfirst,
+  datePublished: article.date,
+  inLanguage: locale,
+  author: { '@type': 'Person', name: article.author },
+  ...(ogImage ? { image: [new URL(ogImage, Astro.site).href] } : {}),
+  mainEntityOfPage: new URL(url(locale, tr.slug), Astro.site).href,
+};
+
 const related = (await articlesIn(locale))
   .filter((e) => e.article.series === article.series && e.article.id !== article.id)
   .sort((a, b) => b.article.date.localeCompare(a.article.date))
@@ -43,7 +59,7 @@ const related = (await articlesIn(locale))
     return { locale, series: a.series, slug: x.slug, title: x.title, excerpt: x.standfirst, date: a.date, minutes: x.readingMinutes, isPlaceholder: a.isPlaceholder, media: h && media.get(h.mediaId), alt: h?.alt[locale] };
   });
 ---
-<Page locale={locale} title={`${tr.title} | ${m.site.name}`} description={tr.standfirst} hrefs={hrefs} alternates={alternates}>
+<Page locale={locale} title={`${tr.title} | ${m.site.name}`} description={tr.standfirst} hrefs={hrefs} alternates={alternates} og={ogImage ? { image: ogImage, alt: heroAlt, type: 'article', width: ogWidth, height: ogHeight } : { type: 'article' }} jsonLd={jsonLd}>
   <div class="progress" aria-hidden="true"><div class="bar" data-progress></div></div>
   <article class="article">
     <header class="head">

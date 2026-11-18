@@ -19,3 +19,4 @@ worker-configuration.d.ts
 public/version.json
 public/artefacts.json
 .playwright-mcp/
+public/_headers

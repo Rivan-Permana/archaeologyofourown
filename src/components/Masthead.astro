@@ -16,7 +16,7 @@ const [first, ...rest] = m.site.name.split(' of ');
     <div class="top"><p class="notice" role="status" data-notice hidden>{m.notice.unavailable}</p><GlobeIcon /><LangSwitch locale={locale} hrefs={hrefs} short /></div>
     <h1 id="site-name" class="rise" style="--i:0"><span>{first}</span> <span>of {rest.join(' of ')}</span></h1>
     <p class="manifesto rise" style="--i:1">{m.masthead.manifesto}</p>
-    {m.masthead.manifestoIsPlaceholder && <Placeholder locale={locale} />}
+    {m._pendingApproval.includes('masthead.manifesto') && <Placeholder locale={locale} />}
     <div class="actions rise" style="--i:2">
       <a class="btn btn-primary" href="#latest-articles" data-read>{m.masthead.read}</a>
       {contribute && <a class="btn btn-secondary" href={contribute}>{m.masthead.contribute}</a>}

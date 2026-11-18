@@ -5,11 +5,11 @@ import Header from '../components/Header.astro';
 import Base from './Base.astro';
 
 // `hrefs` is the equivalent page per language; omit it for pages with no translation pair (404 links to the homes).
-interface Props { locale: Locale; title: string; description: string; hrefs?: Record<Locale, string>; alternates?: Partial<Record<Locale, string>> | false; overMasthead?: boolean }
-const { locale, title, description, alternates, overMasthead = false } = Astro.props;
+interface Props { locale: Locale; title: string; description: string; hrefs?: Record<Locale, string>; alternates?: Partial<Record<Locale, string>> | false; overMasthead?: boolean; og?: Record<string, unknown>; jsonLd?: Record<string, unknown>; noindex?: boolean }
+const { locale, title, description, alternates, overMasthead = false, og, jsonLd, noindex } = Astro.props;
 const hrefs = Astro.props.hrefs ?? { id: routeFor('home', 'id'), en: routeFor('home', 'en') };
 ---
-<Base locale={locale} title={title} description={description} alternates={alternates === false ? undefined : (alternates ?? hrefs)}>
+<Base locale={locale} title={title} description={description} alternates={alternates === false ? undefined : (alternates ?? hrefs)} og={og} jsonLd={jsonLd} noindex={noindex}>
   <Header locale={locale} hrefs={hrefs} overMasthead={overMasthead} />
   <main id="main" tabindex="-1"><slot /></main>
   <Footer locale={locale} hrefs={hrefs} />
