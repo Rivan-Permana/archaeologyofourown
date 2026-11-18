@@ -1,0 +1,39 @@
+---
+import { t } from '../i18n/index.ts';
+import { routeFor, type Locale } from '../i18n/routes.ts';
+import Page from '../layouts/Page.astro';
+import Placeholder from './Placeholder.astro';
+
+// The wording is flagged `_pendingApproval` in the i18n files until the client approves it; the launch gate reads that flag (Story 1.13).
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const m = t(locale);
+const p = m.privacy;
+const hrefs = { id: routeFor('privacy', 'id'), en: routeFor('privacy', 'en') };
+const pending = m._pendingApproval.includes('privacy');
+---
+<Page locale={locale} title={`${p.title} | ${m.site.name}`} description={p.intro} hrefs={hrefs}>
+  <article class="note">
+    <h1>{p.title} {pending && <Placeholder locale={locale} />}</h1>
+    <p class="lead">{p.intro}</p>
+    {p.sections.map((s) => (
+      <section>
+        <h2>{s.h}</h2>
+        {s.p.map((x) => <p>{x}</p>)}
+        {s.ul && <ul>{s.ul.map((x) => <li>{x}</li>)}</ul>}
+        {s.after?.map((x) => <p>{x}</p>)}
+      </section>
+    ))}
+  </article>
+</Page>
+<style>
+  .note { max-width: var(--measure); margin: 0 auto; padding: var(--space-12) var(--margin-mobile) 0; }
+  h1 { font-family: var(--font-display); font-weight: var(--type-h1-weight); font-size: var(--type-h1-size); line-height: var(--type-h1-leading); margin: 0 0 var(--space-6); }
+  h1 :global(.ph) { vertical-align: middle; }
+  .lead { font-family: var(--font-display); font-size: var(--type-standfirst-size); line-height: var(--type-standfirst-leading); margin: 0 0 var(--space-12); }
+  h2 { font-family: var(--font-display); font-weight: 400; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); margin: var(--space-12) 0 var(--space-3); padding-top: var(--space-4); border-top: 1px solid var(--color-line); }
+  p, ul { margin: 0 0 var(--space-4); }
+  ul { padding-left: var(--space-6); }
+  li { margin-bottom: var(--space-2); }
+  @media (min-width: 768px) { .note { padding-inline: var(--gutter-desktop); } }
+</style>

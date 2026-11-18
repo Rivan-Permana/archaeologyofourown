@@ -6,6 +6,7 @@ export const defaultLocale: Locale = 'id';
 
 export const routes = {
   home: { id: '/', en: '/en/' },
+  privacy: { id: '/privasi/', en: '/en/privacy/' },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type RouteKey = keyof typeof routes;

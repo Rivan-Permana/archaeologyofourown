@@ -97,5 +97,72 @@
     "another": "Show another",
     "failed": "Another artefact could not be loaded. Try again later.",
     "empty": "No artefacts in this language yet."
-  }
+  },
+  "privacy": {
+    "title": "Privacy note",
+    "intro": "We keep very little data, only what we need, and we don't track you. This page explains what we store, why, for how long, and how to ask for deletion.",
+    "sections": [
+      {
+        "h": "Newsletter subscribers",
+        "p": [
+          "When you subscribe, we store three things:"
+        ],
+        "ul": [
+          "your email address",
+          "the language of the page you signed up on",
+          "the time you signed up"
+        ],
+        "after": [
+          "We keep them so we know who wants to hear from us. We keep this data until you ask us to delete it. Signing up twice with the same email stores one entry."
+        ]
+      },
+      {
+        "h": "Contributors",
+        "p": [
+          "When you send an artefact, we store what you enter in the form and some system data:"
+        ],
+        "ul": [
+          "your name or pseudonym, and your email",
+          "the artefact title, story and category, plus the year and provenance if you add them",
+          "one to five photos",
+          "your consent statement and when you gave it",
+          "a Reference Number, review status, editor note, page language and the time you sent it"
+        ],
+        "after": [
+          "We use it to review your submission, to contact you by email if needed, and to credit you if the artefact is published. We never show your email on the site.",
+          "Your browser shrinks each photo and removes its metadata, including location, before upload. The server checks it again. Photos are stored privately and cannot be opened from a public address. An editor reviews every submission before anything is published.",
+          "We delete rejected submissions and their photos 90 days after rejection. We keep all other submissions until you ask us to delete them. If an artefact was published from your submission, deleting the submission also unpublishes that artefact and deletes its photos."
+        ]
+      },
+      {
+        "h": "Network address",
+        "p": [
+          "We never store your network address with any record. To limit repeated submissions, we keep a random code made from that address for up to 1 hour, then delete it."
+        ]
+      },
+      {
+        "h": "Tracking and cookies",
+        "p": [
+          "We use no third-party trackers. We only count visits with cookieless analytics. The site runs on Cloudflare, which also runs the security check on our forms."
+        ]
+      },
+      {
+        "h": "Backups",
+        "p": [
+          "Deleted data can remain in database backups for up to 7 days, then it is gone."
+        ]
+      },
+      {
+        "h": "Asking for deletion or withdrawing a submission",
+        "p": [
+          "You can ask us to delete your data at any time. Send the request through the contact channel listed on this site, from the same email address you used to subscribe or submit. Contributors include the Reference Number in the request.",
+          "We reply within 30 days. Before your artefact is published, you can also withdraw it by replying from the same email address with the Reference Number."
+        ]
+      }
+    ]
+  },
+  "_pendingApproval": [
+    "privacy",
+    "masthead.manifesto"
+  ]
 }

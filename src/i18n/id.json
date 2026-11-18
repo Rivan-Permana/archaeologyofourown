@@ -97,5 +97,72 @@
     "another": "Tampilkan lainnya",
     "failed": "Artefak lain belum bisa dimuat. Coba lagi nanti.",
     "empty": "Belum ada artefak dalam bahasa ini."
-  }
+  },
+  "privacy": {
+    "title": "Catatan privasi",
+    "intro": "Kami menyimpan sedikit data, hanya yang kami perlukan, dan kami tidak melacak Anda. Halaman ini menjelaskan apa yang disimpan, untuk apa, berapa lama, dan cara meminta penghapusan.",
+    "sections": [
+      {
+        "h": "Pelanggan buletin",
+        "p": [
+          "Bila Anda berlangganan, kami menyimpan tiga hal:"
+        ],
+        "ul": [
+          "alamat email Anda",
+          "bahasa halaman saat Anda mendaftar",
+          "waktu Anda mendaftar"
+        ],
+        "after": [
+          "Kami menyimpannya agar tahu siapa yang ingin menerima kabar dari kami. Data ini kami simpan sampai Anda meminta penghapusan. Mendaftar dua kali dengan email yang sama hanya menyimpan satu data."
+        ]
+      },
+      {
+        "h": "Kontributor",
+        "p": [
+          "Bila Anda mengirim artefak, kami menyimpan isi formulir dan beberapa data sistem:"
+        ],
+        "ul": [
+          "nama atau nama samaran, dan email Anda",
+          "judul artefak, cerita, kategori, serta tahun dan asal-usul bila Anda mengisinya",
+          "satu sampai lima foto",
+          "pernyataan persetujuan Anda dan waktunya",
+          "Nomor Referensi, status tinjauan, catatan editor, bahasa halaman, dan waktu pengiriman"
+        ],
+        "after": [
+          "Kami memakainya untuk meninjau kiriman, menghubungi Anda lewat email bila perlu, dan mencantumkan nama Anda sebagai kredit bila artefak diterbitkan. Email Anda tidak pernah ditampilkan di situs.",
+          "Foto dikecilkan dan dibersihkan dari metadata, termasuk lokasi, di peramban Anda sebelum diunggah. Server memeriksanya lagi. Foto disimpan secara privat dan tidak bisa dibuka dari alamat publik. Editor memeriksa kiriman sebelum apa pun diterbitkan.",
+          "Kiriman yang ditolak kami hapus beserta fotonya 90 hari setelah penolakan. Kiriman lain kami simpan sampai Anda meminta penghapusan. Bila artefak sudah diterbitkan dari kiriman Anda, menghapus kiriman juga menurunkan artefak itu dan menghapus fotonya."
+        ]
+      },
+      {
+        "h": "Alamat jaringan",
+        "p": [
+          "Kami tidak menyimpan alamat jaringan Anda bersama data apa pun. Untuk membatasi kiriman berulang, kami menyimpan kode acak yang dibuat dari alamat itu paling lama 1 jam, lalu menghapusnya."
+        ]
+      },
+      {
+        "h": "Pelacakan dan cookie",
+        "p": [
+          "Kami tidak memakai pelacak pihak ketiga. Kami hanya mengukur jumlah kunjungan dengan analitik tanpa cookie. Situs ini berjalan di Cloudflare, yang juga menjalankan pemeriksaan keamanan formulir."
+        ]
+      },
+      {
+        "h": "Cadangan",
+        "p": [
+          "Data yang sudah dihapus bisa tersisa di cadangan basis data paling lama 7 hari, lalu hilang."
+        ]
+      },
+      {
+        "h": "Meminta penghapusan atau menarik kiriman",
+        "p": [
+          "Anda bisa meminta kami menghapus data Anda kapan saja. Kirim permintaan lewat saluran kontak yang tercantum di situs ini, dari alamat email yang sama dengan yang Anda pakai saat mendaftar atau mengirim. Kontributor menyebut Nomor Referensi dalam permintaan itu.",
+          "Kami menjawab dalam 30 hari. Sebelum artefak Anda terbit, Anda juga bisa menariknya dengan membalas dari alamat email yang sama dan menyebut Nomor Referensi."
+        ]
+      }
+    ]
+  },
+  "_pendingApproval": [
+    "privacy",
+    "masthead.manifesto"
+  ]
 }
