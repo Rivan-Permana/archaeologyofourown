@@ -64,5 +64,13 @@ body:has(dialog[open]) { overflow: hidden; }
 .catalogue-record dd { font-size: var(--type-small-size); }
 .category-tag { display: inline-block; border: 1px solid var(--color-ink); padding: 2px var(--space-2); font-size: var(--type-meta-size); line-height: var(--type-meta-leading); }
 
+/* Textures as masks, so the colour always comes from a token: soil grain and pebbles for the Masthead section,
+   and the same grain at low strength as paper tooth behind the whole page. */
+:root {
+  --tex-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.2 0 0 0 -1.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --tex-pebbles: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='96' fill='none' stroke='%23000' stroke-width='1.2'%3E%3Cellipse cx='18' cy='22' rx='6' ry='3.5'/%3E%3Cellipse cx='64' cy='60' rx='4' ry='3'/%3E%3Cellipse cx='112' cy='30' rx='8' ry='4.5' transform='rotate(-12 112 30)'/%3E%3Cellipse cx='150' cy='74' rx='5' ry='3'/%3E%3Cellipse cx='92' cy='84' rx='3' ry='2'/%3E%3Cellipse cx='38' cy='80' rx='3.5' ry='2.5'/%3E%3Ccircle cx='140' cy='14' r='2'/%3E%3C/svg%3E");
+}
+body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: var(--color-ink); opacity: 0.05; -webkit-mask: var(--tex-grain); mask: var(--tex-grain); }
+
 /* Motion: one strong ease-out for entrances (emil-design-eng); scroll and fade-up curves are set where they are used. */
 :root { --ease-out: cubic-bezier(0.23, 1, 0.32, 1); }

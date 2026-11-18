@@ -23,6 +23,8 @@ const contribute = optionalRoute('contribute', locale);
 </footer>
 <style>
   .foot { border-top: 1px solid var(--color-ink); margin-top: var(--space-24); }
+  /* The bottom of the dig: the Masthead's hatched natural ground (105) closes the page. */
+  .foot::before { content: ''; display: block; height: var(--space-6); border-bottom: 1px solid var(--color-ink); background: repeating-linear-gradient(60deg, transparent 0 13px, var(--color-ink-muted) 13px 14px), color-mix(in oklab, var(--color-ink) 18%, var(--color-surface)); }
   .inner { max-width: var(--max-width); margin: 0 auto; padding: var(--space-8) var(--margin-mobile); display: grid; gap: var(--space-3); font-size: var(--type-small-size); line-height: var(--type-small-leading); }
   p { margin: 0; }
   .name { font-family: var(--font-display); font-size: var(--type-h3-size); line-height: var(--type-h3-leading); }
