@@ -83,5 +83,14 @@
   },
   "notice": {
     "unavailable": "Artikel ini belum tersedia dalam bahasa Indonesia."
+  },
+  "seriesSection": {
+    "title": "Seri editorial",
+    "soon": "Segera hadir",
+    "latest": "Terbaru",
+    "count": {
+      "one": "{n} artikel",
+      "other": "{n} artikel"
+    }
   }
 }

@@ -4,6 +4,7 @@ import { routeFor, type Locale } from '../i18n/routes.ts';
 import Page from '../layouts/Page.astro';
 import LatestArticles from './LatestArticles.astro';
 import Masthead from './Masthead.astro';
+import SeriesSection from './SeriesSection.astro';
 
 // Section order (UX-DR39): Masthead, Latest Articles; later stories insert the rest in their own slots.
 interface Props { locale: Locale }
@@ -14,4 +15,5 @@ const hrefs = { id: routeFor('home', 'id'), en: routeFor('home', 'en') };
 <Page locale={locale} title={m.site.name} description={m.masthead.manifesto} hrefs={hrefs} overMasthead>
   <Masthead locale={locale} hrefs={hrefs} />
   <LatestArticles locale={locale} />
+  <SeriesSection locale={locale} />
 </Page>

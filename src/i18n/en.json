@@ -83,5 +83,14 @@
   },
   "notice": {
     "unavailable": "This article isn't available in English yet."
+  },
+  "seriesSection": {
+    "title": "Editorial series",
+    "soon": "Coming soon",
+    "latest": "Latest",
+    "count": {
+      "one": "{n} article",
+      "other": "{n} articles"
+    }
   }
 }
