@@ -12,7 +12,7 @@ State on 2026-11-18. Epic 1 is built and reviewed on branch `feat/epic-1-read-th
 ## Step 0: you do these (an agent cannot)
 
 1. `npx wrangler login` in an interactive terminal (the saved token has expired; `wrangler whoami` says "Not logged in").
-2. Cloudflare dashboard, Workers and Pages, set the account `workers.dev` subdomain to a neutral name (for example `archaeologyofourown`). It must not contain a personal email or name (NFR25). The site address will then be `https://archaeologyofourown.<subdomain>.workers.dev`.
+2. Cloudflare dashboard, Workers and Pages, set the account `workers.dev` subdomain to a neutral name (`our-own`, so the address reads `archaeology-of.our-own.workers.dev`). It must not contain a personal email or name (NFR25). The site address will then be `https://archaeology-of.<subdomain>.workers.dev`.
 3. Cloudflare R2 may ask for a payment method before it can be enabled, even for the free allowance (10 GB). Enabling it is your decision; nothing in v1 should exceed the free tier.
 
 ## Step 1: approvals needed (each is outward-facing or creates a resource)
@@ -21,7 +21,7 @@ State on 2026-11-18. Epic 1 is built and reviewed on branch `feat/epic-1-read-th
 |---|---|---|---|
 | A | Create the public GitHub repo `Rivan-Permana/archaeologyofourown` and push `main` and the feature branch | Public repo with full history, including the commit author identity | Repo can be deleted; pushed history may already be copied |
 | B | Create D1 `archaeologyofourown` and R2 bucket `archaeologyofourown-media`, apply migrations | Two Cloudflare resources, free tier | Yes, delete both |
-| C | First deploy of Worker `archaeologyofourown` | Worker at the workers.dev address, public but `noindex` | `wrangler delete` |
+| C | First deploy of Worker `archaeology-of` | Worker at the workers.dev address, public but `noindex` | `wrangler delete` |
 
 ## Step 2: commands after approval (run in order)
 
@@ -37,7 +37,7 @@ npx wrangler r2 bucket create archaeologyofourown-media
 npx wrangler d1 migrations apply DB --remote        # maintainer step before merge (PR checkbox)
 
 # C. First deploy, built on this machine with the Placeholder fixtures
-export PUBLIC_SITE_URL=https://archaeologyofourown.<subdomain>.workers.dev
+export PUBLIC_SITE_URL=https://archaeology-of.<subdomain>.workers.dev
 npm run snapshot -- --local && npm run build        # gate keeps the site noindex
 npx wrangler deploy
 ```
