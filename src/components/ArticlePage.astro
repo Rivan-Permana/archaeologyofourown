@@ -151,6 +151,20 @@ const related = (await articlesIn(locale))
   .related { max-width: var(--max-width); margin: var(--space-16) auto 0; padding: 0 var(--margin-mobile); }
   .related h2 { font-size: var(--type-h3-size); font-weight: var(--type-h3-weight); line-height: var(--type-h3-leading); margin: 0 0 var(--space-8); padding-top: var(--space-4); border-top: 3px solid var(--color-ink); }
   .row { display: grid; grid-template-columns: 1fr; gap: var(--space-12) var(--gutter-desktop); }
+  /* Below 1100px the cover must leave the first paragraph on screen: a drawn find shrinks to a small tag above the
+     title, a photo goes 16:9, and the sheet becomes one line (labels stay for screen readers). */
+  @media (max-width: 1099px) {
+    .cover-in { gap: var(--space-4); }
+    .hero { order: -1; }
+    .media:not(.photo) { width: 72px; aspect-ratio: 1; }
+    .media:not(.photo) .slot::after { inset: 0; }
+    .media:not(.photo) .mark { position: static; }
+    .media:not(.photo) .slot::before, .hero:not(:has(.photo)) figcaption { display: none; }
+    .media.photo { aspect-ratio: 16 / 9; }
+    .sheet { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+    .sheet dt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .cover-txt > .sheet { margin-bottom: 0; }
+  }
   @media (min-width: 768px) {
     .cover-in, .layout, .related { padding-inline: var(--gutter-desktop); }
     .row { grid-template-columns: repeat(3, 1fr); }

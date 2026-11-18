@@ -65,3 +65,12 @@ test('Artefact of the Day marker follows is_placeholder only', () => {
   assert.ok(!html(mk(false, false)).includes('class="ph"'), 'a real photo without alt is not marked as a placeholder');
   assert.ok(!html(mk(false, false)).includes('aria-label="Contoh"'), 'and is not announced as one');
 });
+
+test('findsFor gives distinct drawings until all six are used', async () => {
+  const { findsFor, findFor, FINDS } = await import('../src/shared/finds.ts');
+  const keys = ['a', 'b', 'c', 'd', 'e'];
+  const got = findsFor(keys, [findFor('x')]);
+  assert.equal(new Set([findFor('x'), ...got]).size, 6);
+  assert.deepEqual(findsFor(keys), findsFor(keys), 'stable per build');
+  assert.equal(findsFor([...FINDS, 'z', 'y']).length, 8);
+});

@@ -4,7 +4,8 @@ import { articlesIn } from '../lib/articles.ts';
 import { t } from '../i18n/index.ts';
 import type { Locale } from '../i18n/routes.ts';
 import { articleBase } from '../i18n/routes.ts';
-import { findFor } from '../shared/finds.ts';
+import { findFor, findsFor } from '../shared/finds.ts';
+import { jakartaDate, pickDaily } from '../shared/daily.ts';
 import Placeholder from './Placeholder.astro';
 import ArticleCard from './ArticleCard.astro';
 
@@ -24,7 +25,11 @@ const items = (await articlesIn(locale))
       isPlaceholder: a.isPlaceholder, media: hero && media.get(hero.mediaId), alt: hero?.alt[locale],
     };
   });
-const [featured, ...rest] = items;
+// No drawing repeats on the home page: today's artefact takes its find first, then cover, cards and rows in order.
+const aotdIds = (await getCollection('artefacts')).map((e) => e.data).filter((a) => a.translations.some((x) => x.lang === locale)).map((a) => a.id);
+const aotd = pickDaily(aotdIds, jakartaDate(new Date()));
+const finds = findsFor(items.map((c) => c.slug), aotd ? [findFor(aotd)] : []);
+const [featured, ...rest] = items.map((c, i) => ({ ...c, find: finds[i] }));
 const href = (slug: string) => `${articleBase[locale]}${slug}/`;
 const when = (d: string, style: 'long' | 'medium') => new Intl.DateTimeFormat(locale === 'id' ? 'id-ID' : 'en-GB', { dateStyle: style, timeZone: 'Asia/Jakarta' }).format(new Date(d));
 // The featured plate shows the photo when there is one; otherwise its series colour and drawn find (UX-DR35).
@@ -50,7 +55,7 @@ const long = (featured?.title.length ?? 0) > 40;
               <div class:list={['art', { photo: real }]}>
                 {real
                   ? <img src={src(widths[widths.length - 1])} srcset={widths.map((w) => `${src(w)} ${w}w`).join(', ')} sizes="(min-width: 900px) 45vw, 100vw" width="4" height="3" alt={featured.alt} decoding="async" />
-                  : <div class="slot" data-find={findFor(featured.slug)} aria-hidden="true"></div>}
+                  : <div class="slot" data-find={featured.find} aria-hidden="true"></div>}
               </div>
             </div>
             <div class="cover-foot">
@@ -68,7 +73,7 @@ const long = (featured?.title.length ?? 0) > 40;
                   <a class="t" href={href(c.slug)}>{c.title}</a>
                   <span class="ser"><span class="dot"></span>{m.series[c.series as keyof typeof m.series].label}</span>
                   <time datetime={c.date}>{when(c.date, 'medium')}</time>
-                  <span class="find slot" data-find={findFor(c.slug)} aria-hidden="true"></span>
+                  <span class="find slot" data-find={c.find} aria-hidden="true"></span>
                   {(c.isPlaceholder || c.media?.isPlaceholder) && <span class="ph-row"><Placeholder locale={locale} /></span>}
                 </li>
               ))}
@@ -109,7 +114,7 @@ const long = (featured?.title.length ?? 0) > 40;
   .cover-foot { display: grid; gap: var(--space-3); }
   .excerpt { margin: 0; font-size: var(--type-standfirst-size); line-height: var(--type-standfirst-leading); font-weight: var(--type-standfirst-weight); max-width: 32ch; }
   @media (min-width: 900px) {
-    .cover-in { min-height: min(88svh, 860px); }
+    .cover-in { min-height: min(64svh, 640px); }
     .art { position: absolute; right: -6%; top: 50%; translate: 0 -50%; width: min(70%, 640px); margin: 0; }
     .stage:has(.photo) { grid-template-columns: 1fr 1fr; gap: var(--gutter-desktop); align-items: center; }
     .art.photo { position: relative; right: auto; top: auto; translate: none; width: 100%; order: 0; margin: 0; }
@@ -123,7 +128,7 @@ const long = (featured?.title.length ?? 0) > 40;
   .index { list-style: none; margin: var(--space-16) 0 0; padding: 0; border-top: 3px solid var(--color-ink); }
   .index li { position: relative; isolation: isolate; display: grid; gap: var(--space-2) var(--space-4); align-items: center; padding: var(--space-5) var(--space-2); border-bottom: 1px solid var(--color-ink); }
   .index li::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--c); transform: scaleY(0); transform-origin: bottom; transition: transform 320ms var(--ease-out); }
-  .t { font-family: var(--font-display); font-stretch: 75%; font-weight: 800; letter-spacing: -0.02em; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); text-decoration: none; text-wrap: balance; }
+  .t { font-family: var(--font-display); font-stretch: 75%; font-weight: 800; letter-spacing: -0.02em; font-size: 1.5rem; line-height: 1.1; text-decoration: none; text-wrap: balance; }
   .t::after { content: ''; position: absolute; inset: 0; }
   .t:focus-visible { outline: none; }
   .index li:has(.t:focus-visible) { outline: var(--focus-ring-width) solid var(--on); outline-offset: -4px; color: var(--on); }

@@ -8,9 +8,9 @@ import { findFor } from '../shared/finds.ts';
 interface Props {
   locale: Locale; featured?: boolean;
   series: string; slug: string; title: string; excerpt: string; date: string; minutes: number;
-  isPlaceholder: boolean; media?: PublicMediaT; alt?: string;
+  isPlaceholder: boolean; media?: PublicMediaT; alt?: string; find?: string;
 }
-const { locale, featured = false, series, slug, title, excerpt, date, minutes, isPlaceholder, media, alt } = Astro.props;
+const { locale, featured = false, series, slug, title, excerpt, date, minutes, isPlaceholder, media, alt, find } = Astro.props;
 const m = t(locale);
 const when = new Intl.DateTimeFormat(locale === 'id' ? 'id-ID' : 'en-GB', { dateStyle: 'long', timeZone: 'Asia/Jakarta' }).format(new Date(date));
 // A Placeholder image is a plain surface slot at the real ratio, never a picture of nothing (UX-DR35).
@@ -23,9 +23,7 @@ const Heading = featured ? 'h2' : 'h3';
   <div class="media">
     {real
       ? <img src={src(widths[widths.length - 1])} srcset={widths.map((w) => `${src(w)} ${w}w`).join(', ')} sizes={featured ? '(min-width: 1100px) 66vw, 100vw' : '(min-width: 1100px) 33vw, 100vw'} width="3" height="2" alt={alt} loading="lazy" decoding="async" />
-      : (isPlaceholder || media?.isPlaceholder)
-        ? <div class="slot" data-find={findFor(slug)} aria-hidden="true"></div>
-        : <div class="slot" data-find={findFor(slug)} aria-hidden="true"></div>}
+      : <div class="slot" data-find={find ?? findFor(slug)} aria-hidden="true"></div>}
     {(isPlaceholder || media?.isPlaceholder) && <span class="mark"><Placeholder locale={locale} /></span>}
   </div>
   <Heading><a href={`${articleBase[locale]}${slug}/`}>{title}</a></Heading>
