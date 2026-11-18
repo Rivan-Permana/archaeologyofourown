@@ -118,7 +118,8 @@ const tint = pick && tintOf(pick, pool);
     --color-line: color-mix(in oklab, var(--color-series-ink) 35%, transparent); --color-accent: var(--color-nila); --color-on-accent: var(--color-series-paper);
     --color-surface: color-mix(in oklab, var(--color-series-paper) 40%, transparent); color: var(--color-ink); }
   .wrap { max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); }
-  .head { font-size: var(--type-h2-size); font-weight: var(--type-h2-weight); line-height: var(--type-h2-leading); margin: 0 0 var(--space-8); }
+  /* The section name stays smaller than the artefact's own title, which is the headline here. */
+  .head { font-size: var(--type-h3-size); font-weight: var(--type-h3-weight); line-height: var(--type-h3-leading); margin: 0 0 var(--space-6); }
   .panel { display: grid; gap: var(--space-6); transition: opacity 0.2s ease; }
   .panel.fading { opacity: 0; }
   .controls { margin-top: var(--space-6); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
@@ -130,17 +131,28 @@ const tint = pick && tintOf(pick, pool);
   .panel :global(.slot) { --c: var(--color-nila); --on: var(--color-kunyit); }
   .panel :global(.mark) { position: absolute; top: var(--space-3); left: var(--space-3); }
   .panel :global(figcaption) { margin-top: var(--space-2); font-size: var(--type-small-size); }
+  .panel :global(figcaption .credit)::before { content: ', '; margin-left: -0.25em; }
   .panel :global(.art-title) { font-family: var(--font-display); font-stretch: 75%; font-weight: 800; font-size: var(--type-h1-size); line-height: var(--type-h1-leading); letter-spacing: -0.02em; margin: 0 0 var(--space-8); text-wrap: balance; }
   .panel :global(.catalogue-record) { margin: 0; border: 0; border-top: 3px solid var(--color-ink); }
   .panel :global(.catalogue-record dt), .panel :global(.catalogue-record dd) { border-top-color: var(--color-ink); padding-inline: 0; }
   .panel :global(.catalogue-record dt) { padding-right: var(--space-6); }
   .panel :global(.category-tag) { border-color: var(--color-ink); }
   @media (min-width: 768px) { .wrap { padding-inline: var(--gutter-desktop); } .aotd { padding: var(--space-24) 0; } }
+  /* Wide screens (mockup A): a two-page spread. The nila plate fills the left half edge to edge; heading, record
+     and controls sit on the kunyit right half. The panel's children join the section grid. */
   @media (min-width: 1100px) {
-    .panel { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter-desktop); align-items: center; }
-    .panel :global(.aotd-figure) { grid-column: 1 / span 5; }
-    .panel :global(.aotd-body) { grid-column: 7 / span 6; }
-    .controls { margin-left: calc((100% + var(--gutter-desktop)) / 12 * 6); }
+    .aotd { padding: 0; }
+    .wrap { max-width: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto 1fr; }
+    .panel { display: contents; }
+    .panel.fading > :global(*) { opacity: 0; }
+    .panel > :global(*) { transition: opacity 0.2s ease; }
+    .panel :global(.aotd-figure) { grid-column: 1; grid-row: 1 / span 3; display: flex; flex-direction: column; background: var(--color-nila); min-height: min(92svh, 900px); }
+    .panel :global(.photo) { flex: 1; aspect-ratio: auto; }
+    .panel :global(figcaption) { margin: 0; padding: var(--space-3) var(--space-6); color: var(--color-series-paper); }
+    .panel :global(.mark) { top: var(--space-6); left: var(--space-6); }
+    .head { grid-column: 2; grid-row: 1; margin: 0; padding: var(--space-24) var(--space-16) var(--space-6); }
+    .panel :global(.aotd-body) { grid-column: 2; grid-row: 2; padding: 0 var(--space-16); }
+    .controls { grid-column: 2; grid-row: 3; align-self: start; margin: 0; padding: var(--space-8) var(--space-16) var(--space-24); }
   }
   @media (prefers-reduced-motion: reduce) { .aotd, .panel { transition: none; } }
 </style>

@@ -56,7 +56,7 @@ typography:
   # public: "Indeks" direction, user decision 2026-11-19
   display:
     fontFamily: Bricolage Grotesque
-    fontSize: clamp(3.4rem, 15.2vw, 15.5rem)
+    fontSize: clamp(3.4rem, 22vw, 21rem)
     fontWeight: '800'
     lineHeight: '0.8'
   manifesto:
@@ -66,7 +66,7 @@ typography:
     lineHeight: '1.3'
   h1:
     fontFamily: Bricolage Grotesque
-    fontSize: clamp(2.75rem, 7vw, 6.5rem)
+    fontSize: clamp(3rem, 11vw, 7rem)
     fontWeight: '800'
     lineHeight: '0.9'
   h2:

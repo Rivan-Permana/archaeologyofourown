@@ -84,7 +84,8 @@ const related = (await articlesIn(locale))
               : (article.isPlaceholder || heroMedia?.isPlaceholder)
                 ? <div class="slot" data-find={findFor(tr.slug)} role="img" aria-label={heroAlt ?? m.site.placeholderMarker}></div>
                 : <div class="slot" data-find={findFor(tr.slug)} aria-hidden="true"></div>}
-            {(article.isPlaceholder || heroMedia?.isPlaceholder) && <span class="mark"><Placeholder locale={locale} /></span>}
+            {/* The cover already carries the article's marker; the image gets its own only when the article is real. */}
+            {!article.isPlaceholder && heroMedia?.isPlaceholder && <span class="mark"><Placeholder locale={locale} /></span>}
           </div>
           {(hero?.caption[locale] || hero?.credit[locale]) && (
             <figcaption>{hero?.caption[locale]}{hero?.credit[locale] && <span class="credit">, {hero.credit[locale]}</span>}</figcaption>
@@ -146,8 +147,8 @@ const related = (await articlesIn(locale))
   figcaption { margin-top: var(--space-2); font-size: var(--type-small-size); line-height: var(--type-small-leading); }
   .layout { max-width: var(--max-width); margin: 0 auto; padding: var(--space-12) var(--margin-mobile) 0; display: block; }
   .main { max-width: var(--measure); margin: 0 auto; }
-  .foot { margin-top: var(--space-16); }
-  .related { max-width: var(--max-width); margin: var(--space-24) auto 0; padding: 0 var(--margin-mobile); }
+  .foot { margin-top: var(--space-12); }
+  .related { max-width: var(--max-width); margin: var(--space-16) auto 0; padding: 0 var(--margin-mobile); }
   .related h2 { font-size: var(--type-h2-size); font-weight: var(--type-h2-weight); line-height: var(--type-h2-leading); margin: 0 0 var(--space-8); padding-top: var(--space-6); border-top: 3px solid var(--color-ink); }
   .row { display: grid; grid-template-columns: 1fr; gap: var(--space-12) var(--gutter-desktop); }
   @media (min-width: 768px) {

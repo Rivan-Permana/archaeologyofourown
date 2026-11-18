@@ -66,23 +66,31 @@ const apps = [
   h2 { font-weight: 800; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); margin: 0 0 var(--space-2); }
   .intro p { margin: 0; font-size: var(--type-small-size); line-height: var(--type-small-leading); color: var(--color-ink-muted); }
   .tools { display: grid; gap: var(--space-3); }
-  .field { display: flex; min-height: 48px; border: 1px solid var(--color-ink); background: var(--color-paper); }
-  .url { flex: 1; min-width: 0; display: flex; align-items: center; padding-inline: var(--space-4); font-size: var(--type-small-size); font-variant-numeric: tabular-nums; color: var(--color-ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* Mobile: the link on its own line and the copy button full width under it; side by side from 560px. */
+  .field { display: grid; border: 1px solid var(--color-ink); background: var(--color-paper); }
+  .url { min-width: 0; display: block; line-height: 48px; padding-inline: var(--space-4); font-size: var(--type-small-size); font-variant-numeric: tabular-nums; color: var(--color-ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   button, .apps a { font: 500 var(--type-small-size)/1.2 var(--font-body); color: var(--color-ink); cursor: pointer; }
-  .copy { display: inline-flex; align-items: center; gap: var(--space-2); padding-inline: var(--space-4); border: 0; border-left: 1px solid var(--color-ink); border-radius: var(--radius-none); background: var(--color-ink); color: var(--color-paper); transition: background-color 150ms ease, transform 120ms var(--ease-out); }
+  .copy { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: 48px; padding-inline: var(--space-4); border: 0; border-top: 1px solid var(--color-ink); border-radius: var(--radius-none); background: var(--color-ink); color: var(--color-paper); transition: background-color 150ms ease, transform 120ms var(--ease-out); }
   .copy:hover { background: color-mix(in oklab, var(--color-ink) 85%, var(--color-paper)); }
   .copy[data-copied] { background: var(--color-accent); color: var(--color-on-accent); }
   .copy:active { transform: scale(0.97); }
   svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
   .i-check, .copy[data-copied] .i-link { display: none; }
   .copy[data-copied] .i-check { display: inline; }
-  .apps { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
-  .apps a, .apps button { display: inline-flex; align-items: center; min-height: 44px; padding-inline: var(--space-4); border: 1px solid var(--color-ink); border-radius: var(--radius-none); background: transparent; text-decoration: none; transition: border-color 150ms ease, background-color 150ms ease; }
+  .apps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+  .apps li:has([hidden]) { display: none; }
+  .apps a, .apps button { display: flex; width: 100%; justify-content: center; align-items: center; min-height: 48px; padding-inline: var(--space-4); border: 1px solid var(--color-ink); border-radius: var(--radius-none); background: transparent; text-decoration: none; transition: border-color 150ms ease, background-color 150ms ease; }
   .apps a:hover, .apps button:hover { background: var(--color-ink); color: var(--color-paper); }
   .apps a:active, .apps button:active { transform: scale(0.97); }
   /* The button already shows the result; the status line only announces it. */
   .status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
   .tools { grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 560px) {
+    .field { grid-template-columns: minmax(0, 1fr) auto; }
+    .copy { border-top: 0; border-left: 1px solid var(--color-ink); }
+    .apps { display: flex; flex-wrap: wrap; }
+    .apps a, .apps button { width: auto; }
+  }
   @media (min-width: 768px) { .share { padding: var(--space-8); } }
   @media (prefers-reduced-motion: reduce) { .copy, .apps a, .apps button { transition: none; } .copy:active { transform: none; } }
 </style>
