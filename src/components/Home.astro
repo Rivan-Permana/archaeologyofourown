@@ -2,6 +2,7 @@
 import { t } from '../i18n/index.ts';
 import { routeFor, type Locale } from '../i18n/routes.ts';
 import Page from '../layouts/Page.astro';
+import ArtefactOfTheDay from './ArtefactOfTheDay.astro';
 import LatestArticles from './LatestArticles.astro';
 import Masthead from './Masthead.astro';
 import SeriesSection from './SeriesSection.astro';
@@ -15,5 +16,6 @@ const hrefs = { id: routeFor('home', 'id'), en: routeFor('home', 'en') };
 <Page locale={locale} title={m.site.name} description={m.masthead.manifesto} hrefs={hrefs} overMasthead>
   <Masthead locale={locale} hrefs={hrefs} />
   <LatestArticles locale={locale} />
+  <ArtefactOfTheDay locale={locale} />
   <SeriesSection locale={locale} />
 </Page>

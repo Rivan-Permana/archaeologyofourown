@@ -22,6 +22,7 @@ export function otherLocale(locale: Locale): Locale {
 // The footer shows privacy and contribute links only once those route pairs exist in `routes`.
 export const homeSections: { id: string; label: 'articles' | 'artefactOfTheDay' | 'contribute' | 'newsletter' }[] = [
   { id: 'latest-articles', label: 'articles' },
+  { id: 'artefact-of-the-day', label: 'artefactOfTheDay' },
 ];
 
 // Article pages are built in Story 1.8: /artikel/<slug> and /en/articles/<slug>.

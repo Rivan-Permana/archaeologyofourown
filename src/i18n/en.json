@@ -92,5 +92,10 @@
       "one": "{n} article",
       "other": "{n} articles"
     }
+  },
+  "aotd": {
+    "another": "Show another",
+    "failed": "Another artefact could not be loaded. Try again later.",
+    "empty": "No artefacts in this language yet."
   }
 }

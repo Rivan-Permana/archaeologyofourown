@@ -48,17 +48,23 @@ function image(b: Extract<Block, { type: 'image' }>, ctx: RenderContext): string
   return `<figure><img src="${src(big)}" srcset="${widths.map((w) => `${src(w)} ${w}w`).join(', ')}" sizes="(min-width: 768px) 68ch, 100vw" width="${big}" height="${Math.round((big * m.height) / m.width)}" alt="${esc(alt)}" loading="lazy" decoding="async">${caps ? `<figcaption>${caps}</figcaption>` : ''}</figure>`;
 }
 
-function record(b: Extract<Block, { type: 'catalogueRecord' }>, ctx: RenderContext): string {
-  const a = ctx.artefacts.get(b.props.artefactId);
-  const tr = a?.translations.find((t) => t.lang === ctx.lang);
-  if (!a || !tr) return ''; // not published in this language: omitted
-  const L = ctx.labels;
+type Translation = PublicArtefact['translations'][number];
+/** The bordered key/value list for an Artefact (UX-DR18); reused by Articles, cards and the Artefact of the Day. */
+export function catalogueRecordHtml(a: PublicArtefact, tr: Translation, L: RenderLabels): string {
   const rows: [string, string | null][] = [
-    [L.inventoryNumber, a.inventoryNumber && esc(a.inventoryNumber)], [L.year, a.year && esc(a.year)], [L.category, `<span class="category-tag">${esc(L.categories[a.category] ?? a.category)}</span>`],
+    [L.inventoryNumber, a.inventoryNumber && esc(a.inventoryNumber)], [L.year, a.year && esc(a.year)],
+    [L.category, `<span class="category-tag">${esc(L.categories[a.category] ?? a.category)}</span>`],
     [L.provenance, tr.provenance ? esc(tr.provenance) : null], [L.credit, a.contributorCredit && esc(a.contributorCredit)],
   ];
   const items = rows.filter((r): r is [string, string] => Boolean(r[1])).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('');
   return `<dl class="catalogue-record" aria-label="${esc(tr.title)}">${items}</dl>`;
+}
+
+function record(b: Extract<Block, { type: 'catalogueRecord' }>, ctx: RenderContext): string {
+  const a = ctx.artefacts.get(b.props.artefactId);
+  const tr = a?.translations.find((t) => t.lang === ctx.lang);
+  if (!a || !tr) return ''; // not published in this language: omitted
+  return catalogueRecordHtml(a, tr, ctx.labels);
 }
 
 const text = (b: { content: Inline[] }) => b.content.map((t) => t.text).join('');

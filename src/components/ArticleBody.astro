@@ -14,10 +14,4 @@ const { html } = Astro.props as { html: string };
   .body img { display: block; width: 100%; height: auto; background: var(--color-surface); }
   .body figcaption { margin-top: var(--space-2); font-size: var(--type-small-size); line-height: var(--type-small-leading); color: var(--color-ink-muted); }
   .body figcaption .credit::before { content: '· '; }
-  .catalogue-record { display: grid; grid-template-columns: max-content 1fr; margin: var(--space-8) 0; border: 1px solid var(--color-line); }
-  .catalogue-record dt, .catalogue-record dd { margin: 0; padding: var(--space-3) var(--space-4); border-top: 1px solid var(--color-line); }
-  .catalogue-record dt:first-of-type, .catalogue-record dt:first-of-type + dd { border-top: 0; }
-  .catalogue-record dt { font-size: var(--type-meta-size); font-weight: var(--type-meta-weight); line-height: var(--type-meta-leading); letter-spacing: var(--type-meta-catalogue-tracking); text-transform: uppercase; color: var(--color-ink-muted); }
-  .catalogue-record dd { font-size: var(--type-small-size); }
-  .category-tag { display: inline-block; border: 1px solid var(--color-ink); padding: 2px var(--space-2); font-size: var(--type-meta-size); line-height: var(--type-meta-leading); }
 </style>

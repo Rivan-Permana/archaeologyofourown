@@ -4,7 +4,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 // AD-6: HTML is injected only from renderArticleHtml() output and escaped JSON.
-const ALLOWED = ['src/shared/render.ts', 'src/components/ArticleBody.astro', 'src/components/JsonScript.astro'];
+const ALLOWED = ['src/shared/render.ts', 'src/components/ArticleBody.astro', 'src/components/JsonScript.astro', 'src/components/ArtefactOfTheDay.astro'];
 
 function files(dir: string): string[] {
   return readdirSync(dir).flatMap((n) => {

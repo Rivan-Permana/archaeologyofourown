@@ -6,6 +6,7 @@ import { getPlatformProxy } from 'wrangler';
 import { sql } from 'drizzle-orm';
 import { createDb } from '../src/server/db/client.ts';
 import { article, articleTranslation, artefact, artefactTranslation, mediaAsset, mediaRef, mediaRefTranslation } from '../src/server/db/schema.ts';
+import { clampTint } from '../src/shared/tint.ts';
 import type { Body } from '../src/shared/blocks.ts';
 import type { EditorialSeries } from '../src/shared/enums.ts';
 
@@ -15,13 +16,16 @@ const uid = (name: string) => {
   return `${h.slice(0, 8)}-${h.slice(8, 12)}-4${h.slice(13, 16)}-8${h.slice(17, 20)}-${h.slice(20, 32)}`;
 };
 const SURFACE = '#EAE3D7';
-const SURFACE_DARK = '#201D1A';
 const WIDTHS = [640, 1280, 2000];
 
 const { env, dispose } = await getPlatformProxy<{ DB: D1Database; MEDIA: R2Bucket }>();
 const db = createDb(env.DB);
 
+// Fixture dominant colours stand in for the crop tool's canvas read (Epic 4); the tints come from clampTint().
+const DOMINANT: Record<string, string> = { 'artefact:1': '#5E8C86', 'artefact:2': '#C09A4B', 'artefact:3': '#B06A74', 'artefact:4': '#6F7FA8' };
+
 async function asset(name: string, ratio: number) {
+  const tint = clampTint(DOMINANT[name] ?? SURFACE);
   const id = uid(`asset:${name}`);
   for (const w of WIDTHS) {
     const buf = await sharp({ create: { width: w, height: Math.round(w / ratio), channels: 3, background: SURFACE } }).webp().toBuffer();
@@ -29,8 +33,8 @@ async function asset(name: string, ratio: number) {
   }
   await db.insert(mediaAsset).values({
     id, mime: 'image/webp', width: 2000, height: Math.round(2000 / ratio), variants: JSON.stringify(WIDTHS),
-    tintLight: SURFACE, tintDark: SURFACE_DARK, status: 'ready', isPlaceholder: true,
-  }).onConflictDoNothing();
+    tintLight: tint.light, tintDark: tint.dark, status: 'ready', isPlaceholder: true,
+  }).onConflictDoUpdate({ target: mediaAsset.id, set: { tintLight: tint.light, tintDark: tint.dark } });
   return id;
 }
 

@@ -52,6 +52,9 @@ mkdirSync(OUT, { recursive: true });
 writeFileSync(`${OUT}/articles.json`, JSON.stringify(articles));
 writeFileSync(`${OUT}/artefacts.json`, JSON.stringify(snapshot.artefacts));
 writeFileSync(`${OUT}/media.json`, JSON.stringify(snapshot.media));
+// Static pool for the Artefact of the Day swap (AD-16): published Artefacts and the media they use.
+const poolMedia = new Set(snapshot.artefacts.flatMap((a) => a.refs.map((r) => r.mediaId)));
+writeFileSync('public/artefacts.json', JSON.stringify({ artefacts: snapshot.artefacts, media: snapshot.media.filter((m) => poolMedia.has(m.id)) }));
 // Copied into dist by the build; rebuilds.refresh() compares it to the target version (AD-3).
 writeFileSync('public/version.json', JSON.stringify({ content_version: snapshot.content_version }));
 console.log(`snapshot v${snapshot.content_version}: ${articles.length} articles, ${snapshot.artefacts.length} artefacts, ${snapshot.media.length} media`);

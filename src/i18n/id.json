@@ -92,5 +92,10 @@
       "one": "{n} artikel",
       "other": "{n} artikel"
     }
+  },
+  "aotd": {
+    "another": "Tampilkan lainnya",
+    "failed": "Artefak lain belum bisa dimuat. Coba lagi nanti.",
+    "empty": "Belum ada artefak dalam bahasa ini."
   }
 }

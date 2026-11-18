@@ -1,0 +1,139 @@
+---
+import { getCollection } from 'astro:content';
+import { t } from '../i18n/index.ts';
+import type { Locale } from '../i18n/routes.ts';
+import { jakartaDate, pickDaily } from '../shared/daily.ts';
+import { panelHtml, poolFor, tintOf, type Pool } from '../shared/artefact-html.ts';
+import JsonScript from './JsonScript.astro';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const m = t(locale);
+const pool: Pool = {
+  artefacts: (await getCollection('artefacts')).map((e) => e.data),
+  media: (await getCollection('media')).map((e) => e.data),
+};
+const inLang = poolFor(pool, locale);
+const date = jakartaDate(new Date());
+const pickId = pickDaily(inLang.map((a) => a.id), date);
+const pick = inLang.find((a) => a.id === pickId);
+const labels = { ...m.record, categories: m.category };
+const marker = m.site.placeholderMarker;
+const tint = pick && tintOf(pick, pool);
+---
+<section class="aotd" id="artefact-of-the-day" aria-labelledby="aotd-heading" data-aotd data-pick={pickId} data-date={date} data-lang={locale} data-count={inLang.length}
+  style={tint ? `--tint-light:${tint.light};--tint-dark:${tint.dark}` : undefined}>
+  <div class="wrap">
+    <h2 id="aotd-heading">{m.nav.artefactOfTheDay}</h2>
+    {pick
+      ? <div class="panel" data-panel set:html={panelHtml(pick, pool, locale, labels, marker)} />
+      : <p>{m.aotd.empty}</p>}
+    {pick && (
+      <div class="controls">
+        <button type="button" class="btn btn-secondary" data-another hidden>{m.aotd.another}</button>
+        <p class="note" data-note role="status" hidden>{m.aotd.failed}</p>
+        <p class="vh" data-live role="status" aria-live="polite"></p>
+      </div>
+    )}
+  </div>
+</section>
+<JsonScript id="aotd-config" data={{ labels, marker }} />
+<script>
+  import { jakartaDate, pickDaily } from '../shared/daily.ts';
+  import { panelHtml, poolFor, tintOf, type Pool } from '../shared/artefact-html.ts';
+
+  const root = document.querySelector<HTMLElement>('[data-aotd]');
+  const panel = root?.querySelector<HTMLElement>('[data-panel]');
+  const button = root?.querySelector<HTMLButtonElement>('[data-another]');
+  if (root && panel && button) {
+    const lang = root.dataset.lang as 'id' | 'en';
+    const cfg = JSON.parse(document.getElementById('aotd-config')!.textContent!) as { labels: any; marker: string };
+    const live = root.querySelector<HTMLElement>('[data-live]')!;
+    const note = root.querySelector<HTMLElement>('[data-note]')!;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
+    let pool: Pool | undefined;
+    let current = root.dataset.pick!;
+
+    // Shown as soon as the build says there is more than one to choose from.
+    if (Number(root.dataset.count) > 1) button.hidden = false;
+
+    async function load(): Promise<Pool | undefined> {
+      if (pool) return pool;
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const res = await fetch('/artefacts.json');
+          if (res.ok) { pool = (await res.json()) as Pool; note.hidden = true; return pool; }
+        } catch { /* retried once, then the note */ }
+        if (attempt === 0) await new Promise((r) => setTimeout(r, 800));
+      }
+      return undefined;
+    }
+
+    async function show(id: string, announce: boolean) {
+      const p = pool!;
+      const a = poolFor(p, lang).find((x) => x.id === id);
+      if (!a) return;
+      panel!.classList.add('fading');
+      await wait(200);
+      panel!.innerHTML = panelHtml(a, p, lang, cfg.labels, cfg.marker);
+      const tint = tintOf(a, p);
+      if (tint) { root!.style.setProperty('--tint-light', tint.light); root!.style.setProperty('--tint-dark', tint.dark); }
+      else { root!.style.removeProperty('--tint-light'); root!.style.removeProperty('--tint-dark'); }
+      panel!.classList.remove('fading');
+      current = id;
+      root!.dataset.pick = id;
+      if (announce) live.textContent = a.translations.find((x) => x.lang === lang)?.title ?? '';
+    }
+
+    // A later Jakarta date than the build: recompute the pick, no rebuild or cron (AR45).
+    if (root.dataset.date !== jakartaDate(new Date())) {
+      load().then((p) => {
+        if (!p) return;
+        const id = pickDaily(poolFor(p, lang).map((a) => a.id), jakartaDate(new Date()));
+        if (id && id !== current) show(id, false);
+        if (poolFor(p, lang).length > 1) button.hidden = false;
+      });
+    }
+
+    button.addEventListener('click', async () => {
+      if (button.getAttribute('aria-disabled') === 'true') return;
+      button.setAttribute('aria-disabled', 'true');
+      try {
+        const p = await load();
+        if (!p) { note.hidden = false; return; }
+        const others = poolFor(p, lang).filter((a) => a.id !== current);
+        if (others.length) await show(others[Math.floor(Math.random() * others.length)].id, true);
+      } finally {
+        button.removeAttribute('aria-disabled');
+      }
+    });
+  }
+</script>
+<style>
+  .aotd { background: var(--tint-light, var(--color-surface)); padding: var(--space-12) 0 var(--space-16); transition: background-color 0.6s ease; }
+  @media (prefers-color-scheme: dark) { .aotd { background: var(--tint-dark, var(--color-surface)); } }
+  .wrap { max-width: var(--max-width); margin: 0 auto; padding-inline: var(--margin-mobile); }
+  h2 { font-family: var(--font-display); font-weight: 400; font-size: var(--type-h2-size); line-height: var(--type-h2-leading); margin: 0 0 var(--space-6); }
+  .panel { display: grid; gap: var(--space-6); transition: opacity 0.2s ease; }
+  .panel.fading { opacity: 0; }
+  .controls { margin-top: var(--space-6); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .note { margin: 0; font-size: var(--type-small-size); }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
+  .panel :global(figure) { margin: 0; }
+  .panel :global(.photo) { position: relative; aspect-ratio: 4 / 5; background: var(--color-surface); }
+  .panel :global(.photo img), .panel :global(.slot) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .panel :global(.mark) { position: absolute; top: var(--space-3); left: var(--space-3); }
+  .panel :global(figcaption) { margin-top: var(--space-2); font-size: var(--type-small-size); color: var(--color-ink); }
+  .panel :global(.art-title) { font-family: var(--font-display); font-weight: 400; font-size: var(--type-h3-size); line-height: var(--type-h3-leading); margin: 0 0 var(--space-4); }
+  .panel :global(.catalogue-record) { margin: 0; border-color: var(--color-ink); }
+  .panel :global(.catalogue-record dt) { color: var(--color-ink); }
+  @media (min-width: 768px) { .wrap { padding-inline: var(--gutter-desktop); } .aotd { padding: var(--space-16) 0 var(--space-24); } }
+  @media (min-width: 1100px) {
+    .panel { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter-desktop); align-items: start; }
+    .panel :global(.aotd-figure) { grid-column: 2 / span 5; }
+    .panel :global(.aotd-body) { grid-column: 8 / span 4; }
+    .controls { margin-left: calc(100% / 12 * 7 + var(--gutter-desktop)); }
+  }
+  @media (prefers-reduced-motion: reduce) { .aotd, .panel { transition: none; } }
+</style>
