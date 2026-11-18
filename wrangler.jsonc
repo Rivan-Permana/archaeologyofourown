@@ -11,8 +11,8 @@
     "run_worker_first": ["/admin/*", "/api/*", "/media/*"]
   },
   "preview_urls": false,
-  // No ids on purpose: created on first approved deploy, local dev uses miniflare. Neutral names (AR3).
-  "d1_databases": [{ "binding": "DB", "database_name": "archaeologyofourown", "migrations_dir": "src/server/db/migrations" }],
+  // Neutral names (AR3). Database ids are not secrets; local dev uses miniflare.
+  "d1_databases": [{ "binding": "DB", "database_name": "archaeologyofourown", "database_id": "38f1c34c-8b42-40ac-a709-d00dae6339c8", "migrations_dir": "src/server/db/migrations" }],
   "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "archaeologyofourown-media" }],
   "observability": { "enabled": true, "logs": { "invocation_logs": false } }
 }
