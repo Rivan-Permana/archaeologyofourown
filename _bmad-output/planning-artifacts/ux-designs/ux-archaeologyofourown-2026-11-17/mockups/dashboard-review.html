@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arah C v2 · Ruang baca</title>
+<style>
+/* Direction C "Ruang baca", v2 (anti-slop pass, 2026-11-17).
+   Design read: private review tool for 1 to 3 editors, calm reading room, dial ENERGY 1 / RHYTHM 1 / MOTION 1.
+   Palette roles (unchanged from v1):
+   --room #EDEBE6 room behind the sheet · --rail #E4E1DA queue rail, photo slots · --sheet #FCFCFA reading sheet
+   --text #24221F (15.2:1 on sheet) · --muted #5F5B55 (6.56:1 on sheet, 5.16:1 on rail)
+   --accent #B4462B primary action, focus, aging note (5.31:1 on sheet; never as text on rail)
+   --control #857F76 field and button borders (3.85:1 on sheet, 3.63:1 on decision bar)
+   --line #D9D5CD decorative hairlines only, never a control boundary
+   Type: Inter for the tool; Fraunces (Georgia fallback) only for titles that will be published,
+   so the editor sees them as readers will. All spacing on a 4px grid.
+   Signature: the register strip, ruled like the Catalogue Record block, heads every Contribution
+   and closes it with its facts. It appears on the review sheet only. */
+:root{
+  --room:#EDEBE6;--rail:#E4E1DA;--sheet:#FCFCFA;--foot:#F6F5F1;
+  --text:#24221F;--muted:#5F5B55;--line:#D9D5CD;--control:#857F76;
+  --accent:#B4462B;--accent-press:#9A3B24;--on-acc:#FFFFFF;
+  --sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --serif:Fraunces,Georgia,"Times New Roman",serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+body{margin:0;background:#F5F4F0;color:var(--text);font:400 16px/1.5 var(--sans);padding:48px 32px 96px}
+a,button,label[for],summary{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* presentation header, not product UI */
+.intro{max-width:1440px;margin:0 auto 32px}
+.intro h1{font:500 28px/1.2 var(--sans);margin:0 0 12px}
+.intro p{max-width:72ch;margin:0 0 8px;font-size:16px}
+.intro .note{color:var(--muted);font-size:14px}
+
+/* window */
+.frame{max-width:1440px;margin:0 auto;background:var(--room);border:1px solid #C9C5BD;border-radius:12px;overflow:hidden}
+.bar{height:36px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid var(--line);color:var(--muted);font-size:13px}
+.app{display:grid;grid-template-columns:200px 300px minmax(0,1fr);min-height:940px}
+
+/* nav */
+nav{padding:24px 12px}
+.brand{padding:0 12px 24px;font-weight:500;font-size:15px;line-height:1.3}
+.brand span{display:block;font-weight:400;color:var(--muted);font-size:13px;margin-top:4px}
+nav a{display:flex;justify-content:space-between;align-items:center;height:36px;padding:0 12px;margin-bottom:2px;border-radius:8px;color:var(--text);text-decoration:none;font-size:15px;transition:background-color 150ms var(--ease)}
+nav a:hover{background:var(--rail)}
+nav a[aria-current]{background:var(--sheet);font-weight:500;box-shadow:inset 0 0 0 1px var(--line)}
+nav a .n{color:var(--muted);font-size:13px;font-weight:400}
+
+/* queue rail */
+.rail{background:var(--rail);padding:24px 12px}
+.rail h2{font:500 15px/1.3 var(--sans);margin:0 12px 4px}
+.rail .sub{color:var(--muted);font-size:13px;margin:0 12px 16px}
+.rail ol{list-style:none;margin:0;padding:0}
+.rail li a{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:4px;padding:12px;margin-bottom:4px;border-radius:8px;color:var(--text);text-decoration:none;transition:background-color 150ms var(--ease)}
+.rail li a:hover{background:#EBE8E2}
+.rail li a[aria-current]{background:var(--sheet);box-shadow:inset 0 0 0 1px var(--line)}
+.rail .t{font-size:15px;line-height:1.3}
+.rail .age{font-size:13px;color:var(--muted);text-align:right;line-height:20px;white-space:nowrap}
+.rail .m{grid-column:1 / -1;font-size:13px;line-height:1.35;color:var(--muted)}
+
+/* room and sheet */
+.room{padding:32px}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:48px 64px 0;max-width:900px}
+
+/* signature: register strip */
+.register{display:flex;flex-wrap:wrap;margin:0;border-top:2px solid var(--text);border-bottom:1px solid var(--line)}
+.register div{padding:8px 16px 12px;border-left:1px solid var(--line)}
+.register div:first-child{padding-left:0;border-left:0}
+.register dt{font-size:13px;color:var(--muted);line-height:20px}
+.register dd{margin:0;font-size:15px;line-height:20px;font-variant-numeric:tabular-nums}
+.register .wait{margin-left:auto;text-align:right;border-left:0;padding-right:0}
+.register .wait dd{color:var(--accent);font-weight:500}
+
+.sheet h3{font:400 34px/1.18 var(--serif);margin:32px 0 8px;max-width:24ch}
+.by{color:var(--muted);margin:0 0 32px;font-size:15px}
+
+/* photo slots: honest placeholders, real photos replace them */
+.photos{margin:0}
+.slot{display:block;background:var(--rail);border:1px solid var(--line);border-radius:10px}
+.hero{height:336px}
+.photos figcaption,.strip figcaption{font-size:13px;color:var(--muted);margin-top:8px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 0}
+.strip figure{margin:0}
+.strip .slot{height:96px}
+
+.story{max-width:60ch;margin:32px 0 24px}
+.story p{font-size:19px;line-height:1.65;margin:0 0 16px}
+.facts{border-bottom:0}
+
+.decide{margin:32px -64px 0;padding:24px 64px 32px;border-top:1px solid var(--line);background:var(--foot);border-radius:0 0 13px 13px}
+.decide label{display:block;font-weight:500;margin-bottom:8px}
+textarea{display:block;width:100%;min-height:72px;border:1px solid var(--control);border-radius:8px;background:var(--sheet);font:16px/1.5 var(--sans);padding:12px;resize:vertical;color:var(--text)}
+.help{color:var(--muted);font-size:14px;margin:8px 0 20px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{min-height:48px;padding:0 20px;border-radius:8px;border:1px solid var(--control);background:var(--sheet);color:var(--text);font:500 15px var(--sans);transition:background-color 150ms var(--ease),transform 150ms var(--ease)}
+.btn:hover{background:#F0EEE9}
+.btn:active{transform:scale(.98)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--on-acc)}
+.btn.pri:hover{background:var(--accent-press);border-color:var(--accent-press)}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--muted);text-decoration:underline;text-underline-offset:4px;padding:0 12px}
+.btn.quiet:hover{color:var(--text)}
+.next{margin-left:auto;color:var(--muted);font-size:14px}
+.next a{color:var(--text);text-underline-offset:4px}
+
+/* second row */
+.below{max-width:1440px;margin:48px auto 0;display:grid;grid-template-columns:minmax(0,920px) minmax(0,1fr);gap:32px;align-items:start}
+.cap{color:var(--muted);font-size:14px;margin:0 0 8px}
+.ed{padding:32px 40px}
+.edtop{display:flex;flex-wrap:wrap;align-items:baseline;gap:16px}
+.edtop h2{font:500 24px/1.25 var(--sans);margin:0}
+.status{margin-left:auto;font-size:14px;color:var(--muted);border:1px solid var(--line);background:var(--sheet);border-radius:6px;padding:4px 12px}
+.edsheet{background:var(--sheet);border:1px solid var(--line);border-radius:14px;margin-top:20px;padding:24px 40px 28px}
+.tabs{display:inline-flex;background:var(--rail);border-radius:10px;padding:4px}
+.tabs a{padding:4px 16px;border-radius:6px;color:var(--text);text-decoration:none;font-size:14px;line-height:24px}
+.tabs a[aria-selected="true"]{background:var(--sheet);font-weight:500}
+fieldset{border:0;margin:20px 0 24px;padding:0}
+legend{font-size:14px;color:var(--muted);padding:0;margin-bottom:8px}
+.series{display:flex;flex-wrap:wrap;gap:8px}
+.series label{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;border:1px solid var(--control);border-radius:8px;font-size:14px}
+.series input{appearance:none;margin:0;width:16px;height:16px;border:1px solid var(--control);border-radius:50%;background:var(--sheet)}
+.series input:checked{border:5px solid var(--text)}
+.series label:has(input:checked){border-color:var(--text);font-weight:500}
+.edsheet .title{font:400 30px/1.2 var(--serif);margin:0 0 8px}
+.edsheet .stand{font:400 19px/1.5 var(--serif);color:var(--muted);margin:0 0 16px}
+.edsheet .body{font-size:18px;line-height:1.65;margin:0 0 24px;max-width:60ch}
+.edbtns{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-end;border-top:1px solid var(--line);padding-top:20px}
+
+.empty{padding:32px}
+.empty .sheet{padding:64px 40px;text-align:center}
+.empty h3{font:500 24px/1.25 var(--sans);margin:0 0 8px;max-width:none}
+.empty p{color:var(--muted);margin:0 auto 24px;max-width:36ch}
+
+@media (max-width:1100px){
+  body{padding:24px 16px 64px}
+  .app{grid-template-columns:1fr;min-height:0}
+  nav{display:flex;flex-wrap:wrap;gap:4px;padding:16px}
+  .brand{width:100%;padding:0 12px 8px}
+  .room{padding:16px}
+  .sheet{padding:24px 20px 0}
+  .decide{margin:24px -20px 0;padding:20px}
+  .register .wait{margin-left:0;text-align:left;padding-left:0}
+  .below{grid-template-columns:1fr}
+  .ed{padding:20px 16px}
+  .edsheet{padding:20px}
+  .hero{height:220px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <h1>Arah C, Ruang baca (v2)</h1>
+  <p>Editor membaca satu kiriman penuh di lembar besar. Antrean tinggal daftar tipis di samping, urut dari yang paling lama menunggu. Setiap kiriman dibuka dengan lajur register bergaris seperti blok Catatan Katalog di situs publik, supaya nomor referensi, tanggal masuk, dan lama menunggu terbaca sekali lirik.</p>
+  <p class="note">Mockup statis: tombol dan tautan belum berfungsi. Kotak abu-abu menandai tempat foto kiriman; foto asli belum dipasang.</p>
+</header>
+
+<div class="frame">
+  <div class="bar tnum">/admin/kiriman/AOO-7K3F9Q</div>
+  <div class="app">
+    <nav aria-label="Navigasi dashboard">
+      <div class="brand">Archaeology of Our Own<span>Ruang editor</span></div>
+      <a href="#">Artikel</a>
+      <a href="#">Artefak</a>
+      <a href="#" aria-current="page">Kiriman <span class="n tnum">7</span></a>
+      <a href="#">Pelanggan</a>
+      <a href="#">Aktivitas</a>
+    </nav>
+
+    <section class="rail" aria-labelledby="rail-h">
+      <h2 id="rail-h">Menunggu dibaca</h2>
+      <p class="sub tnum">7 kiriman, yang terlama di atas</p>
+      <ol>
+        <li><a href="#" aria-current="true"><span class="t">Kaleng biskuit peninggalan ibu, 1970-an</span><span class="age tnum">12 hari</span><span class="m tnum">AOO-7K3F9Q · Bu Ratna · ingatan · 4 foto</span></a></li>
+        <li><a href="#"><span class="t">Sketsa sampul majalah sekolah, 1988</span><span class="age tnum">9 hari</span><span class="m tnum">AOO-2M8D4T · Hendra K. · proses · 3 foto</span></a></li>
+        <li><a href="#"><span class="t">Papan nama warung kopi, cat tangan</span><span class="age tnum">7 hari</span><span class="m tnum">AOO-9P1X6B · Mas Yudi · budaya visual · 2 foto</span></a></li>
+        <li><a href="#"><span class="t">Surat wesel untuk kakek, 1965</span><span class="age tnum">5 hari</span><span class="m tnum">AOO-4H7R2N · Sekar · ingatan · 5 foto</span></a></li>
+        <li><a href="#"><span class="t">Film sablon kaos band kampus</span><span class="age tnum">3 hari</span><span class="m tnum">AOO-6C3V8L · Ijal · proses · 3 foto</span></a></li>
+        <li><a href="#"><span class="t">Bungkus rokok kretek bergambar wayang</span><span class="age tnum">2 hari</span><span class="m tnum">AOO-1W5Q7E · Pengumpul Bandung · budaya visual · 1 foto</span></a></li>
+        <li><a href="#"><span class="t">Album foto studio keluarga, Medan</span><span class="age tnum">6 jam</span><span class="m tnum">AOO-8T2J5Z · Cucu Oma Lina · ingatan · 5 foto</span></a></li>
+      </ol>
+    </section>
+
+    <main class="room">
+      <article class="sheet" aria-labelledby="k-title">
+        <dl class="register">
+          <div><dt>No. referensi</dt><dd>AOO-7K3F9Q</dd></div>
+          <div><dt>Diterima</dt><dd>Kamis, 5 November 2026</dd></div>
+          <div><dt>Urutan</dt><dd>1 dari 7</dd></div>
+          <div class="wait"><dt>Kiriman tertua</dt><dd>menunggu 12 hari</dd></div>
+        </dl>
+
+        <h3 id="k-title">Kaleng biskuit peninggalan ibu, 1970-an</h3>
+        <p class="by">Bu Ratna · r•••@contoh.id · Surabaya</p>
+
+        <figure class="photos">
+          <span class="slot hero" role="img" aria-label="Tempat foto 1, belum ada foto"></span>
+          <figcaption>Foto 1 dari 4 · tutup kaleng</figcaption>
+        </figure>
+        <div class="strip">
+          <figure><span class="slot" role="img" aria-label="Tempat foto 2, belum ada foto"></span><figcaption>Foto 2 · sisi samping</figcaption></figure>
+          <figure><span class="slot" role="img" aria-label="Tempat foto 3, belum ada foto"></span><figcaption>Foto 3 · isi benang</figcaption></figure>
+          <figure><span class="slot" role="img" aria-label="Tempat foto 4, belum ada foto"></span><figcaption>Foto 4 · cap pabrik</figcaption></figure>
+        </div>
+
+        <div class="story">
+          <p>Kaleng ini dibeli ibu saya di Pasar Turi sekitar 1974, isinya biskuit untuk Lebaran. Setelah kosong, kaleng tidak pernah dibuang: berganti jadi tempat benang jahit, kancing, dan jarum.</p>
+          <p>Gambar di tutupnya, keluarga Belanda minum teh di taman, dulu saya kira rumah kami suatu hari nanti. Catnya sudah mengelupas di bagian yang paling sering dipegang ibu.</p>
+        </div>
+
+        <dl class="register facts">
+          <div><dt>Tahun</dt><dd>± 1974</dd></div>
+          <div><dt>Kategori</dt><dd>ingatan</dd></div>
+          <div><dt>Izin muat</dt><dd>ya, nama samaran</dd></div>
+          <div><dt>Lokasi foto</dt><dd>sudah dihapus</dd></div>
+        </dl>
+
+        <div class="decide">
+          <label for="nc">Catatan untuk editor lain</label>
+          <textarea id="nc" aria-describedby="nc-help">Cerita kuat. Minta foto tutup yang lebih tajam sebelum dijadikan artefak.</textarea>
+          <p class="help" id="nc-help">Kontributor tidak melihat catatan ini. Catatan disimpan bersama keputusan di Aktivitas.</p>
+          <div class="btns">
+            <button class="btn pri" type="button">Jadikan artefak</button>
+            <button class="btn" type="button">Setujui</button>
+            <button class="btn quiet" type="button">Tolak</button>
+            <span class="next">Berikutnya: <a href="#">Sketsa sampul majalah sekolah</a></span>
+          </div>
+        </div>
+      </article>
+    </main>
+  </div>
+</div>
+
+<div class="below">
+  <section aria-label="Layar kedua">
+    <p class="cap">Layar kedua · Artikel baru, sesaat setelah Terbitkan</p>
+    <div class="frame">
+      <div class="bar">/admin/artikel/baru</div>
+      <div class="ed">
+        <div class="edtop"><h2>Artikel baru</h2><span class="status" role="status">Situs sedang dibangun ulang, sekitar 2 menit</span></div>
+        <div class="edsheet">
+          <div class="tabs" role="tablist" aria-label="Bahasa"><a href="#" role="tab" aria-selected="true">Indonesia</a><a href="#" role="tab" aria-selected="false">English · kosong</a></div>
+          <fieldset>
+            <legend>Seri editorial</legend>
+            <div class="series">
+              <label><input type="radio" name="seri"> Temuan</label>
+              <label><input type="radio" name="seri"> Jejak Proses</label>
+              <label><input type="radio" name="seri" checked> Ingatan Bersama</label>
+              <label><input type="radio" name="seri"> Stratigrafi</label>
+            </div>
+          </fieldset>
+          <p class="title">Kaleng-kaleng yang menyimpan rumah</p>
+          <p class="stand">Dari Khong Guan sampai Monde, wadah biskuit menjadi lemari kecil ingatan keluarga Indonesia.</p>
+          <p class="body">Hampir setiap rumah punya satu: kaleng biskuit yang isinya bukan biskuit. Di dapur ibu, kaleng itu berisi benang…</p>
+          <div class="edbtns"><button class="btn quiet" type="button">Simpan draf</button><button class="btn" type="button">Pratinjau</button><button class="btn pri" type="button">Terbitkan</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section aria-label="Keadaan antrean kosong">
+    <p class="cap">Keadaan · antrean kosong</p>
+    <div class="frame empty">
+      <div class="sheet">
+        <h3>Tidak ada kiriman yang menunggu</h3>
+        <p>Semua kiriman sudah diputuskan. Kiriman baru dari halaman Kirim artefak masuk ke daftar ini, yang terlama di atas.</p>
+        <button class="btn" type="button">Lihat yang disetujui</button>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

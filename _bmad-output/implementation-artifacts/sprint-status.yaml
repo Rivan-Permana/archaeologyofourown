@@ -1,0 +1,93 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 11-18-2026 03:54
+last_updated: 11-18-2026 04:30
+project: archaeologyofourown
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: in-progress
+  1-1-project-scaffold-and-bilingual-shell-on-workers-dev: review
+  1-2-design-tokens-self-hosted-fonts-and-device-theme: backlog
+  1-3-public-chrome-header-mobile-menu-language-switch-footer-and: backlog
+  1-4-content-schema-media-serving-and-placeholder-seed: backlog
+  1-5-build-snapshot-endpoint-with-public-dtos: backlog
+  1-6-article-rendering-prebuild-snapshot-and-leak-check: backlog
+  1-7-home-masthead-and-latest-articles: backlog
+  1-8-article-page: backlog
+  1-9-editorial-series-section: backlog
+  1-10-artefact-of-the-day: backlog
+  1-11-masthead-strata-motion-and-section-reveal: backlog
+  1-12-privacy-note-page: backlog
+  1-13-sharing-metadata-cookieless-analytics-and-launch-gate: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-subscribe-endpoint-with-the-public-write-guard-chain: backlog
+  2-2-per-network-hourly-limit-with-the-ratelimiter-durable-object: backlog
+  2-3-newsletter-section-on-the-home-page: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-contribute-page-and-form-fields: backlog
+  3-2-contribution-start-endpoint-with-presigned-uploads-and-site: backlog
+  3-3-contribution-finish-with-content-verification-and-reference: backlog
+  3-4-photo-uploader-with-in-browser-downscale-and-per-file-feedba: backlog
+  3-5-submit-success-and-failure-screens: backlog
+  3-6-daily-cleanup-of-abandoned-uploads: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-editor-sign-in-and-server-side-identity-check: backlog
+  4-2-dashboard-shell-admin-tokens-and-navigation: backlog
+  4-3-article-list-and-draft-editing-with-autosave: backlog
+  4-4-block-editor-for-article-bodies: backlog
+  4-5-media-upload-pipeline: backlog
+  4-6-crop-tool-island-and-editor-image-integration: backlog
+  4-7-rebuild-requests-and-status: backlog
+  4-8-preview-publish-update-unpublish-and-delete-articles: backlog
+  4-9-manage-artefacts: backlog
+  4-10-activity-log-view: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-contribution-queue: backlog
+  5-2-review-sheet-with-private-photos-and-masked-email: backlog
+  5-3-approve-reject-and-change-a-decision: backlog
+  5-4-convert-a-contribution-into-a-draft-artefact: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-extend-the-daily-job-with-retention-and-media-cleanup: backlog
+  6-2-subscriber-list-lookup-by-email-and-csv-export: backlog
+  6-3-delete-a-person-s-data-on-request: backlog
+  epic-6-retrospective: optional
